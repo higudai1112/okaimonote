@@ -54,6 +54,9 @@
 |E           | ×              | △(2人のみ) | △(安値のみ)  | ⭕️        | ×              |
 
 
+## 画面遷移図
+https://www.figma.com/design/JjdRUEWuNYMQrnJhOCZyXz/%E3%81%8A%E3%81%8B%E3%81%84%E3%82%82%E3%83%8E%E3%83%BC%E3%83%88?node-id=0-1&p=f&m=draw
+
 ## 🌐機能候補
 MVP
 - ユーザー登録・ログイン (Device)
