@@ -1,0 +1,47 @@
+# Ruby公式の最新版ベースイメージ
+FROM ruby:3.3.9
+
+# タイムゾーンと文字コードの設定（日本対応）
+ENV LANG C.UTF-8
+ENV TZ Asia/Tokyo
+
+# Node.js / Yarn用のリポジトリ追加と必要パッケージのインストール
+RUN apt-get update -qq && apt-get install -y \
+  ca-certificates \
+  curl \
+  gnupg \
+  build-essential \
+  libpq-dev
+
+# Node.js（20系）とYarnのリポジトリ追加
+RUN mkdir -p /etc/apt/keyrings \
+ && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+      | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+ && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
+      | tee /etc/apt/sources.list.d/nodesource.list \
+ && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg \
+      | gpg --dearmor \
+      | tee /etc/apt/trusted.gpg.d/yarn.gpg > /dev/null \
+ && echo "deb https://dl.yarnpkg.com/debian/ stable main" \
+      | tee /etc/apt/sources.list.d/yarn.list
+
+# Node.js と Yarn インストール
+RUN apt-get update -qq && apt-get install -y nodejs yarn
+
+# esbuildをここでインストール
+RUN yarn global add esbuild
+
+# Bundler明示インストール（バージョン固定も可）
+RUN gem install bundler
+
+# アプリ作業ディレクトリ作成・移動
+WORKDIR /app
+
+# アプリの全コードをコピー
+COPY . .
+
+# Railsのデフォルトポートを開放
+EXPOSE 3000
+
+# Railsサーバー起動コマンド（CMDで上書き可能）
+CMD ["rails", "server", "-b", "0.0.0.0"]
