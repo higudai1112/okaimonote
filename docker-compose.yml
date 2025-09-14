@@ -1,0 +1,52 @@
+version: '3.9'  # Docker Composeのバージョン
+
+services:
+  db:  # PostgreSQLデータベースサービス
+    image: postgres:15  # 使用するPostgreSQLのバージョン
+    restart: always  # コンテナが落ちても自動で再起動
+    environment:
+      TZ: Asia/Tokyo  # タイムゾーンを日本時間に設定
+      POSTGRES_USER: postgres  # データベースのユーザー名
+      POSTGRES_PASSWORD: password  # データベースのパスワード
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data  # DBの永続化（ボリューム）
+    ports:
+      - "5432:5432"  # ホストとコンテナのポートをバインド（DB接続用）
+    healthcheck:  # Rails側が起動前にDBの状態を確認するためのヘルスチェック
+      test: ["CMD-SHELL", "pg_isready -d app_development -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:  # Railsアプリケーションのサービス
+    build:
+      context: .  # 現在のディレクトリをビルド対象にする
+      dockerfile: Dockerfile.dev  # 開発用Dockerfileを指定
+    command: bash -c "bundle install && ./bin/dev"
+    # アプリ起動時に実行するコマンド
+    # - Gemをインストール
+    # - `./bin/dev` を実行（Rails + JS/CSSビルドをまとめて起動）
+
+    tty: true  # ターミナルを割り当てる（byebugなど対話ツールで便利）
+    stdin_open: true  # 標準入力を開く（コンテナで対話的に操作可能）
+
+    volumes:
+      - .:/app  # ホスト側のカレントディレクトリを `/app` にマウント（ホットリロード対応）
+      - bundle_data:/usr/local/bundle:cached  # Gemのキャッシュボリューム（再インストール回避）
+      - node_modules:/app/node_modules  # node_modulesのキャッシュ（JS/CSS開発が快適に）
+
+    environment:
+      TZ: Asia/Tokyo  # コンテナ内のタイムゾーン設定（ログや日時表示用）
+
+    ports:
+      - "3000:3000"  # Railsのポートをホストにバインド（ブラウザでアクセスできる）
+
+    depends_on:
+      db:
+        condition: service_healthy  # DBが起動完了してからwebサービスを起動
+
+# 永続化に使うボリュームの定義
+volumes:
+  bundle_data:  # Gemの保存場所（再ビルド時の時短）
+  postgresql_data:  # PostgreSQLのデータ保存場所（DB永続化）
+  node_modules:  # JS/CSS関連の依存モジュール（yarn, esbuildなど用）
