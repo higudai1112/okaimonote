@@ -24,5 +24,8 @@
 
   <body>
     <%= yield %>
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value.html_safe %></div>
+    <% end %>
   </body>
 </html>

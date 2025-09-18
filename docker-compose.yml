@@ -11,7 +11,7 @@ services:
     volumes:
       - postgresql_data:/var/lib/postgresql/data  # DBの永続化（ボリューム）
     ports:
-      - "5432:5432"  # ホストとコンテナのポートをバインド（DB接続用）
+      - "15432:5432"  # ホストとコンテナのポートをバインド（DB接続用）
     healthcheck:  # Rails側が起動前にDBの状態を確認するためのヘルスチェック
       test: ["CMD-SHELL", "pg_isready -d app_development -U postgres"]
       interval: 10s

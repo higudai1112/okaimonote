@@ -1,0 +1,19 @@
+ja:
+  devise:
+    links:
+      log_in: ログインはこちら
+      sign_up: 新規登録はこちら
+      forgot_password: パスワードをお忘れの方
+      resend_confirmation: 確認メールを再送する
+  activerecord:
+    models:
+      user: ユーザー
+    attributes:
+      user:
+        nickname: ニックネーム
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード確認
+  errors:
+    messages:
+      not_saved: "%{resource}にエラーが発生し、登録できませんでした。"

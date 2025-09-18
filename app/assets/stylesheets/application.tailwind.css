@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@layer components {
+  .title-wrapper {
+    @apply h-[calc(100vh-134px)] bg-orange-50 relative;
+  }
+
+  .title-inner-text {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full;
+  }
+
+  .title-inner-text h1 {
+    @apply text-4xl text-orange-600 mb-8;
+  }
+
+  .logo img {
+    @apply w-32 mx-auto mb-8;
+  }
+
+  .buttons {
+    @apply flex flex-col items-center gap-4;
+  }
+
+  .btn {
+    @apply text-lg py-3 px-6 rounded-full inline-block transition duration-300;
+  }
+
+  .btn-orange {
+    @apply bg-orange-500 text-white hover:bg-orange-600;
+  }
+
+  .btn-white {
+    @apply bg-white text-black border border-gray-300 hover:bg-gray-100;
+  }
+
+  .btn-gray {
+    @apply bg-gray-100 text-gray-800 hover:bg-gray-200;
+  }
+}

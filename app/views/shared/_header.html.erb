@@ -1,0 +1,15 @@
+<header class="header">
+  <div class="left">
+    <% if content_for?(:back_link) %>
+      <%= link_to "< 戻る", yield(:back_link), class: "back-link" %>
+    <% end %>
+  </div>
+
+  <div class="center">
+    <h2><%= yield(:page_title) || "おかいもノート" %></h2>
+  </div>
+
+  <div class="right">
+    <%= yield(:header_action) %>
+  </div>
+</header>
