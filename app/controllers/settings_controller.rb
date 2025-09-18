@@ -1,0 +1,9 @@
+class SettingsController < ApplicationController
+  def index
+    if user_signed_in?
+      render :logged_in
+    else
+      render :not_logged_in
+    end
+  end
+end

@@ -1,0 +1,25 @@
+<nav aria-label="アカウント関連リンク" class="mt-4 text-center space-y-2">
+  <% if controller_name != 'sessions' %>
+    <div>
+      <%= link_to "ログインはこちら", new_session_path(resource_name), class: "text-sm underline text-gray-600 hover:text-gray-800" %>
+    </div>
+  <% end %>
+
+  <% if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <div>
+      <%= link_to "新規登録はこちら", new_registration_path(resource_name), class: "text-sm underline text-gray-600 hover:text-gray-800" %>
+    </div>
+  <% end %>
+
+  <% if devise_mapping.recoverable? && controller_name != 'passwords' %>
+    <div>
+      <%= link_to "パスワードをお忘れの方はこちら", new_password_path(resource_name), class: "text-sm underline text-gray-600 hover:text-gray-800" %>
+    </div>
+  <% end %>
+  <div>
+    <%= button_to "ゲストで試す", guest_sign_in_path, method: :post,
+                  class: "text-sm underline text-gray-600 hover:text-gray-800",
+                  form: { class: "inline" },
+                  data: { turbo: false } %>
+  </div>
+</nav>
