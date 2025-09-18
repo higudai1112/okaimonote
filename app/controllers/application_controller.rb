@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
-   # ログイン不要の公開ページを許可する
+  # ログイン不要の公開ページを許可する
   def devise_controller_or_public_page?
     devise_controller? || public_page?
   end
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :nickname ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname ])
   end
 end

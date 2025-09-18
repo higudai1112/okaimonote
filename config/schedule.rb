@@ -16,7 +16,7 @@
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
 # end
-every 1.day, at: '12:00 am' do
+every 1.day, at: "12:00 am" do
   rake "guest:cleanup"
 end
 # Learn more: http://github.com/javan/whenever

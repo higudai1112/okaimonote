@@ -1,23 +1,23 @@
 Rails.application.routes.draw do
   root to: "pages#title"
-  #ユーザー認証用
+  # ユーザー認証用
   devise_for :users, controllers: {
-    registrations: 'users/registrations',
-    sessions: 'users/sessions'
+    registrations: "users/registrations",
+    sessions: "users/sessions"
   }
 
-  #ゲストログイン用
+  # ゲストログイン用
   devise_scope :user do
-    post 'users/guest_sign_in', to: 'users/sessions#guest_sign_in', as: :guest_sign_in
+    post "users/guest_sign_in", to: "users/sessions#guest_sign_in", as: :guest_sign_in
   end
 
   get "home", to:  "home#index", as: :home
   resources :products
   resources :shops
   resources :records
-  resources :categories, only: [:index, :create, :destroy]
+  resources :categories, only: [ :index, :create, :destroy ]
 
-  get 'settings', to: 'settings#index'
+  get "settings", to: "settings#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
