@@ -22,4 +22,9 @@
                   form: { class: "inline" },
                   data: { turbo: false } %>
   </div>
+  <% if devise_mapping.recoverable? && controller_name != 'pages' %>
+    <div>
+      <%= link_to "タイトル画面に戻る", root_path(resource_name), class: "text-sm underline text-gray-600 hover:text-gray-800" %>
+    </div>
+  <% end %>
 </nav>

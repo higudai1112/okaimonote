@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :nickname, presence: true, length: { maximum: 20 }
+  has_one_attached :avatar
 
   def self.guest
     create!(
@@ -12,5 +13,9 @@ class User < ApplicationRecord
       password: SecureRandom.urlsafe_base64,
       nickname: "ゲストユーザー"
     )
+  end
+
+  def guest?
+    email.present? && email.start_with?("guest_")
   end
 end
