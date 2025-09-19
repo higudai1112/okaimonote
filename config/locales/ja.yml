@@ -5,6 +5,9 @@ ja:
       sign_up: 新規登録はこちら
       forgot_password: パスワードをお忘れの方
       resend_confirmation: 確認メールを再送する
+    mailer:
+      reset_password_instructions:
+        subject: "【おかいもノート】パスワード再設定のご案内"
   activerecord:
     models:
       user: ユーザー

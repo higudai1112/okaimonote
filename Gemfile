@@ -25,6 +25,7 @@ gem "jbuilder"
 # 追加分
 gem "devise"
 gem "whenever", require: false
+gem "image_processing", "~> 1.2" # 画像のリサイズ
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -55,6 +56,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "factory_bot_rails"
 end
 
 group :development do

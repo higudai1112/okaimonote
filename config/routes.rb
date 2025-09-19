@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: "pages#title"
+  root to: "pages#index"
   # ユーザー認証用
   devise_for :users, controllers: {
     registrations: "users/registrations",
@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   resources :shops
   resources :records
   resources :categories, only: [ :index, :create, :destroy ]
+  resource :profile, only: [ :show, :edit, :update ] do
+    get "edit_email"
+    patch "update_email"
+  end
 
   get "settings", to: "settings#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
