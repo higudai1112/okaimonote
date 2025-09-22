@@ -1,0 +1,13 @@
+<div id= "summary" class="price-summary card p-3 mb-4">
+    <h2 class="h5 mb-3">価格サマリー</h2>
+    <% if @min_price.nil? && @max_price.nil? && @average_price.nil? && @last_price.nil? %>
+      <p class="text-gray-500">まだ価格の登録がありません</p>
+    <% else %>
+      <div class="d-flex justify-content-between">
+        <div>最安値: <span class="text-danger">¥<%= @min_price || '未登録' %></span></div>
+        <div>最高値: ¥<%= @max_price || '未登録' %></div>
+      </div>
+      <div class="mt-2">平均価格: ¥<%= @average_price || '未登録' %></div>
+      <div class="mt-2">前回購入: ¥<%= @last_price || '未登録' %>（<%= @last_purchased_at&.strftime('%Y/%m/%d') || '----/--/--' %>）</div>
+    <% end %>
+  </div>

@@ -11,7 +11,9 @@ Rails.application.routes.draw do
     post "users/guest_sign_in", to: "users/sessions#guest_sign_in", as: :guest_sign_in
   end
 
-  get "home", to:  "home#index", as: :home
+  get "home", to: "home#index", as: :home
+  get "home/summary", to: "home#summary", as: :home_summary
+
   resources :products
   resources :shops
   resources :records

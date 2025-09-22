@@ -1,9 +1,69 @@
-<h1>Welcome to Okaimonote!</h1>
-<p>仮のHOME画面は表示されかな？</p>
-<% if user_signed_in? %>
-  <p>こんにちは、<%= current_user.email %> さん！</p>
-  <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
-<% else %>
-  <%= link_to "ログイン", new_user_session_path %> |
-  <%= link_to "新規登録", new_user_registration_path %>
-<% end %>
+<div class= "container mx-auto px-4 py-6">
+  <h1 class= "text-2xl font-bold mb-4">HOME</h1>
+
+  <!-- 検索機能(非表示) -->
+  <div data-controller="toggle">
+    <button data-action="click->toggle#toggle" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded mb-4">
+      絞り込み検索
+    </button>
+
+    <div data-toggle-target="content" class="hidden mb-4">
+      <%= search_form_for @q, url: home_path, method: :get, class: "bg-white p-4 rounded shadow" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <%= f.label :product_name_cont, "商品名" %>
+            <%= f.search_field :product_name_cont, class: "form-control w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :category_name_eq, "カテゴリー" %>
+            <%= f.select :category_name_eq, Category.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :shop_name_eq, "店舗" %>
+            <%= f.select :shop_name_eq, Shop.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
+          </div>
+
+        </div>
+
+        <div class="mt-4">
+          <%= f.submit "検索", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 価格サマリー -->
+  <%= render "summary" %>
+
+  <!-- 価格登録履歴 -->
+  <h2 class="h5 mb-3">価格登録履歴（新着順）</h2>
+
+  <% if @price_records.blank? %>
+    <p class="text-muted">まだ価格の登録がありません</p>
+  <% else %>
+    <% @price_records.each do |record| %>
+      <div class="card mb-3 shadow-sm cursor-pointer"
+           data-action="click->summary#fetch"
+           data-summary-product-id="<%= record.product.id %>">
+        <div class="card-body">
+          <h5 class="card-title font-bold mb-2"><%= record.product.name %></h5>
+
+          <p class="fs-5 mb-1 text-primary">¥<%= number_with_delimiter(record.price) %></p>
+
+          <p class="text-muted small mb-2">
+            店舗：<%= record.shop&.name || "未登録" %> ／ 登録日：<%= l(record.created_at, format: :short) %>
+          </p>
+
+          <% if record.memo.present? %>
+            <details>
+              <summary class="text-muted small">▼ メモを見る</summary>
+              <p class="mt-1 small text-secondary"><%= simple_format(record.memo) %></p>
+            </details>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

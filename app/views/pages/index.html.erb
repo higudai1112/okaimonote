@@ -6,7 +6,7 @@
     <div class="buttons">
       <%= link_to "新規登録", new_user_registration_path, class: "btn btn-orange" %>
       <%= link_to "ログイン", new_user_session_path, class: "btn btn-white" %>
-      <%= link_to "ゲスト", guest_sign_in_path, method: :post, class: "btn btn-gray" %>
+      <%= button_to "ゲスト", guest_sign_in_path, method: :post, class: "btn btn-gray" %>
     </div>
   </div>
 </div>

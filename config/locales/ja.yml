@@ -20,3 +20,6 @@ ja:
   errors:
     messages:
       not_saved: "%{resource}にエラーが発生し、登録できませんでした。"
+  time:
+    formats:
+      short: "%Y/%m/%d"
