@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
-  def index; end
+  def index
+    @products = Product.includes(:category).order(created_at: :desc).page(params[:page]).per(20)
+  end
 
   def new
     @product = Product.new

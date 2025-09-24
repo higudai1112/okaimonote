@@ -14,9 +14,11 @@ Rails.application.routes.draw do
   get "home", to: "home#index", as: :home
   get "home/summary", to: "home#summary", as: :home_summary
 
-  resources :products, only: [ :new, :create, :edit, :update, :destroy ]
+  resources :products, only: [ :new, :create, :show, :edit, :update, :destroy ] do
+    resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]
+  end
+  resources :price_records, only: [ :new, :create ]
   resources :shops
-  resources :records
   resources :categories do
     resources :products, only: [ :index, :new, :create ]
   end
