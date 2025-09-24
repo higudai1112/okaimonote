@@ -1,0 +1,16 @@
+<%= link_to "← 戻る", request.referer || categories_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
+<h1 class="text-xl font-bold mb-6">カテゴリーを追加</h1>
+
+<%= form_with model: @category, local: true, do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, "カテゴリー名", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, placeholder: "例：食料品", class: "for,-control w-full" %>
+  </div>
+
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "補足情報など", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "登録する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
+<% end %>
