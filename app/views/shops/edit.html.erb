@@ -1,0 +1,24 @@
+<%= link_to "← 戻る", shops_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
+<h1 class="text-xl font-bold mb-6">お店情報の編集</h1>
+
+<%= form_with model: @shop, local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, "お店の名前", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, placeholder: "例：イオン", class: "form-control w-full" %>
+  </div>
+
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "補足情報など", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "更新する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded mb-4" %>
+
+  <div class="text-center">
+    <%= button_to "削除する",
+          shop_path(@shop),
+          method: :delete,
+          data: { confirm: "本当に削除しますか？" },
+          class: "btn btn-danger border border-red-500 text-red-600 hover:bg-red-50 w-full py-2 rounded" %>
+  </div>
+<% end %>
