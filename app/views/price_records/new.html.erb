@@ -1,0 +1,12 @@
+<h1 class="text-xl font-bold mb-4">価格登録</h1>
+
+<div class="flex justify-center space-x-4 mb-6">
+  <%= link_to "新規登録", new_price_record_path(mode: :new), class: "btn #{ @mode != 'existing' ? 'btn-orange' : 'btn-outline'}" %>
+  <%= link_to "既存から選択", new_price_record_path(mode: :existing), class: "btn #{ @mode == 'existing' ? 'btn-orange' : 'btn-outline'}" %>
+</div>
+
+<% if @mode == 'existing' %>
+  <%= render 'form_existing', price_record: @price_record %>
+<% else %>
+  <%= render 'form_new', price_record: @price_record %>
+<% end %>
