@@ -1,0 +1,27 @@
+<%= link_to "← 戻る", request.referer || categories_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
+<h1 class= "text-xl font-bold mb-6">商品を追加</h1>
+
+<%= form_with model: @product, local: true do |f| %>
+  <!-- 商品　-->
+  <div class="mb-4">
+    <%= f.label :name, "商品名", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, placeholder: "例：牛乳", class: "form-control w-full" %>
+  </div>
+
+  <!-- カテゴリー -->
+  <div class="mb-4">
+    <%= f.label :category_id, "カテゴリー選択", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.select :category_id,
+          options_from_collection_for_select(@categories, :id, :name, @product.category_id),
+          { include_blank: "選択してください" },
+          class: "form-control w-full" %>
+  </div>
+
+  <!-- メモ -->
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "備考などを記入", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "登録する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
+<% end %>

@@ -1,0 +1,39 @@
+<%= form_with model: @price_record, local: true do |f| %>
+  <!-- 絞り込み -->
+  <div class="mb-4">
+    <%= f.label :category_filter, "カテゴリー", class: "block text-sm font-medium text-gray-700" %>
+    <%= select_tag :category_filter, options_from_collection_for_select(@categories, :id, :name, params[:category_filter]), prompt: "全て", class: "form-control w-full", onchange: "this.form.submit()" %>
+  </div>
+
+  <!-- 商品選択 -->
+  <div class="mb-4">
+    <%= f.label :product_id, "商品", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.collection_select :product_id, @products, :id, :name, prompt: "選択してください", class: "form-control w-full" %>
+  </div>
+
+  <!-- 店舗選択 -->
+  <div class="mb-4">
+    <%= f.label :shop_id, "お店", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.collection_select :shop_id, @shops, :id, :name, prompt: "選択してください", class: "form-control w-full" %>
+  </div>
+
+  <!-- 価格 -->
+  <div class="mb-4">
+    <%= f.label :price, "価格", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.number_field :price, class: "form-control w-full" step: 1 %>
+  </div>
+
+  <!-- 日付 -->
+  <div class="mb-4">
+    <%= f.label :purchased_at, "日付", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.date_field :purchased_at, class: "form-control w-full" %>
+  </div>
+
+  <!-- メモ -->
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, class: "font-control w-full" %>
+  </div>
+
+  <%= f.submit "登録", class: "btn btn-orange w-full" %>
+<% end %>
