@@ -7,6 +7,11 @@ class User < ApplicationRecord
   validates :nickname, presence: true, length: { maximum: 20 }
   has_one_attached :avatar
 
+  has_many :categories, dependent: :destroy
+  has_many :price_records, dependent: :destroy
+
+  after_create :setup_default_categories
+
   def self.guest
     create!(
       email: "guest_#{ SecureRandom.hex(10) }@example.com",
@@ -17,5 +22,13 @@ class User < ApplicationRecord
 
   def guest?
     email.present? && email.start_with?("guest_")
+  end
+
+  private
+
+  def setup_default_categories
+    %w[日用品 食料品].each do |name|
+      categories.create!(name: name)
+    end
   end
 end

@@ -1,0 +1,29 @@
+<%= link_to "← 戻る", categories_path, class: "text-sm text-gray-500 mb-2 inline-block" %>
+
+<h1 class="text-xl font-bold mb-4"><%= @category.name %></h1>
+
+<% if @category.memo.present? %>
+  <p class="text-gray-600 text-sm mb-4 whitespace-pre-line">
+    <%= simple_format(@category.memo) %>
+  </p>
+<% end %>
+
+<% if @products.empty? %>
+  <P class="text-muted">このカテゴリーに商品がまだ登録されていません。</p>
+<% else %>
+  <ul class="divide-y divide-gray-200">
+    <% @products.each do |product| %>
+      <li class="py-3 flex justify-between items-center">
+        <span><%= product.name %></span>
+        <%= link_to "︙", edit_product_path(product), class: "text-gray-500 hover:text-gray-700 text-xl" %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<!-- 商品追加ボタン -->
+<div class="fixed bottom-16 right-4">
+  <%= link_to new_product_path(category_id: @category.id), "bg-orange-400 hover:bg-orange-500 text-white p-4 rounded-full shadow-md" do %>
+    <i class="fas fa-plus"></i>
+  <% end %>
+</div>

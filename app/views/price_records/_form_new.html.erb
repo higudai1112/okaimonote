@@ -1,0 +1,39 @@
+<%= form_with model: @price_record, local: true do |f| %>
+  <!-- 商品名 -->
+  <div class="mb-4">
+    <%= f.label :product_name, "商品名", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :product_name, placeholder: "例：牛乳", class: "form-control w-full" %>
+  </div>
+
+  <!-- カテゴリー -->
+  <div class="mb-4">
+    <%= f.label :category_id, "カテゴリー", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.collection_select :category_id, @categories, :id, :name, prompt: "選択してください", class: "form-control w-full" %>
+  </div>
+
+  <!-- 店舗 -->
+  <div class="mb-4">
+    <%= f.label :shop_name, "お店の名前", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :shop_name, placeholder: "例：イオン", class: "form-control w-full" %>
+  </div>
+
+  <!-- 価格 -->
+  <div class="mb-4">
+    <%= f.label :price, "価格", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.number_field :price, class: "form-control w-full", step: 1 %>
+  </div>
+
+  <!-- 日付 -->
+  <div class="mb-4">
+    <%= f.label :purchased_at, "日付", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.date_field :purchased_at, class: "form-control w-full" %>
+  </div>
+
+  <!-- メモ -->
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, placeholder: "例：広告の品", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "登録", class: "btn btn-orange w-full" %>
+<% end %>

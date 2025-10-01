@@ -1,0 +1,43 @@
+<%= link_to "← 戻る", request.referer || product_path(@price_record.product), class: "text-sm text-gray-500 inline-block mb-2" %>
+
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-xl font-bold">履歴の編集</h1>
+  <%= button_to price_record_path(@price_record),
+        method: :delete,
+        data: { confirm: "本当に削除しますか？" },
+        class: "text-red-400 hover:text-red-600 text-xl" do %>
+    <i class="fas fa-trash-alt"></i>
+  <% end %>
+</div>
+
+<%= form_with model: @price_record, local: true do |f| %>
+  <!-- 商品名(表示だけ) -->
+  <div class="mb-4">
+    <label class="block text-sm text-gray-700 mb-1">商品名</label>
+    <p class="bg-gray-100 p-2 rounded text-gray-800"><%= @price_record.product.name %></p>
+  </div>
+
+  <!-- お店選択 -->
+  <div class="mb-4">
+    <%= f.label :shop_id, "お店の名前", class: "block text-sm text-gray-700 mb-1" %>
+    <%= f.collection_select :shop_id, current_user.shops.order(:name), :id, :name, { prompt: "お店を選択" }, { class: "form-control w-full" } %>
+  </div>
+
+  <!-- 価格 -->
+  <div class="mb-4">
+    <%= f.label :price, "価格", class: "block text-sm text-gray-700 mb-1" %>
+    <%= f.number_field :price, class: "form-control w-full", placeholder: "例：298" %>
+  </div>
+  <!-- 日付 -->
+  <div class="mb-4">
+    <%= f.label :purchased_at, "日付", class: "block text-sm text-gray-700 mb-1" %>
+    <%= f.date_field :purchased_at, class: "form-control w-full" %>
+  </div>
+  <!-- メモ -->
+  <div class="mb-4">
+    <%= f.label :memo, "メモ", class: "block text-sm text-gray-700 mb-1" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "広告の品など", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "更新する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
+<% end %>
