@@ -1,51 +1,56 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
   def index
-    @products = Product.includes(:category).order(created_at: :desc).page(params[:page]).per(20)
+    @products = current_user.products.includes(:category).order(created_at: :desc).page(params[:page]).per(20)
   end
 
   def new
-    @product = Product.new
+    @product = current_user.products.new
     @product.category_id = params[:category_id] if params[:category_id].present?
-    @categories = Category.order(created_at: :desc)
+    @categories = current_user.categories.order(created_at: :desc)
   end
 
   def create
-    @product = Product.new(product_params)
+    @product = current_user.products.new(product_params)
     if @product.save
       redirect_to category_path(@product.category), notice: "商品を登録しました"
     else
-      @categories = Category.order(created_at: :desc)
-      render :new, status: :unprocessable_entity
+      @categories = current_user.categories.order(created_at: :desc)
+      render :new, status: 422
     end
   end
 
   def show
-    @price_records = @product.price_records.order(purchased_on: :desc).page(params[:page]).per(10)
+    @price_records = @product.price_records.order(purchased_at: :desc).page(params[:page]).per(10)
   end
 
   def edit
-    @categories = Category.order(created_at: :desc)
+    @categories = current_user.categories.order(created_at: :desc)
   end
 
   def update
     if @product.update(product_params)
       redirect_to products_path, notice: "更新しました"
     else
-      @categories = Category.order(created_at: :desc)
-      render :edit, status: :unprocessable_entity
+      @categories = current_user.categories.order(created_at: :desc)
+      render :edit, status: 422
     end
   end
 
   def destroy
+    category = @product.category
     @product.destroy!
-    redirect_to products_path, notice: "削除しました", status: :see_other
+    if category.present?
+      redirect_to category_products_path(category), notice: "削除しました", status: :see_other
+    else
+      redirect_to products_path, notice: "削除しました", status: :see_other
+    end
   end
 
   private
 
   def set_product
-    @product = Product.find(params[:id])
+    @product = current_user.products.find(params[:id])
   end
 
   def product_params

@@ -1,0 +1,9 @@
+<%= turbo_stream.replace "product_select" do %>
+  <div id="product_select" class="mb-4">
+    <%= label_tag "price_record_product_id", "商品名", class: "block text-sm font-medium text-gray-700" %>
+    <%= select_tag "price_record[product_id]",
+          options_from_collection_for_select(@products, :id, :name, params.dig(:price_record, :product_id)),
+          prompt: "選択してください",
+          class: "form-control w-full" %>
+  </div>
+<% end %>

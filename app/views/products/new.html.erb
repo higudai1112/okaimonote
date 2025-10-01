@@ -1,6 +1,8 @@
 <%= link_to "← 戻る", request.referer || categories_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
 <h1 class= "text-xl font-bold mb-6">商品を追加</h1>
 
+<%= render "shared/error_message", resource: @product %>
+
 <%= form_with model: @product, local: true do |f| %>
   <!-- 商品　-->
   <div class="mb-4">
@@ -23,5 +25,5 @@
     <%= f.text_area :memo, rows: 3, placeholder: "備考などを記入", class: "form-control w-full" %>
   </div>
 
-  <%= f.submit "登録する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
+  <%= f.submit "登録する", class: "w-full py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded" %>
 <% end %>

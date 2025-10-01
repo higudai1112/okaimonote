@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :category do
-    name { "日用品" }
+    sequence(:name) { |n| "カテゴリー#{n}" }
+    memo { "メモ内容" }
+    association :user
   end
 end

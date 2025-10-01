@@ -29,6 +29,7 @@ gem "image_processing", "~> 1.2" # 画像のリサイズ
 gem "ransack", "4.3.0" # 検索
 gem "kaminari", "1.2.2" # ページネーション用
 gem "bootstrap5-kaminari-views"
+gem "tailwindcss-rails"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -59,8 +60,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  
-  gem 'rspec-rails'
+
+  gem "rspec-rails"
   gem "factory_bot_rails"
 end
 
@@ -73,4 +74,6 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'shoulda-matchers', '~> 5.0'
+  gem "webdrivers"
 end

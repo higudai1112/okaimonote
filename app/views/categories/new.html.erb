@@ -1,6 +1,8 @@
 <%= link_to "← 戻る", request.referer || categories_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
 <h1 class="text-xl font-bold mb-6">カテゴリーを追加</h1>
 
+<%= render "shared/error_message", resource: @category %>
+
 <%= form_with model: @category, local: true do |f| %>
   <div class="mb-4">
     <%= f.label :name, "カテゴリー名", class: "block text-sm font-medium text-gray-700" %>

@@ -37,6 +37,7 @@ services:
 
     environment:
       TZ: Asia/Tokyo  # コンテナ内のタイムゾーン設定（ログや日時表示用）
+      SELENIUM_DRIVER_URL: http://chrome:4444/wd/hub
 
     ports:
       - "3000:3000"  # Railsのポートをホストにバインド（ブラウザでアクセスできる）
@@ -44,9 +45,20 @@ services:
     depends_on:
       db:
         condition: service_healthy  # DBが起動完了してからwebサービスを起動
+      chrome: { condition: service_healthy }
+
+  chrome:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - "4444:4444"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 # 永続化に使うボリュームの定義
 volumes:
   bundle_data:  # Gemの保存場所（再ビルド時の時短）
   postgresql_data:  # PostgreSQLのデータ保存場所（DB永続化）
-  node_modules:  # JS/CSS関連の依存モジュール（yarn, esbuildなど用）
+  node_modules:  # JS/CSS関連の依存モジュール（yarn, esbuildなど用)

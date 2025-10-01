@@ -1,16 +1,16 @@
 <h2 class="text-center text-lg font-bold border-b mb-4">設定</h2>
-
+<%# 未完了
 <div class="space-y-4">
   <%= link_to "プロフィール", profile_path, class: "block text-center bg-white py-2 rounded shadow" %>
-  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "block text-center bg-white py-2 rounded shadow" %>
+<%#  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "block text-center bg-white py-2 rounded shadow" %>
 
-  <h3 class="mt-6 font-semibold">家族一覧</h3>
+<%#  <h3 class="mt-6 font-semibold">家族一覧</h3>
   <% current_user.family_members.each do |member| %>
-    <div class="text-center bg-gray-100 py-1 rounded"><%= member.nickname %></div>
-  <% end %>
-  <%= link_to "招待する", new_invite_path, class: "block text-center bg-white py-2 rounded shadow" %>
+<%#    < class="text-center bg-gray-100 py-1 rounded"><%= member.nickname %>
+<%#  <% end %>
+<%#  <%= link_to "招待する", new_invite_path, class: "block text-center bg-white py-2 rounded shadow" %>
 
-  <%= link_to "利用規約", terms_path, class: "block text-center text-sm text-gray-600" %>
-  <%= link_to "プライバシー", privacy_path, class: "block text-center text-sm text-gray-600" %>
-  <%= link_to "お問い合わせ", contact_path, class: "block text-center text-sm text-gray-600" %>
-</div>
+<%#  <%= link_to "利用規約", terms_path, class: "block text-center text-sm text-gray-600" %>
+<%#  <%= link_to "プライバシー", privacy_path, class: "block text-center text-sm text-gray-600" %>
+<%#  <%= link_to "お問い合わせ", contact_path, class: "block text-center text-sm text-gray-600" %>
+<%#</div>

@@ -1,13 +1,18 @@
 <!-- 購入履歴 -->
-<%= link_to edit_price_record_path(record), class: "block bg-white shadow rounded-lg p-4 hover:bg-ray-50 transition" do %>
+<%= link_to edit_product_price_record_path(price_record.product, price_record),
+            class: "block bg-white shadow rounded-lg p-4 hover:bg-gray-50 transition" do %>
   <div class="flex justify-between items-start">
     <div>
-      <p class="text-sm text-gray-500">日付： <%= l record.purchased_on, format: :short %></p>
-      <p class="text-base font-semibold">金額： <%= number_to_currency(record.price, unite: "¥") %></p>
-      <p class="text-sm text-gray-500">場所： <%= record.shop_name %></p>
+      <p class="text-sm text-gray-500">日付: <%= l price_record.purchased_at, format: :default %></p>
+      <p class="text-base font-semibold">金額: <%= number_to_currency(price_record.price, unit: "円", precision: 0, format: "%n%u") %></p>
+      <% if price_record.shop.present? %>
+        <p class="text-sm text-gray-500">店名: <%= price_record.shop.name %></p>
+      <% end %>
     </div>
-    <% if record.memo.present? %>
-      <i class="fas fa-sticky-note text-gray-400 text-lg"></i>
+    <% if price_record.memo.present? %>
+      <div class="mt-2 bg-gray-50 p-2 rounded text-sm text-gray-700">
+        <%= truncate(price_record.memo, length: 10) %>
+      </div>
     <% end %>
   </div>
 <% end %>
