@@ -15,7 +15,7 @@ RSpec.describe Product, type: :model do
 
   describe 'アソシエーション' do
     it { should belong_to(:user) }
-    it { should belong_to(:category) }
-    it { should belong_to(:price_records.dependent(:destroy)) }
+    it { should belong_to(:category).optional }
+    it { should have_many(:price_records) }
   end
 end

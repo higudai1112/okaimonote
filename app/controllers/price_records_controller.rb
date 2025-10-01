@@ -1,13 +1,13 @@
 class PriceRecordsController < ApplicationController
-  before_action :set_price_record, only: [:edit, :update, :destroy]
-  before_action :set_product, only: [:new, :create]
+  before_action :set_price_record, only: [ :edit, :update, :destroy ]
+  before_action :set_product, only: [ :new, :create ]
 
   def new
-    @mode = params[:mode].presence_in(%w[new existing]) || 'new'
+    @mode = params[:mode].presence_in(%w[new existing]) || "new"
     @price_record = PriceRecord.new
     @price_record.product = @product if @product.present?
 
-    if @mode == 'existing'
+    if @mode == "existing"
       @products = current_user.products.order(:name)
       @shops = current_user.shops.order(:name)
       @categories = current_user.categories.order(:name)
@@ -17,7 +17,8 @@ class PriceRecordsController < ApplicationController
     end
   end
 
-  def create @mode = params[:mode].presence_in(%w[new existing]) || 'new'
+  def create
+    @mode = params[:mode].presence_in(%w[new existing]) || "new"
     @price_record = current_user.price_records.new(price_record_params)
     @price_record.product = @product if @product.present?
     if @price_record.save

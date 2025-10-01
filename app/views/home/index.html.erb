@@ -16,13 +16,13 @@
           </div>
 
           <div>
-            <%= f.label :category_name_eq, "カテゴリー" %>
-            <%= f.select :category_name_eq, Category.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
+            <%= f.label :product_category_id_eq, "カテゴリー" %>
+            <%= f.select :product_category_id_eq, Category.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
           </div>
 
           <div>
-            <%= f.label :shop_name_eq, "店舗" %>
-            <%= f.select :shop_name_eq, Shop.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
+            <%= f.label :shop_id_eq, "店舗" %>
+            <%= f.select :shop_id_eq, Shop.pluck(:name), { include_blank: "選択してください" }, class: "form-control w-full" %>
           </div>
 
         </div>

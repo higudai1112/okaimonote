@@ -5,7 +5,7 @@ class HomeController < ApplicationController
 
     @q = current_user.price_records.ransack(params[:q])
 
-    @price_records = @q.result.includes(:product, :shop).order(created_at: :desc).limit(10)
+    @price_records = @q.result.includes(:product, :shop, product: :category).order(created_at: :desc).limit(10)
 
     latest_record = current_user.price_records.order(created_at: :desc).first
 
