@@ -1,0 +1,41 @@
+<div class="footer fixed bottom-0 w-full bg-white border-t flex justify-around py-2" >
+  <%= link_to home_path, data: { turbo: false },
+      class: "footer-link text-center #{current_page?(home_path) ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400" do %>
+    <div class="text-center">
+      <i class="fa fa-home text-2xl"></i>
+      <p class="text-xs">HOME</p>
+    </div>
+  <% end %>
+
+  <%= link_to lists_path, data: { turbo: false },
+      class: "footer-link text-center #{current_page?(lists_path) ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400" do %>
+    <div class="text-center">
+      <i class="fa fa-list text-2xl"></i>
+      <p class="text-xs">登録リスト</p>
+    </div>
+  <% end %>
+
+  <%= link_to new_price_record_path, data: { turbo: false },
+      class: "footer-link text-center #{current_page?(new_price_record_path) ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400" do %>
+    <div class="text-center">
+      <i class="fa fa-plus-square text-2xl"></i>
+      <p class="text-xs">追加</p>
+    </div>
+  <% end %>
+
+  <%= link_to cart_path, data: { turbo: false },
+      class: "footer-link text-center #{current_page?(cart_path) ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400" do %>
+    <div class="text-center">
+      <i class="fa fa-shopping-cart text-2xl"></i>
+      <p class="text-xs">カート</p>
+    </div>
+  <% end %>
+
+  <%= link_to settings_path, data: { turbo: false },
+      class: "footer-link text-center #{current_page?(settings_path) ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400" do %>
+    <div class="text-center">
+      <i class="fa fa-cog text-2xl"></i>
+      <p class="text-xs">設定</p>
+    </div>
+  <% end %>
+</div>

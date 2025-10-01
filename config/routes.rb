@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get "edit_email"
     patch "update_email"
   end
+  resource :cart, only: [ :show ]
 
   get "settings", to: "settings#index"
   get "lists", to: "lists#index", as: :lists

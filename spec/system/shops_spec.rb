@@ -5,11 +5,12 @@ RSpec.describe "店舗機能", type: :system do
   let!(:shop1) { create(:shop, name: "イオン", user: user) }
   let!(:shop2) { create(:shop, name: "業務スーパー", user: user, memo: "A店") }
 
-   before do
+  before do
     visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: user.password
+    fill_in "user[email]", with: user.email   # ← ラベルではなく name 属性
+    fill_in "user[password]", with: user.password
     click_button "ログイン"
+    expect(page).to have_current_path(home_path) # ログイン成功の確認
   end
 
   describe "お店一覧ページ" do

@@ -28,5 +28,8 @@
     <% flash.each do |key, value| %>
       <div class="alert alert-<%= key %>"><%= value.html_safe %></div>
     <% end %>
+
+    <%# ログイン済みユーザーのみフッターを表示 %>
+    <%= render "shared/footer" if user_signed_in? %>
   </body>
 </html>

@@ -9,9 +9,10 @@ RSpec.describe "価格登録", type: :system do
 
    before do
     visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: user.password
+    fill_in "user[email]", with: user.email   # ← ラベルではなく name 属性
+    fill_in "user[password]", with: user.password
     click_button "ログイン"
+    expect(page).to have_current_path(home_path) # ログイン成功の確認
   end
 
   it "有効なファクトリーであること" do
