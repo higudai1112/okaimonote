@@ -1,0 +1,50 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">カテゴリーリスト</h1>
+  </div>
+
+  <!-- 検索部分 -->
+  <div class="mb-4">
+    <div class="relative">
+      <%= form_with url: categories_path,method: :get, local: true do |f| %>
+        <%= f.search_field :name_cont, placeholder: "検索", class: "border rounded py-2 px-3 pl-10 w-full" %>
+        <div class="absolute left-3 top-2.5 text-gray-500">
+          <i class="fas fa-search"></i>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- カテゴリーリスト -->
+  <ul class="divide-y divide-gray-200 rounded bg-white shadow mb-6">
+    <li class="p-4 flex items-center hover:bg-gray-50">
+      <%= link_to "すべての商品", products_path, class: "text-lg text-black hover:underline w-full" %>
+    </li>
+
+    <% @categories.each do |category| %>
+      <li class="p-4 flex items-center hover:bg-gray-50">
+        <%= link_to category.name, category_path(category), class: "text-lg text-gray-800 hover:underline w-full" %>
+        <% if category.memo.present? %>
+          <i class="fas fa-sticky-note text-gray-400 ml-2" title="メモあり"></i>
+        <% end %>
+        <%= link_to edit_category_path(category), class: "text-xl text-gray-500 hover:text-gray-700" do %>
+          <i class="fa fa-ellipsis-v"></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <!-- 追加ボタン -->
+  <div class="flex gap-4 justify-center">
+    <%= link_to new_product_path,
+                class: "btn btn-circle bg-orange-400 text-white" do %>
+      <i class="fa fa-plus text-2xl"></i>
+      <span class="text-xs mt-1">商品を追加</span>
+    <% end %>
+    <%= link_to new_category_path,
+                class: "bg-orange-400 hover:bg-orange-500 text-white p-4 rounded-full shadow-md" do %>
+      <i class="fa fa-folder-plus text-2xl"></i>
+      <span class="text-xs mt-1">カテゴリーを追加</span>
+    <% end %>
+  </div>
+</div>

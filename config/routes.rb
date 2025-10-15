@@ -11,17 +11,27 @@ Rails.application.routes.draw do
     post "users/guest_sign_in", to: "users/sessions#guest_sign_in", as: :guest_sign_in
   end
 
-  get "home", to:  "home#index", as: :home
-  resources :products
+  get "home", to: "home#index", as: :home
+  get "home/summary", to: "home#summary", as: :home_summary
+
+  resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
+    resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]
+  end
+  resources :price_records, only: [:new, :create]
   resources :shops
-  resources :records
-  resources :categories, only: [ :index, :create, :destroy ]
+  resources :categories do
+    resources :products, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
+  end
   resource :profile, only: [ :show, :edit, :update ] do
     get "edit_email"
     patch "update_email"
   end
+  resource :shopping_list, only: [ :show, :create, :update, :destroy ] do
+    resources :shopping_items, only: [ :create, :update, :destroy]
+  end
 
   get "settings", to: "settings#index"
+  get "lists", to: "lists#index", as: :lists
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

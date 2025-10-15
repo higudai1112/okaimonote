@@ -37,3 +37,17 @@
     @apply bg-gray-100 text-gray-800 hover:bg-gray-200;
   }
 }
+
+@layer base {
+  i {
+    font-style: normal !important;
+  }
+
+  .fa,
+  .fa-solid,
+  .fa-regular,
+  .fa-brands {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+  }
+}
