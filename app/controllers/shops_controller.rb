@@ -2,20 +2,20 @@ class ShopsController < ApplicationController
   before_action :set_shops, only: [ :edit, :update, :destroy ]
 
   def index
-    @q = Shop.ransack(params[:id])
+    @q = current_user.shops.ransack(params[:id])
     @shops = @q.result.order(created_at: :desc)
   end
 
   def new
-    @shop = Shop.new
+    @shop = current_user.shops.new
   end
 
   def create
-    @shop = Shop.new(shop_params)
+    @shop = current_user.shops.new(shop_params)
     if @shop.save
       redirect_to shops_path, notice: "お店を登録しました"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: 422
     end
   end
 
@@ -25,7 +25,7 @@ class ShopsController < ApplicationController
     if @shop.update(shop_params)
       redirect_to shops_path, notice: "更新しました"
     else
-      render :edit, status: :processable_entity
+      render :edit, status: 422
     end
   end
 
@@ -37,7 +37,7 @@ class ShopsController < ApplicationController
   private
 
   def set_shops
-    @shop = Shop.find(params[:id])
+    @shop = current_user.shops.find(params[:id])
   end
 
   def shop_params

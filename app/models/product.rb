@@ -3,13 +3,13 @@ class Product < ApplicationRecord
   belongs_to :user
   has_many :price_records, dependent: :destroy
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: :user_id }
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id name memo category_id user_id created_at updated_at]
+    %w[name memo category_id ]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    %w[category user price_records]
+    %w[category price_records]
   end
 end

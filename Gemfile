@@ -29,6 +29,7 @@ gem "image_processing", "~> 1.2" # 画像のリサイズ
 gem "ransack", "4.3.0" # 検索
 gem "kaminari", "1.2.2" # ページネーション用
 gem "bootstrap5-kaminari-views"
+gem "tailwindcss-rails"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

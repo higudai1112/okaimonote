@@ -4,6 +4,7 @@ RSpec.describe "カテゴリー機能", type: :system do
   let(:user) { create(:user) }
   let!(:category1) { create(:category, name: "野菜", user: user) }
   let!(:category2) { create(:category, name: "お肉", user: user, memo: "加工肉含む") }
+  let(:unique_name) { "日用品#{SecureRandom.hex(4)}" }
 
   before do
     visit new_user_session_path
@@ -11,19 +12,19 @@ RSpec.describe "カテゴリー機能", type: :system do
     fill_in "user[password]", with: user.password
     click_button "ログイン"
     expect(page).to have_current_path(home_path) # ログイン成功の確認
+    find('p', text: '登録リスト').click
+    find('a', text: 'カテゴリーリスト').click
+    expect(page).to have_current_path(categories_path)
   end
 
-  describe "カテゴリー一覧ページ" do
-    it "カテゴリー一覧が表示されること" do
-      visit categories_path
+  describe "カテゴリーリストページ" do
+    it "カテゴリーリストが表示されること" do
       expect(page).to have_content "野菜"
       expect(page).to have_content "お肉"
     end
 
-    it "メモがあるお店にメモアイコンが表示されること" do
-      visit shops_path
-
-      within("li", text: "業務スーパー") do
+    it "メモがあるカテゴリーにメモアイコンが表示されること" do
+      within("li", text: "お肉") do
         expect(page).to have_selector(".fa-sticky-note")
       end
     end
@@ -31,8 +32,8 @@ RSpec.describe "カテゴリー機能", type: :system do
 
   describe "新規作成" do
     it "カテゴリーを新規作成できる" do
-      visit new_category_path
-      fill_in "カテゴリー名", with: "日用品"
+      find('a .fa-folder-plus').click
+      fill_in "カテゴリー名", with: unique_name
       fill_in "メモ", with: "洗剤・ティッシュなど"
       click_button "登録する"
 
@@ -41,7 +42,7 @@ RSpec.describe "カテゴリー機能", type: :system do
     end
 
     it "カテゴリー名が未入力では登録できない" do
-      visit new_category_path
+      find('a .fa-folder-plus').click
       fill_in "カテゴリー名", with: ""
       click_button "登録する"
 
@@ -51,8 +52,9 @@ RSpec.describe "カテゴリー機能", type: :system do
 
   describe "編集" do
     it "カテゴリーを編集できる" do
-      category = create(:category, name: "旧名", user: user)
-      visit edit_category_path(category)
+      within("li", text: "お肉") do
+        find("a i.fa-ellipsis-v").click
+      end
       fill_in "カテゴリー名", with: "新しい名前"
       click_button "更新する"
 
@@ -61,15 +63,21 @@ RSpec.describe "カテゴリー機能", type: :system do
     end
   end
 
-  describe "削除" do
+  describe "削除", js: true do
     it "カテゴリーを削除できる" do
       category = create(:category, name: "削除対象", user: user)
-      visit edit_category_path(category)
+      visit categories_path
+
+      within(:xpath, "//li[contains(., '削除対象')]") do
+        find("a i.fa-ellipsis-v").click
+      end
+      expect(page).to have_current_path(edit_category_path(category))
+
       accept_confirm do
         click_button "削除する"
       end
 
-      expect(page).to have_content "削除しました"
+      expect(page).to have_content "カテゴリーを削除しました"
       expect(page).not_to have_content "削除対象"
     end
   end

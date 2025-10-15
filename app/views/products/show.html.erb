@@ -12,13 +12,13 @@
   <p class="text-sm text-gray-500">この商品の購入履歴はまだありません</p>
 <% else %>
   <div class="space-y-3">
-    <% @price_records.each do |record| %>
-      <%= render partial: "price_records/card", locals: { record: record } %>
-    <% end %>
-  </div>
-
-  <!-- ページネーション -->
-  <div class="mt-4">
-    <%= paginate @price_records, theme: 'bootstrap-5' %>
+    <%= render partial: "price_records/card",
+                collection: @price_records,
+                as: :price_record %>
   </div>
 <% end %>
+
+<!-- ページネーション -->
+<div class="mt-4">
+  <%= paginate @price_records, theme: 'bootstrap-5' %>
+</div>

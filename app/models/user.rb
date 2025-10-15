@@ -9,8 +9,12 @@ class User < ApplicationRecord
 
   has_many :categories, dependent: :destroy
   has_many :price_records, dependent: :destroy
+  has_many :shops, dependent: :destroy
+  has_many :products, dependent: :destroy
+  belongs_to :shopping_list, dependent: :destroy
 
   after_create :setup_default_categories
+  after_create :setup_default_shopping_list
 
   def self.guest
     create!(
@@ -30,5 +34,9 @@ class User < ApplicationRecord
     %w[日用品 食料品].each do |name|
       categories.create!(name: name)
     end
+  end
+
+  def setup_default_shopping_list
+    shopping_lists.create!(name: "マイリスト")
   end
 end

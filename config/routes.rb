@@ -14,19 +14,21 @@ Rails.application.routes.draw do
   get "home", to: "home#index", as: :home
   get "home/summary", to: "home#summary", as: :home_summary
 
-  resources :products, only: [ :new, :create, :show, :edit, :update, :destroy ] do
+  resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]
   end
-  resources :price_records, only: [ :new, :create ]
+  resources :price_records, only: [:new, :create]
   resources :shops
   resources :categories do
-    resources :products, only: [ :index, :new, :create ]
+    resources :products, only: [ :index, :show, :new, :create, :edit, :update, :destroy ]
   end
   resource :profile, only: [ :show, :edit, :update ] do
     get "edit_email"
     patch "update_email"
   end
-  resource :cart, only: [ :show ]
+  resource :shopping_list, only: [ :show, :create, :update, :destroy ] do
+    resources :shopping_items, only: [ :create, :update, :destroy]
+  end
 
   get "settings", to: "settings#index"
   get "lists", to: "lists#index", as: :lists

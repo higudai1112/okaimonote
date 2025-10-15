@@ -14,8 +14,12 @@
   <ul class="divide-y divide-gray-200">
     <% @products.each do |product| %>
       <li class="py-3 flex justify-between items-center">
-        <span><%= product.name %></span>
-        <%= link_to "︙", edit_product_path(product), class: "text-gray-500 hover:text-gray-700 text-xl" %>
+        <span>
+          <%= link_to product.name, product_path(product), class: "text-blue-600 hover: underline" %>
+        </span>
+        <%= link_to edit_product_path(product), class: "text-gray-500 hover:text-gray-700 text-xl" do %>
+          <i class="fa fa-ellipsis-v"></i>
+        <% end %>
       </li>
     <% end %>
   </ul>
@@ -23,7 +27,9 @@
 
 <!-- 商品追加ボタン -->
 <div class="fixed bottom-16 right-4">
-  <%= link_to new_product_path(category_id: @category.id), "bg-orange-400 hover:bg-orange-500 text-white p-4 rounded-full shadow-md" do %>
-    <i class="fas fa-plus"></i>
+  <%= link_to new_product_path(category_id: @category.id),
+              class: "btn btn-circle bg-orange-400 text-white flex flex-col items-center" do %>
+    <i class="fa fa-plus text-2xl"></i>
+    <span class="text-xs mt-1">商品</span>
   <% end %>
 </div>

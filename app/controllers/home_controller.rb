@@ -1,24 +1,28 @@
 class HomeController < ApplicationController
   def index
-    @categories = Category.pluck(:name)
-    @shops = Shop.pluck(:name)
+    @categories = current_user.categories
+    @shops = current_user.shops
 
     @q = current_user.price_records.ransack(params[:q])
 
-    @price_records = @q.result.includes(:product, :shop, product: :category).order(created_at: :desc).limit(10)
+    @price_records = @q.result
+                       .includes(:product, :shop, product: :category)
+                       .joins(product: [:category, :user])
+                       .joins(:shop)
+                       .order(created_at: :desc)
+                       .limit(5)
 
-    latest_record = current_user.price_records.order(created_at: :desc).first
+    latest_record = current_user.price_records.where.not(purchased_at: nil).order(purchased_at: :desc).first
 
     if latest_record.present?
       set_summary(latest_record.product)
     else
       @selected_product = nil
-      @price_records = []
     end
   end
 
   def show_summary
-    product = Product.find(params[:id])
+    product = current_user.products.find(params[:id])
     set_summary(product)
 
     respond_to do |format|
@@ -37,6 +41,6 @@ class HomeController < ApplicationController
     @average_price = histories.average(:price)&.round
     latest = histories.first
     @last_price = latest&.price
-    @last_purchased_at = latest&.created_at
+    @last_purchased_at = latest&.purchased_at
   end
 end

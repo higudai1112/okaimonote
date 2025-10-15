@@ -26,7 +26,7 @@ ja:
         user: "ユーザー"
 
       shop:
-        name: "店舗名"
+        name: "店名"
         user: "ユーザー"
 
       price_record:
@@ -80,6 +80,7 @@ ja:
   errors:
     format: "%{attribute}%{message}"
     messages:
+      not_saved: "エラーが発生しました"
       blank: "を入力してください"
       taken: "は既に使用されています"
       record_invalid: "バリデーションに失敗しました: %{errors}"
@@ -112,6 +113,10 @@ ja:
     sessions:
       signed_in: "ログインしました。"
       signed_out: "ログアウトしました。"
+  date:
+    formats:
+      default: "%Y/%m/%d"
   time:
     formats:
+      default: "%Y/%m/%d %H:%M"
       short: "%Y/%m/%d %H:%M"

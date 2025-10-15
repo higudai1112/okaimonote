@@ -11,28 +11,26 @@ RSpec.describe "店舗機能", type: :system do
     fill_in "user[password]", with: user.password
     click_button "ログイン"
     expect(page).to have_current_path(home_path) # ログイン成功の確認
+    find('p', text: '登録リスト').click
+    find('a', text: 'お店リスト').click
+    expect(page).to have_current_path(shops_path)
   end
 
   describe "お店一覧ページ" do
     it "お店一覧が表示されること" do
-      visit shops_path
       expect(page).to have_content "イオン"
       expect(page).to have_content "業務スーパー"
     end
 
     it "メモがあるお店にメモアイコンが表示されること" do
-      visit shops_path
-
       within("li", text: "業務スーパー") do
         expect(page).to have_selector(".fa-sticky-note")
       end
     end
 
     it "編集ページへ遷移できること" do
-      visit shops_path
-
       within("li", text: "イオン") do
-        find("a", text: "︙").click
+        find("a i.fa-ellipsis-v").click
       end
 
       expect(page).to have_current_path(edit_shop_path(shop1))
@@ -42,8 +40,7 @@ RSpec.describe "店舗機能", type: :system do
 
   describe "新規登録" do
     it "正しい情報でお店を登録できること" do
-      visit new_shop_path
-
+      find('a .fa-plus').click
       fill_in "店名", with: "コープ"
       fill_in "メモ", with: "近所のスーパー"
       click_button "登録する"
@@ -53,8 +50,7 @@ RSpec.describe "店舗機能", type: :system do
     end
 
     it "店名が空だとエラーになること" do
-      visit new_shop_path
-
+      find('a .fa-plus').click
       fill_in "店名", with: ""
       click_button "登録する"
 
@@ -64,7 +60,9 @@ RSpec.describe "店舗機能", type: :system do
 
   describe "編集" do
     it "お店の情報を更新できること" do
-      visit edit_shop_path(shop1)
+      within("li", text: "イオン") do
+        find("a i.fa-ellipsis-v").click
+      end
 
       fill_in "店名", with: "イオンモール"
       fill_in "メモ", with: "ショッピングモール内"
@@ -75,7 +73,9 @@ RSpec.describe "店舗機能", type: :system do
     end
 
     it "空欄では更新できないこと" do
-      visit edit_shop_path(shop1)
+      within("li", text: "イオン") do
+        find("a i.fa-ellipsis-v").click
+      end
 
       fill_in "店名", with: ""
       click_button "更新する"
@@ -86,14 +86,21 @@ RSpec.describe "店舗機能", type: :system do
 
   describe "削除" do
     it "お店を削除できること" do
-      visit edit_shop_path(shop2)
+      shop = create(:shop, name: "削除用店舗", user: user)
+      visit shops_path
+
+      within(:xpath, "//li[contains(., '削除用店舗')]") do
+        find("a i.fa-ellipsis-v").click
+      end
+
+      expect(page).to have_current_path(edit_shop_path(shop))
 
       accept_confirm do
         click_button "削除する"
       end
 
       expect(page).to have_content "削除しました"
-      expect(page).not_to have_content "業務スーパー"
+      expect(page).not_to have_content "削除用店舗"
     end
   end
 end
