@@ -26,12 +26,12 @@ Rails.application.routes.draw do
     get "edit_email"
     patch "update_email"
   end
-  resource :shopping_list, only: [ :show, :create, :update, :destroy ] do
-    resources :shopping_items, only: [ :create, :update, :destroy]
+  resource :shopping_list, only: [ :show ] do
+    resources :shopping_items, only: [ :create, :update, :edit, :destroy]
+    delete :delete_purchased, on: :collection
   end
-
-  get "settings", to: "settings#index"
   get "lists", to: "lists#index", as: :lists
+  get "settings", to: "settings#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -11,7 +11,8 @@ class User < ApplicationRecord
   has_many :price_records, dependent: :destroy
   has_many :shops, dependent: :destroy
   has_many :products, dependent: :destroy
-  belongs_to :shopping_list, dependent: :destroy
+  has_one :shopping_list, dependent: :destroy
+  has_many :shopping_items, through: :shopping_list
 
   after_create :setup_default_categories
   after_create :setup_default_shopping_list
@@ -37,6 +38,6 @@ class User < ApplicationRecord
   end
 
   def setup_default_shopping_list
-    shopping_lists.create!(name: "マイリスト")
+    shopping_list.create!(name: "マイリスト")
   end
 end

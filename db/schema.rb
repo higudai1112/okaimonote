@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_164023) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_155334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,6 +76,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_164023) do
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
+  create_table "shopping_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "purchased", default: false
+    t.string "memo"
+    t.bigint "shopping_list_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shopping_list_id"], name: "index_shopping_items_on_shopping_list_id"
+  end
+
+  create_table "shopping_lists", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.string "shared_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shared_token"], name: "index_shopping_lists_on_shared_token", unique: true
+    t.index ["user_id"], name: "index_shopping_lists_on_user_id"
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "name"
     t.text "memo"
@@ -106,5 +126,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_164023) do
   add_foreign_key "price_records", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "users"
+  add_foreign_key "shopping_items", "shopping_lists"
+  add_foreign_key "shopping_lists", "users"
   add_foreign_key "shops", "users"
 end
