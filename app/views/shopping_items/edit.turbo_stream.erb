@@ -1,0 +1,53 @@
+<turbo-stream action="append" target="modal_container">
+  <template>
+    <!-- 画面全体を半透明(position),モーダル中央配置(display),背景グレー(background),最前面固定(z-index),浮き彫り(box-shadow)-->
+    <div id="modal"
+         style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                display: flex; align-items: center; justify-content: center;
+                background: rgba(0, 0, 0, 0.5); z-index: 50;"
+         onclick="if (event.target.id === 'modal') document.getElementById('modal').remove()">
+      <div id="modal-content"
+           style="background: white; padding: 24px; border-radius: 12px;
+                  width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                  position: relative;"
+           onclick="event.stopPropagation()">
+        <h2 style="font-size: 1.1rem; font-weight: 600; color: #F97316;
+                   display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <i class="fa-solid fa-pen-to-square"></i>
+          商品を編集
+        </h2>
+
+        <%= render "form", shopping_item: @shopping_item %>
+
+        <!-- 閉じるボタン -->
+        <button type="button"
+                style="position: absolute; top: 12px; right: 12px; color: #9CA3AF; cursor: pointer;"
+                onclick="document.getElementById('modal').remove()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+      // すでに開いているモーダルを削除
+      const oldModal = document.getElementById("modal");
+      if (oldModal) oldModal.remove();
+
+      // モーダル削除関数
+      function closeModal() {
+        const modal = document.getElementById("modal");
+        if (modal) modal.remove();
+        document.removeEventListener("keydown", handleEscKey);
+      }
+
+      // Escキーで閉じる
+      function handleEscKey(e) {
+        if (e.key === "Escape") closeModal();
+      }
+
+      // Escキーリスナをイベント重複しないように再登録
+      document.removeEventListener("keydown", handleEscKey);
+      document.addEventListener("keydown", handleEscKey);
+    </script>
+</turbo-stream>

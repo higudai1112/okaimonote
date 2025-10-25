@@ -1,0 +1,11 @@
+<!-- 編集後にモーダルを終えて、リストを再表示 -->
+<turbo-stream action="replace" target="shopping_item_<%= @shopping_item.id %>">
+  <template>
+    <%= render partial: "shopping_items/item_row",
+               formats: [:html],
+               locals: { shopping_item: @shopping_item } %>
+  </template>
+</turbo-stream>
+
+<!-- モーダル全体を削除 -->
+<turbo-stream action="remove" target="modal"></turbo-stream>
