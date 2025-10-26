@@ -1,0 +1,24 @@
+<%= form_with(
+      model: shopping_item,
+      url: shopping_list_shopping_item_path(shopping_item),
+      method: :patch,
+      data: { turbo_stream: true } ) do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, "商品名", class: "block mb-1" %>
+    <%= f.text_field :name, class: "w-full border rounded p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :memo, "メモ", class: "block mb-1" %>
+    <%= f.text_area :memo, class: "w-full border rounded p-2", rows: 3 %>
+  </div>
+
+  <div class="flex justify-between items-center">
+    <%= f.submit "更新", class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
+
+    <%= button_to "削除", shopping_list_shopping_item_path(shopping_item),
+                  method: :delete,
+                  data: { confirm: "削除しますか？" },
+                  class: "text-red-500 hover:underline" %>
+  </div>
+<% end %>

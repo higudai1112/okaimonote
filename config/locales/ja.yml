@@ -1,22 +1,122 @@
 ja:
-  devise:
-    links:
-      log_in: ログインはこちら
-      sign_up: 新規登録はこちら
-      forgot_password: パスワードをお忘れの方
-      resend_confirmation: 確認メールを再送する
-    mailer:
-      reset_password_instructions:
-        subject: "【おかいもノート】パスワード再設定のご案内"
   activerecord:
     models:
-      user: ユーザー
+      user: "ユーザー"
+      product: "商品"
+      category: "カテゴリー"
+      shop: "店舗"
+      price_record: "価格記録"
+
     attributes:
       user:
-        nickname: ニックネーム
-        email: メールアドレス
-        password: パスワード
-        password_confirmation: パスワード確認
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+        remember_me: "ログイン情報を記憶"
+        name: "名前"
+
+      product:
+        name: "商品名"
+        memo: "メモ"
+        category: "カテゴリー"
+        user: "ユーザー"
+
+      category:
+        name: "カテゴリー名"
+        user: "ユーザー"
+
+      shop:
+        name: "店名"
+        user: "ユーザー"
+
+      price_record:
+        price: "価格"
+        memo: "メモ"
+        purchased_at: "購入日"
+        product: "商品"
+        shop: "店舗"
+        user: "ユーザー"
+
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "を入力してください"
+              taken: "は既に使用されています"
+            password:
+              blank: "を入力してください"
+              too_short: "は%{count}文字以上で入力してください"
+        product:
+          attributes:
+            name:
+              blank: "を入力してください"
+        category:
+          attributes:
+            name:
+              blank: "を入力してください"
+            user:
+              required: "を入力してください"
+        shop:
+          attributes:
+            name:
+              blank: "を入力してください"
+            user:
+              required: "を入力してください"
+        price_record:
+          attributes:
+            price:
+              blank: "を入力してください"
+              not_a_number: "は数値で入力してください"
+            purchased_at:
+              blank: "を入力してください"
+            product:
+              required: "を入力してください"
+            shop:
+              required: "を入力してください"
+            user:
+              required: "を入力してください"
+
   errors:
+    format: "%{attribute}%{message}"
     messages:
-      not_saved: "%{resource}にエラーが発生し、登録できませんでした。"
+      not_saved: "エラーが発生しました"
+      blank: "を入力してください"
+      taken: "は既に使用されています"
+      record_invalid: "バリデーションに失敗しました: %{errors}"
+      too_short: "は%{count}文字以上で入力してください"
+      too_long: "は%{count}文字以内で入力してください"
+      wrong_length: "は%{count}文字で入力してください"
+      not_a_number: "は数値で入力してください"
+      greater_than: "%{count}より大きい値にしてください"
+      less_than: "%{count}より小さい値にしてください"
+      greater_than_or_equal_to: "%{count}以上の値にしてください"
+      less_than_or_equal_to: "%{count}以下の値にしてください"
+      equal_to: "%{count}にしてください"
+      other_than: "%{count}以外の値にしてください"
+      confirmation: "が一致しません"
+      invalid: "は不正な値です"
+      required: "を入力してください"
+
+  devise:
+    failure:
+      already_authenticated: "すでにログインしています。"
+      unauthenticated: "ログインしてください。"
+      invalid: "メールアドレスまたはパスワードが違います"
+      not_found_in_database: "メールアドレスまたはパスワードが違います"
+      timeout: "一定時間が経過したため、再度ログインが必要です。"
+      unconfirmed: "メールアドレスの確認が必要です。"
+    registrations:
+      signed_up: "アカウントを登録しました。"
+      updated: "アカウント情報を変更しました。"
+      destroyed: "アカウントを削除しました。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+  date:
+    formats:
+      default: "%Y/%m/%d"
+  time:
+    formats:
+      default: "%Y/%m/%d %H:%M"
+      short: "%Y/%m/%d %H:%M"

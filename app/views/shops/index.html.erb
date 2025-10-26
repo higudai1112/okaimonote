@@ -1,0 +1,30 @@
+<h1 class="text-xl font-bold mb-4">お店リスト</h1>
+
+<%= search_form_for @q, url: shops_path, method: :get, html: { class: "mb-4" } do |f| %>
+  <%= f.search_field :name_cont, placeholder: "検索", class: "form-control w-full mb-2" %>
+  <%= f.submit "検索", class: "btn btn-outline-gray w-full" %>
+<% end %>
+
+<!-- お店一覧 -->
+<ul class="divide-y divide-gray-200 mb-4">
+  <% @shops.each do |shop| %>
+    <li class="py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <span><%= shop.name %></span>
+        <% if shop.memo.present? %>
+          <i class="fa fa-sticky-note text-gray-400 ml-2" title="メモあり"></i>
+        <% end %>
+      </div>
+      <%= link_to edit_shop_path(shop), class: "text-xl text-gray-500 hover:text-gray-700" do %>
+        <i class="fa fa-ellipsis-v"></i>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<div class="fixed bottom-16 right-4">
+  <%= link_to new_shop_path, class: "bg-orange-400 hover:bg-orange-500 text-white p-4 rounded-full shadow-md" do %>
+    <i class="fa fa-plus text-2xl"></i>
+    <span class="text-xs mt-1">お店を追加</span>
+  <% end %>
+</div>

@@ -4,5 +4,17 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import CategoryFilterController from "./category_filter_controller"
+application.register("category-filter", CategoryFilterController)
+
+import ConfirmController from "./confirm_controller"
+application.register("confirm", ConfirmController)
+
+import ModalController from "./modal_controller"
+application.register("modal", ModalController)
+
+import SummaryController from "./summary_controller"
+application.register("summary", SummaryController)
+
+import ToggleController from "./toggle_controller"
+application.register("toggle", ToggleController)

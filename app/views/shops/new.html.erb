@@ -1,0 +1,18 @@
+<%= link_to "← 戻る", shops_path, class: "text-sm text-gray-500 mb-4inline-block" %>
+<h1 class="text-xl font-bold mb-6">お店を追加</h1>
+
+<%= render "shared/error_message", resource: @shop %>
+
+<%= form_with model: @shop, local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, "店名", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, placeholder: "例：イオン", class: "form-control w-full" %>
+  </div>
+
+  <div class="mb-6">
+    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "補足情報など", class: "form-control w-full" %>
+  </div>
+
+  <%= f.submit "登録する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
+<% end %>

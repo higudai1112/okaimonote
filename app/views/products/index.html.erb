@@ -1,0 +1,32 @@
+<%= link_to "← 戻る", categories_path, class: "text-sm text-gray-500 mb-2 inline-block" %>
+
+<h1 class="text-xl font-bold mb-4">すべての商品</h1>
+
+<% if @products.empty? %>
+  <P class="text-muted">商品がまだ登録されていません。</p>
+<% else %>
+  <ul class="divide-y divide-gray-200">
+    <% @products.each do |product| %>
+      <li class="py-3 flex justify-between items-center">
+        <span>
+          <%= link_to product.name, product_path(product), class: "text-blue-600 hover:underline" %>
+          <% if product.category.present? %>
+            <span class="ml-2 text-sm text-gray-500">（<%= product.category.name %>）</span>
+          <% end %>
+        </span>
+        <%= link_to edit_product_path(product), class: "text-gray-500 hover:text-gray-700 text-xl" do %>
+          <i class="fa fa-ellipsis-v"></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<!-- 商品追加ボタン -->
+<div class="fixed bottom-16 right-4">
+  <%= link_to new_product_path,
+              class: "btn btn-circle bg-orange-400 text-white flex flex-col items-center" do %>
+    <i class="fa fa-plus text-2xl"></i>
+    <span class="text-xs mt-1">商品</span>
+  <% end %>
+</div>

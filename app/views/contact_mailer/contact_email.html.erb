@@ -1,0 +1,14 @@
+<div style="background-color:#FFF9F3; padding:24px; font-family: 'Helvetica Neue', Arial, sans-serif; color:#333;">
+  <h2 style="color:#F97316;">【okaimonote】お問い合わせが届きました</h2>
+
+  <div style="background:white; border-radius:12px; padding:20px; margin-top:16px; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+    <p><strong>ニックネーム：</strong><%= @nickname %></p>
+    <p><strong>メールアドレス：</strong><%= @user_email %></p>
+    <p><strong>お問い合わせ内容：</strong></p>
+    <p style="white-space: pre-wrap;"><%= @message %></p>
+  </div>
+
+  <p style="margin-top:32px; font-size:13px; color:#777;">
+    okaimonote運営チーム
+  </p>
+</div>

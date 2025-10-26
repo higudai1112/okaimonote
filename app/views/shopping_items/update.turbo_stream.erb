@@ -1,0 +1,25 @@
+<% if @shopping_item.purchased? %>
+  <!-- 「買うもの」リストから削除 -->
+  <turbo-stream action="remove" target="shopping_item_<%= @shopping_item.id %>"></turbo-stream>
+
+  <!-- 「購入済み」リストへ追加 -->
+  <turbo-stream action="append" target="purchased_items_list">
+    <template>
+      <%= render partial: "shopping_items/item_row", formats: [:html], locals: { shopping_item: @shopping_item } %>
+    </template>
+  </turbo-stream>
+
+<% else %>
+  <!-- 「購入済み」リストから削除 -->
+  <turbo-stream action="remove" target="shopping_item_<%= @shopping_item.id %>"></turbo-stream>
+
+  <!-- 「買うもの」リストへ追加 -->
+  <turbo-stream action="prepend" target="shopping_items">
+    <template>
+      <%= render partial: "shopping_items/item_row", formats: [:html], locals: { shopping_item: @shopping_item } %>
+    </template>
+  </turbo-stream>
+<% end %>
+
+<!-- 編集モーダルが開いていた場合は閉じる -->
+<%= turbo_stream.remove "modal" %>
