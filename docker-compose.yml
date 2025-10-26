@@ -39,6 +39,9 @@ services:
       TZ: Asia/Tokyo  # コンテナ内のタイムゾーン設定（ログや日時表示用）
       SELENIUM_DRIVER_URL: http://chrome:4444/wd/hub
 
+    env_file:
+      - .env
+
     ports:
       - "3000:3000"  # Railsのポートをホストにバインド（ブラウザでアクセスできる）
 

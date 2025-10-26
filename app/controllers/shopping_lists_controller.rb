@@ -10,7 +10,7 @@ class ShoppingListsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to shopping_list_path,notice: "購入済みの商品を削除しました" }
+      format.html { redirect_to shopping_list_path, notice: "購入済みの商品を削除しました" }
     end
   end
 

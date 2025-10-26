@@ -17,18 +17,6 @@ class User < ApplicationRecord
   after_create :setup_default_categories
   after_create :setup_default_shopping_list
 
-  def self.guest
-    create!(
-      email: "guest_#{ SecureRandom.hex(10) }@example.com",
-      password: SecureRandom.urlsafe_base64,
-      nickname: "ゲストユーザー"
-    )
-  end
-
-  def guest?
-    email.present? && email.start_with?("guest_")
-  end
-
   private
 
   def setup_default_categories
@@ -38,6 +26,6 @@ class User < ApplicationRecord
   end
 
   def setup_default_shopping_list
-    shopping_list.create!(name: "マイリスト")
+    create_shopping_list!(name: "マイリスト")
   end
 end

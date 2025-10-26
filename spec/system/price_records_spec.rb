@@ -56,7 +56,7 @@ RSpec.describe "価格登録", type: :system do
       visit new_price_record_path(mode: "existing")
 
       select category.name, from: "category_filter"
-      expect(page).to have_select("商品名", with_options: [product1.name], wait: 5)
+      expect(page).to have_select("商品名", with_options: [ product1.name ], wait: 5)
 
       # 商品を選択
       select product1.name, from: "商品名"

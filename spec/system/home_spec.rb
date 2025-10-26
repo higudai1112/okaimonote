@@ -51,7 +51,6 @@ RSpec.describe 'HOME画面', type: :system do
       select "イオン", from: "店舗"
       click_button "検索"
       within(".price-records") do
-
         expect(page).to have_content "牛乳"
         expect(page).to have_content "150円"
         expect(page).to have_content "お肉"

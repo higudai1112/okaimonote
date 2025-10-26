@@ -7,7 +7,7 @@ class HomeController < ApplicationController
 
     @price_records = @q.result
                        .includes(:product, :shop, product: :category)
-                       .joins(product: [:category, :user])
+                       .joins(product: [ :category, :user ])
                        .joins(:shop)
                        .order(created_at: :desc)
                        .limit(5)
