@@ -26,7 +26,7 @@ gem "jbuilder"
 gem "devise" # 認証系
 gem "whenever", require: false
 gem "image_processing", "~> 1.2" # 画像のリサイズ
-gem "aws-sdk-s3", require: false #画像の保存先
+gem "aws-sdk-s3", require: false # 画像の保存先
 gem "ransack", "4.3.0" # 検索
 gem "kaminari", "1.2.2" # ページネーション用
 gem "bootstrap5-kaminari-views"
