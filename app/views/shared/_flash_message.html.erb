@@ -1,15 +1,21 @@
 <% flash.each do |key, message| %>
   <% next if message.blank? %>
 
-  <% css_class =
+  <% base_class = "flex items-center gap-2 mb-4 border-l-4 p-3 rounded-xl shadow-sm text-sm font-medium" %>
+
+  <% css_class, icon =
     case key.to_sym
-    when :notice then "bg-green-100 border-green-400 text-green-700"
-    when :alert  then "bg-red-100 border-red-400 text-red-700"
-    else "bg-gray-100 border-gray-400 text-gray-700"
+    when :notice
+      ["border-green-400 bg-green-50 text-green-700", "fa-solid fa-circle-check"]
+    when :alert
+      ["border-red-400 bg-red-50 text-red-700", "fa-solid fa-circle-exclamation"]
+    else
+      ["border-gray-400 bg-gray-50 text-gray-700", "fa-solid fa-circle-info"]
     end
   %>
 
-  <div class="mb-4 border-l-4 p-4 rounded #{css_class}">
+  <div class="<%= "#{base_class} #{css_class}" %>">
+    <i class="<%= icon %> text-lg"></i>
     <p><%= message %></p>
   </div>
 <% end %>

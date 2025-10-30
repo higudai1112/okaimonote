@@ -1,9 +1,9 @@
-<div class="min-h-screen bg-[#FFF9F3] text-gray-800 py-10 px-6 md:px-16 lg:px-32">
-  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-10 border border-orange-100">
-    <h1 class="text-3xl font-bold text-center text-orange-600 mb-6">お問い合わせ</h1>
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 flex justify-center">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 md:p-10 border border-orange-100">
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-brand mb-6">お問い合わせ</h1>
 
     <% if flash[:notice] %>
-      <div class="mb-6 bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded">
+      <div class="mb-6 bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg text-center shadow-sm">
         <%= flash[:notice] %>
       </div>
     <% end %>
@@ -12,27 +12,40 @@
       <div class="space-y-5">
         <div>
           <%= f.label :nickname, "ニックネーム", class: "block text-gray-700 font-medium mb-2" %>
-          <%= f.text_field :nickname, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400", required: true %>
+          <%= f.text_field :nickname,
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition",
+                required: true,
+                placeholder: "例：おかいも太郎" %>
         </div>
 
         <div>
           <%= f.label :email, "メールアドレス", class: "block text-gray-700 font-medium mb-2" %>
-          <%= f.email_field :email, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400", required: true %>
+          <%= f.email_field :email,
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition",
+                required: true,
+                placeholder: "例：sample@email.com" %>
         </div>
 
         <div>
           <%= f.label :message, "お問い合わせ内容", class: "block text-gray-700 font-medium mb-2" %>
-          <%= f.text_area :message, rows: 6, class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400", required: true %>
+          <%= f.text_area :message,
+                rows: 6,
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition",
+                required: true,
+                placeholder: "内容を入力してください" %>
         </div>
 
-        <div class="text-center">
-          <%= f.submit "送信する", class: "bg-orange-500 text-white font-semibold px-8 py-2 rounded-full shadow hover:bg-orange-600 transition" %>
+        <div class="text-center pt-4">
+          <%= f.submit "送信する",
+                class: "bg-brand text-white font-semibold px-8 py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
         </div>
       </div>
     <% end %>
 
     <div class="text-center mt-8">
-      <%= link_to '戻る', settings_path, class: "inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full shadow hover:bg-gray-300 transition" %>
+      <%= link_to '設定に戻る',
+            settings_path,
+            class: "inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full shadow hover:bg-gray-300 transition duration-200" %>
     </div>
   </div>
 </div>

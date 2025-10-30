@@ -1,8 +1,19 @@
-<div div class= "container mx-auto px-4 py-6">
-  <h1 class="text-2xl font-bold mb-4 text-center">登録リスト</h1>
+<div class="min-h-screen bg-base text-gray-800 flex flex-col items-center py-10 px-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+    <h1 class="text-2xl font-bold text-center text-brand mb-8">
+      登録リスト
+    </h1>
 
-  <div class="space-y-4">
-    <%= link_to "カテゴリーリスト", categories_path, class: "block border-b pb-2 text-lg text-center hover:bg-gray-100" %>
-    <%= link_to "お店リスト", shops_path, class: "block border-b pb-2 text-lg text-center hover:bg-gray-100" %>
+    <div class="space-y-4">
+      <%= link_to categories_path, class: "block w-full bg-white border border-orange-100 rounded-xl py-3 text-center text-gray-700 font-semibold shadow-sm hover:bg-orange-50 transition" do %>
+        <i class="fa-solid fa-layer-group text-orange-500 mr-2"></i>
+        カテゴリーリスト
+      <% end %>
+
+      <%= link_to shops_path, class: "block w-full bg-white border border-orange-100 rounded-xl py-3 text-center text-gray-700 font-semibold shadow-sm hover:bg-orange-50 transition" do %>
+        <i class="fa-solid fa-store text-orange-500 mr-2"></i>
+        お店リスト
+      <% end %>
+    </div>
   </div>
 </div>

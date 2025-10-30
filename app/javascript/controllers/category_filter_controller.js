@@ -1,3 +1,4 @@
+// 価格登録 新規,既存切り替え
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -20,7 +21,7 @@ export default class extends Controller {
         console.log("=== RESPONSE LENGTH ===", html.length)
 
         if (html.length === 0) {
-          console.warn("⚠️ Turbo Stream response is empty! Controller側でformat.turbo_streamが発火していない可能性があります。")
+          console.warn(" Turbo Stream response is empty! Controller側でformat.turbo_streamが発火していない可能性があります。")
         }
 
         // Turbo Streamを実行
@@ -37,10 +38,10 @@ export default class extends Controller {
           const targetElement = document.getElementById(targetId)
 
           if (targetElement) {
-            console.log(`✅ Fallback: replacing content of #${targetId}`)
+            console.log(` Fallback: replacing content of #${targetId}`)
             targetElement.innerHTML = newContent
           } else {
-            console.warn(`⚠️ Fallback: target #${targetId} not found in DOM`)
+            console.warn(` Fallback: target #${targetId} not found in DOM`)
           }
         }
       })

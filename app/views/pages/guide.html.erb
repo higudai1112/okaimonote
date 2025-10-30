@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
+  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+
+    <!-- タイトル -->
+    <h1 class="text-2xl font-bold text-center text-orange-500 mb-8 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-circle-info"></i>
+      おかいもノート 使い方ガイド
+    </h1>
+
+    <!-- セクション1 -->
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-tag text-orange-400"></i>
+        1. 価格を登録する
+      </h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        フッター中央の「<i class="fa-solid fa-plus text-orange-400"></i>」ボタンから価格を登録できます。<br>
+        登録画面では「新規登録」と「既存から選択」モードを切り替えて利用できます。
+      </p>
+    </section>
+
+    <!-- セクション2 -->
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-chart-line text-orange-400"></i>
+        2. 価格サマリーを見る
+      </h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        ホーム画面の履歴カードをタップすると、その商品の価格サマリーが表示されます。<br>
+        最安値・最高値・平均価格・前回購入価格を簡単に確認できます。
+      </p>
+    </section>
+
+    <!-- セクション3 -->
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-store text-orange-400"></i>
+        3. お店リストを管理する
+      </h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        「お店リスト」では、よく使うお店を登録できます。<br>
+        新しくお店を追加すると、価格登録時にその店舗を選択できるようになります。<br>
+        既に登録済みの商品も、編集画面から購入店舗を後から設定・変更可能です。
+      </p>
+    </section>
+
+    <!-- セクション4 -->
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-folder-open text-orange-400"></i>
+        4. カテゴリーと商品を整理する
+      </h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        「カテゴリーリスト」からカテゴリーを追加・編集・削除できます。<br>
+        各カテゴリーに紐づいた商品は「商品リスト」から編集や削除も可能です。
+      </p>
+    </section>
+
+    <!-- セクション5 -->
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-list-check text-orange-400"></i>
+        5. 買い物リスト機能を使う
+      </h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        「買い物リスト」では、必要なものをリスト化して管理できます。<br>
+        商品名をタップして購入済みに変更したり、<br>
+        「購入済みを削除」ボタンでまとめて一括削除も可能です。<br>
+        買い物の準備から後片付けまで、このリストでスマートに整理できます。
+      </p>
+    </section>
+
+    <!-- セクション6 -->
+    <section>
+      <h2 class="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-lightbulb text-orange-400"></i>
+        6. ワンポイント
+      </h2>
+      <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1 leading-relaxed">
+        <li>トップページの価格履歴は新しい順に5件まで表示されます。</li>
+        <li>登録後の編集や削除は、各詳細ページの「︙」ボタンから行えます。</li>
+        <li>メモ欄には自由にコメントを残せるので、特売情報などを記録しておくと便利です。</li>
+      </ul>
+    </section>
+
+    <!-- 戻るボタン -->
+    <div class="text-center mt-10">
+      <% if user_signed_in? %>
+        <%= link_to "設定画面に戻る", settings_path,
+            class: "inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-6 rounded-full shadow-md transition" %>
+      <% else %>
+        <%= link_to "タイトルに戻る", root_path,
+            class: "inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-6 rounded-full shadow-md transition" %>
+      <% end %>
+    </div>
+</div>

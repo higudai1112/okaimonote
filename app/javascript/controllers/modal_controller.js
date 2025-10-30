@@ -1,28 +1,25 @@
-// 現在未使用
-
+// 買い物カート編集
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
     console.log("[modal] connected ✅")
-    // Escキーでも閉じられるようにする
-    this._onKeydown = (e) => {
-      if (e.key === "Escape") this.close()
-    }
-    document.addEventListener("keydown", this._onKeydown)
   }
 
   disconnect() {
-    document.removeEventListener("keydown", this._onKeydown)
+    console.log("[modal] disconnected 🧹")
   }
 
   // 背景クリック時
   closeBackground(e) {
-    console.log("[modal] 背景クリック検知:", e.target === this.element)
-    // 背景（=モーダル外側）をクリックした場合のみ閉じる
     if (e.target === this.element) {
       this.close()
     }
+  }
+
+  // Escキーで閉じる
+  closeByEsc(e) {
+    if (e.key === "Escape") this.close()
   }
 
   // 閉じる処理
@@ -31,7 +28,7 @@ export default class extends Controller {
     this.element.remove()
   }
 
-  // モーダル内クリックはイベントを止める
+  // モーダル内部のクリックは伝播を止める
   stop(e) {
     e.stopPropagation()
   }

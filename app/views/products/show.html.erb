@@ -1,24 +1,41 @@
-<%= link_to "← 戻る", request.referer || categories_path, class: "text-sm text-gray-500 mb-2 inline-block" %>
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-2xl p-6 mt-4 mb-24 border border-orange-100">
+  <!-- 戻るボタン -->
+  <%= link_to categories_path,
+              class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
+    <i class="fa-solid fa-arrow-left mr-2"></i>
+    戻る
+  <% end %>
 
-<h1 class="text-xl font-bold mb-2"><%= @product.name %></h1>
+  <!-- 商品タイトル -->
+  <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center tracking-tight"><%= @product.name %></h1>
 
-<% if @product.memo.present? %>
-  <p class="text-sm text-gray-600 mb-4"><%= @product.memo %></p>
-<% end %>
+  <% if @product.memo.present? %>
+    <p class="text-sm text-gray-600 mb-6 text-center whitespace-pre-line">
+      <%= @product.memo %>
+    </p>
+  <% end %>
 
-<h2 class="text-lg font-semibold mb-2">価格履歴</h2>
+  <!-- 価格履歴 -->
+  <h2 class="text-lg font-semibold mb-3 text-orange-600 flex items-center gap-2">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    価格履歴
+  </h2>
 
-<% if @price_records.empty? %>
-  <p class="text-sm text-gray-500">この商品の購入履歴はまだありません</p>
-<% else %>
-  <div class="space-y-3">
-    <%= render partial: "price_records/card",
-                collection: @price_records,
-                as: :price_record %>
+  <% if @price_records.empty? %>
+    <p class="text-sm text-gray-500 text-center py-4">この商品の購入履歴はまだありません。</p>
+  <% else %>
+    <div class="space-y-3">
+      <%= render partial: "price_records/card",
+                  collection: @price_records,
+                  as: :price_record %>
+    </div>
+  <% end %>
+
+  <!-- モーダル挿入用コンテナ -->
+  <div id="modal_container"></div>
+
+  <!-- ページネーション -->
+  <div class="mt-6 flex justify-center">
+    <%= paginate @price_records %>
   </div>
-<% end %>
-
-<!-- ページネーション -->
-<div class="mt-4">
-  <%= paginate @price_records, theme: 'bootstrap-5' %>
 </div>

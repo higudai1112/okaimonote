@@ -1,12 +1,13 @@
-<div class="min-h-screen bg-white flex flex-col">
-  <div class="flex-1 px-2 pt-10 pb-[env(safe-area-inset-bottom)] sm:px-6 md:px-8">
+<div class="min-h-screen bg-base text-gray-800 py-2 px-4">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
     <!-- タイトル -->
-    <h1 class="text-3xl md:text-4xl font-extrabold text-orange-500 mt-10 mb-10 flex justify-center items-center gap-3">
-      <i class="fa-solid fa-cart-shopping text-3xl"></i>
+    <h1 class="text-2xl font-bold text-center text-orange-500 mb-8 flex justify-center items-center gap-2">
+      <i class="fa-solid fa-cart-shopping text-2xl"></i>
       買い物リスト
     </h1>
 
+    <!-- エラーメッセージ -->
     <%= render "shared/error_message", resource: @shopping_list %>
 
     <!-- 商品追加フォーム -->
@@ -16,21 +17,21 @@
       <div class="flex flex-col gap-3">
         <%= f.text_field :name,
               placeholder: "商品名を入力（例：にんじん）",
-              class: "w-full border border-gray-300 rounded-xl p-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" %>
+              class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm" %>
 
         <%= f.text_area :memo,
               rows: 2,
               placeholder: "メモ（例：広告の品）",
-              class: "w-full border border-gray-300 rounded-xl p-2 focus:ring-2 focus:ring-orange-400 focus:outline-none" %>
+              class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm" %>
 
         <%= f.submit "追加",
-              class: "w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl font-semibold shadow-sm transition" %>
+              class: "w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl font-semibold shadow-sm transition active:scale-[0.98]" %>
       </div>
     <% end %>
 
     <!-- 未購入品一覧 -->
-    <h2 class="text-lg font-semibold mt-6 mb-3 flex items-center gap-2 text-gray-700 border-b border-gray-200 pb-1">
-      <i class="fa-solid fa-basket-shopping"></i>
+    <h2 class="text-lg font-semibold mt-8 mb-3 flex items-center gap-2 text-gray-700 border-b border-gray-200 pb-1">
+      <i class="fa-solid fa-basket-shopping text-orange-400"></i>
       買うもの
     </h2>
 
@@ -48,54 +49,40 @@
         購入済み
       </h2>
 
-      <!-- 削除ボタン -->
-      <div class="flex justify-end items-center mb-3">
-        <button type="button"
-                onclick="openDeleteModal()"
-                class="flex items-center gap-2 text-red-500 hover:text-red-600 text-sm transition">
+      <!-- Stimulus confirmを使用した削除ボタン -->
+      <div data-controller="confirm" class="flex justify-end items-center mb-3">
+        <%= button_to delete_purchased_shopping_list_path,
+            method: :delete,
+            data: {
+              action: "click->confirm#confirm",
+              confirm_message: "購入済みの商品をすべて削除しますか？"
+            },
+            class: "flex items-center gap-2 text-red-500 hover:text-red-600 text-sm transition" do %>
           <i class="fa-solid fa-trash-can"></i>
           <span>購入済みを削除</span>
-        </button>
-      </div>
+        <% end %>
 
-      <!-- モーダル -->
-      <div id="deleteModal"
-           class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-        <div class="bg-white rounded-3xl shadow-2xl p-6 w-80 text-center">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4">本当に削除しますか？</h3>
+        <!-- 共通確認モーダル -->
+        <div data-confirm-target="modal"
+             class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+            <p data-confirm-target="message" class="text-gray-700 mb-4">
+              購入済みの商品を削除しますか？
+            </p>
 
-          <div class="flex justify-center gap-4">
-          <!-- キャンセルボタン -->
-            <button type="button"
-                    class="px-4 py-2 bg-gray-200 rounded-xl hover:bg-gray-300 transition"
-                    onclick="closeDeleteModal()">
-              キャンセル
-            </button>
-
-            <!-- 削除ボタン -->
-            <%= button_to "削除する",
-                          delete_purchased_shopping_list_path,
-                          method: :delete,
-                          data: { turbo: false },
-                          form: { class: "inline-block" },
-                          class: "px-4 py-2 !bg-red-600 !text-white rounded-xl hover:bg-red-700 transition font-semibold shadow-sm" %>
+            <div class="flex justify-center gap-4">
+              <button data-action="click->confirm#proceed"
+                      class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+                削除
+              </button>
+              <button data-action="click->confirm#cancel"
+                      class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+                キャンセル
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- JS -->
-      <script>
-        function openDeleteModal() {
-          const modal = document.getElementById("deleteModal");
-          console.log("モーダル要素:", modal);
-          modal.classList.remove("hidden");
-        }
-
-        function closeDeleteModal() {
-          const modal = document.getElementById("deleteModal");
-          modal.classList.add("hidden");
-        }
-      </script>
 
       <!-- 購入済み商品一覧 -->
       <ul id="purchased_items_list" class="space-y-3 text-left">
@@ -105,4 +92,7 @@
       </ul>
     </div>
   </div>
+
+  <!-- モーダル挿入用コンテナ -->
+  <div id="modal_container"></div>
 </div>

@@ -1,7 +1,8 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
   def index
-    @products = current_user.products.includes(:category).order(created_at: :desc).page(params[:page]).per(20)
+    @q = current_user.products.ransack(params[:q])
+    @products = @q.result.includes(:category).order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def new
@@ -30,7 +31,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      redirect_to products_path, notice: "更新しました"
+      redirect_to category_path(@product.category), notice: "更新しました"
     else
       @categories = current_user.categories.order(created_at: :desc)
       render :edit, status: 422

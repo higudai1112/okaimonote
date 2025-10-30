@@ -1,35 +1,54 @@
-<%= link_to "← 戻る", categories_path, class: "text-sm text-gray-500 mb-2 inline-block" %>
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
-<h1 class="text-xl font-bold mb-4"><%= @category.name %></h1>
-
-<% if @category.memo.present? %>
-  <p class="text-gray-600 text-sm mb-4 whitespace-pre-line">
-    <%= simple_format(@category.memo) %>
-  </p>
-<% end %>
-
-<% if @products.empty? %>
-  <P class="text-muted">このカテゴリーに商品がまだ登録されていません。</p>
-<% else %>
-  <ul class="divide-y divide-gray-200">
-    <% @products.each do |product| %>
-      <li class="py-3 flex justify-between items-center">
-        <span>
-          <%= link_to product.name, product_path(product), class: "text-blue-600 hover: underline" %>
-        </span>
-        <%= link_to edit_product_path(product), class: "text-gray-500 hover:text-gray-700 text-xl" do %>
-          <i class="fa fa-ellipsis-v"></i>
-        <% end %>
-      </li>
+    <!-- 戻るボタン -->
+    <%= link_to categories_path,
+          class: "inline-flex items-center text-gray-600 hover:text-brand mb-4 transition-colors duration-200" do %>
+      <i class="fa-solid fa-arrow-left mr-2"></i>
+      一覧に戻る
     <% end %>
-  </ul>
-<% end %>
 
-<!-- 商品追加ボタン -->
-<div class="fixed bottom-16 right-4">
-  <%= link_to new_product_path(category_id: @category.id),
-              class: "btn btn-circle bg-orange-400 text-white flex flex-col items-center" do %>
-    <i class="fa fa-plus text-2xl"></i>
-    <span class="text-xs mt-1">商品</span>
-  <% end %>
+    <!-- タイトル -->
+    <h1 class="text-2xl font-bold text-center text-brand mb-4"><%= @category.name %></h1>
+
+    <!-- メモ表示 -->
+    <% if @category.memo.present? && @category.memo.strip != "" %>
+      <p class="text-gray-600 text-sm mb-6 bg-orange-50 p-3 rounded-lg border border-orange-100 leading-relaxed whitespace-pre-line">
+        <%= @category.memo.strip %>
+      </p>
+    <% end %>
+
+    <!-- 商品リスト -->
+    <% if @products.empty? %>
+      <p class="text-center text-gray-500 text-sm py-4">このカテゴリーに商品がまだ登録されていません。</p>
+    <% else %>
+      <ul class="divide-y divide-gray-200">
+        <% @products.each do |product| %>
+          <li class="py-3 flex justify-between items-center hover:bg-orange-50 px-2 rounded-lg transition">
+            <%= link_to product.name,
+                  product_path(product),
+                  class: "text-lg text-gray-800 font-medium hover:text-brand transition" %>
+            <%= link_to edit_product_path(product),
+                  class: "text-gray-400 hover:text-orange-500 transition text-lg" do %>
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <!-- ページネーション -->
+      <div class="flex justify-center mt-6">
+        <%= paginate @products %>
+      </div>
+    <% end %>
+
+    <!-- 追加ボタン -->
+    <div class="text-center mt-8">
+      <%= link_to new_product_path(category_id: @category.id),
+            class: "inline-flex items-center justify-center bg-brand hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow-md transition duration-200" do %>
+        <i class="fa-solid fa-plus mr-2"></i>
+        商品を追加
+      <% end %>
+    </div>
+  </div>
 </div>

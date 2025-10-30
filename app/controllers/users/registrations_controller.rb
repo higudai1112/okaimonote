@@ -1,7 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super do |user|
-      flash[:notice] = "ようこそ、#{user.nickname}さん！<br>さっそく始めましょう！"
+      set_flash_message!(:notice, :signed_up, name: user.nickname)
     end
   end
 end

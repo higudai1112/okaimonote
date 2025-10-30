@@ -2,8 +2,7 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @q = current_user.categories.ransack(params[:q])
-    @categories = @q.result.order(created_at: :desc)
+    @categories = current_user.categories.order(:name)
   end
 
   def new
@@ -20,7 +19,7 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @products = @category.products.order(created_at: :desc)
+    @products = @category.products.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def edit; end

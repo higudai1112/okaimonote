@@ -6,8 +6,9 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
+  get "guide", to: "pages#guide", as: :guide
   get "home", to: "home#index", as: :home
-  get "home/summary", to: "home#summary", as: :home_summary
+  get "home/summary/:id", to: "home#show_summary", as: :home_summary
 
   resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]

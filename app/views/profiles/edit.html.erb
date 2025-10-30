@@ -1,19 +1,66 @@
-<h2>プロフィールを編集</h2>
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 flex justify-center">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 md:p-10 border border-orange-100">
+    <h2 class="text-2xl font-bold text-center text-brand mb-6">プロフィールを編集</h2>
 
-<%= form_with model: @user, url: profile_path, local: true do |f| %>
-  <div class= "form-group">
-    <%= f.label :nickname, "ニックネーム" %>
-    <%= f.text_field :nickname, class: "form-control" %>
-  </div>
+    <%= form_with model: @user, url: profile_path, local: true, html: { data: { controller: "avatar-preview" } } do |f| %>
+      <div class="space-y-6">
 
-  <div class= "form-group">
-    <%= f.label :avatar, "プロフィール画像" %>
-    <%= f.file_field :avatar, class: "form-control" %>
-    <% if @user.avatar.attached? %>
-      <p>現在の画像：</p>
-      <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]), class: "w-24 h-24 rounded-full object-cover" %>
+        <!-- ニックネーム -->
+        <div>
+          <%= f.label :nickname, "ニックネーム", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.text_field :nickname,
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition",
+                placeholder: "例：おかいも太郎" %>
+        </div>
+
+        <!-- プロフィール画像 -->
+        <div>
+          <%= f.label :avatar, "プロフィール画像", class: "block text-gray-700 font-medium mb-3" %>
+          <%= f.file_field :avatar,
+                data: { avatar_preview_target: "input", action: "change->avatar-preview#preview" },
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand transition" %>
+
+          <!-- 比較表示ブロック -->
+          <div class="mt-6 flex justify-center items-center gap-6">
+            <!-- 現在の画像 -->
+            <div class="text-center">
+              <p class="text-sm text-gray-600 mb-2">現在</p>
+              <% if @user.avatar.attached? %>
+                <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]),
+                      class: "w-24 h-24 rounded-full object-cover shadow-sm border border-gray-200" %>
+              <% else %>
+                <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                  <i class="fas fa-user fa-lg"></i>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- 矢印 -->
+            <div class="text-gray-400 text-2xl">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+
+            <!-- 新しい画像プレビュー -->
+            <div class="text-center">
+              <p class="text-sm text-gray-600 mb-2">新しい画像</p>
+              <img data-avatar-preview-target="preview"
+                   class="hidden w-24 h-24 rounded-full object-cover shadow-sm border border-gray-200 opacity-0 transition-opacity duration-300"
+                   alt="新しいプロフィール画像プレビュー">
+            </div>
+          </div>
+        </div>
+
+        <!-- 更新ボタン -->
+        <div class="text-center pt-4">
+          <%= f.submit "更新する",
+                class: "bg-brand text-white font-semibold px-8 py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
+        </div>
+      </div>
     <% end %>
-  </div>
 
-  <%= f.submit "更新する", class: "btn btn-success mt-2" %>
-<% end %>
+    <div class="text-center mt-8">
+      <%= link_to '戻る', profile_path,
+            class: "inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-full shadow hover:bg-gray-300 transition duration-200" %>
+    </div>
+  </div>
+</div>

@@ -1,41 +1,79 @@
-<h2 class="text-xl text-center mb-4">新規登録</h2>
+<div class="min-h-screen bg-base text-gray-800 flex items-center justify-center px-4 py-10">
+  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 w-full max-w-md">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <!-- 見出し -->
+    <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">
+      新規登録
+    </h2>
 
-<!-- autofocus初期カーソル配置,autocomplete過去の入力記憶 -->
-  <div class="form-group">
-    <%= f.label :nickname, "ニックネーム" %><br />
-    <%= f.text_field :nickname, autofocus: true, class: "form-control" %>
+    <%= form_for(resource,
+                 as: resource_name,
+                 url: registration_path(resource_name),
+                 html: { data: { controller: "avatar-preview" } }) do |f| %>
+      <%= render "shared/error_message", resource: resource %>
+
+      <!-- ニックネーム -->
+      <div class="mb-4">
+        <%= f.label :nickname, "ニックネーム", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.text_field :nickname,
+              autofocus: true,
+              placeholder: "例：ひぐだい",
+              class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
+      </div>
+
+      <!-- メール -->
+      <div class="mb-4">
+        <%= f.label :email, "メールアドレス", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.email_field :email,
+              autocomplete: "email",
+              placeholder: "example@email.com",
+              class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
+      </div>
+
+      <!-- パスワード -->
+      <div class="mb-4">
+        <%= f.label :password, "パスワード（6文字以上）", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password,
+              autocomplete: "new-password",
+              placeholder: "••••••",
+              class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition" %>
+      </div>
+
+      <!-- 確認用パスワード -->
+      <div class="mb-4">
+        <%= f.label :password_confirmation, "パスワード確認", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password_confirmation,
+              placeholder: "もう一度入力",
+              class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition" %>
+      </div>
+
+      <!-- アイコン画像 -->
+      <div class="mb-6" data-controller="avatar-preview">
+        <%= f.label :avatar, "アイコン画像（任意）", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.file_field :avatar,
+              class: "block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 p-1.5",
+              data: { avatar_preview_target: "input", action: "change->avatar-preview#preview" } %>
+        <p class="text-xs text-gray-500 mt-1">未選択の場合はデフォルトのアイコンが表示されます</p>
+
+        <!-- プレビュー -->
+        <div class="mt-4">
+          <img data-avatar-preview-target="preview"
+               src=""
+               alt="プレビュー"
+               class="hidden w-24 h-24 rounded-full border border-gray-300 shadow-sm mx-auto object-cover opacity-0 transition-opacity duration-300" />
+        </div>
+      </div>
+
+      <!-- 登録ボタン -->
+      <div class="pt-2">
+        <%= f.submit "登録する",
+              class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-full shadow-md transition-transform active:scale-[0.98]" %>
+      </div>
+    <% end %>
+
+    <!-- リンク -->
+    <div class="mt-6 text-center">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
-
-  <div class="form-group">
-    <%= f.label :email, "メールアドレス" %><br />
-    <%= f.email_field :email, autocomplete: "email", class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :password, "パスワード (6文字以上) " %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :password_confirmation, "パスワード確認" %><br />
-    <%= f.password_field :password_confirmation, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :avatar, "アイコン画像 (任意)" %><br />
-    <%= f.file_field :avatar, class: "form-control" %>
-    <p class="text-xs text-gray-500">未選択の場合はデフォルトのアイコンが表示されます</p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "登録する", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

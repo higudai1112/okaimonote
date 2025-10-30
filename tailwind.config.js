@@ -7,7 +7,15 @@ module.exports = {
     "./app/assets/stylesheets/**/*.{css,scss}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        base: "#FFF9F3",  //背景色
+        brand: "#F97316",  //メインオレンジ
+      },
+      boxShadow: {
+        card: "0 4px 8px rgba(0, 0, 0, 0.05)",  //柔らかめの影
+      },
+    },
   },
   plugins: [],
 }

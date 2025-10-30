@@ -2,8 +2,7 @@ class ShopsController < ApplicationController
   before_action :set_shops, only: [ :edit, :update, :destroy ]
 
   def index
-    @q = current_user.shops.ransack(params[:id])
-    @shops = @q.result.order(created_at: :desc)
+    @shops = current_user.shops.order(:name)
   end
 
   def new
