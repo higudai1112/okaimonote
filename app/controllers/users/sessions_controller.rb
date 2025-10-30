@@ -1,7 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
   def create
-    super do |user|
-      set_flash_message!(:notice, :signed_in, name: user.nickname)
-    end
+    super
+      flash.delete(:notice)
+      flash[:notice] = "お帰りなさい、#{current_user.nickname}さん！"
   end
 end
