@@ -1,26 +1,76 @@
-<%= link_to "← 戻る", shops_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
-<h1 class="text-xl font-bold mb-6">お店情報の編集</h1>
+<div class="min-h-screen bg-base text-gray-800 flex flex-col items-center py-10 px-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
-<%= render "shared/error_message", resource: @shop %>
+    <!-- 戻るリンク -->
+    <%= link_to "← 戻る", shops_path,
+          class: "text-sm text-gray-500 mb-4 inline-block hover:text-orange-500 transition" %>
 
-<%= form_with model: @shop, local: true do |f| %>
-  <div class="mb-4">
-    <%= f.label :name, "店名", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_field :name, placeholder: "例：イオン", class: "form-control w-full" %>
+    <!-- タイトル -->
+    <h1 class="text-2xl font-bold text-center text-brand mb-6">お店情報の編集</h1>
+
+    <!-- エラーメッセージ -->
+    <%= render "shared/error_message", resource: @shop %>
+
+    <!-- フォーム -->
+    <%= form_with model: @shop, local: true do |f| %>
+      <div class="space-y-6">
+        <!-- 店名 -->
+        <div>
+          <%= f.label :name, "店名", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.text_field :name,
+                placeholder: "例：イオン",
+                class: "w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-brand focus:outline-none transition" %>
+        </div>
+
+        <!-- メモ -->
+        <div>
+          <%= f.label :memo, "メモ", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.text_area :memo,
+                rows: 3,
+                placeholder: "補足情報など",
+                class: "w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-brand focus:outline-none transition" %>
+        </div>
+
+        <!-- 更新ボタン -->
+        <div class="text-center">
+          <%= f.submit "更新する",
+                class: "w-full bg-brand text-white font-semibold py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Stimulus confirmを使用した削除ボタン -->
+    <div data-controller="confirm" class="text-center mt-6 relative">
+      <%= button_to "削除する",
+            shop_path(@shop),
+            method: :delete,
+            data: {
+              action: "click->confirm#confirm",
+              confirm_message: "このお店情報を削除しますか？"
+            },
+            class: "w-full border border-red-400 text-red-500 font-semibold py-2 rounded-full hover:bg-red-50 transition duration-200 shadow-sm" %>
+
+      <!-- 共通確認モーダル -->
+      <div data-confirm-target="modal"
+           class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+          <p data-confirm-target="message" class="text-gray-700 mb-4">
+            このお店情報を削除しますか？
+          </p>
+
+          <div class="flex justify-center gap-4">
+            <button data-action="click->confirm#proceed"
+                    class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+              削除
+            </button>
+            <button data-action="click->confirm#cancel"
+                    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+              キャンセル
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <div class="mb-6">
-    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_area :memo, rows: 3, placeholder: "補足情報など", class: "form-control w-full" %>
-  </div>
-
-  <%= f.submit "更新する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded mb-4" %>
-<% end %>
-
-<div class="text-center">
-    <%= button_to "削除する",
-          shop_path(@shop),
-          method: :delete,
-          data: { turbo_confirm: "本当に削除しますか？" },
-          class: "btn btn-danger border border-red-500 text-red-600 hover:bg-red-50 w-full py-2 rounded" %>
-  </div>
+</div>

@@ -1,0 +1,22 @@
+<div data-controller="confirm" class="relative">
+  <!-- 確認モーダル -->
+  <div data-confirm-target="modal"
+       class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+    <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+      <p data-confirm-target="message" class="text-gray-700 mb-4">
+        本当に削除しますか？
+      </p>
+
+      <div class="flex justify-center gap-4">
+        <button data-action="click->confirm#proceed"
+                class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+          削除
+        </button>
+        <button data-action="click->confirm#cancel"
+                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+          キャンセル
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

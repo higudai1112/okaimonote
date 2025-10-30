@@ -18,3 +18,6 @@ application.register("summary", SummaryController)
 
 import ToggleController from "./toggle_controller"
 application.register("toggle", ToggleController)
+
+import AvatarPreviewController from "./avatar_preview_controller"
+application.register("avatar-preview", AvatarPreviewController)

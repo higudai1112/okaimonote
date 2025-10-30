@@ -1,60 +1,58 @@
-<h2 class="text-xl font-semibold mb-6">プロフィール設定</h2>
+<div class="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-6 mt-6 mb-24 border border-orange-100 sm:max-w-lg">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center tracking-tight">プロフィール設定</h2>
 
-<div class="space-y-6">
-
-  <!-- ニックネーム -->
-  <div class="flex items-center justify-between border-b pb-2">
-    <div>
-      <p class="text-gray-600 text-sm"><i class="fas fa-user me-2"></i>ニックネーム</p>
-      <p class="text-lg font-medium"><%= current_user.nickname %></p>
-    </div>
-    <%= link_to edit_profile_path, class: "text-blue-500 hover:text-blue-700" do %>
-      <i class="fas fa-pen"></i>
-    <% end %>
-  </div>
-
-  <!-- メールアドレス -->
-  <div class="flex items-center justify-between border-b pb-2">
-    <div>
-      <p class="text-gray-600 text-sm"><i class="fas fa-envelope me-2"></i>メールアドレス</p>
-      <p class="text-lg font-medium"><%= current_user.email %></p>
-    </div>
-    <%= link_to edit_email_profile_path, class: "text-blue-500 hover:text-blue-700" do %>
-      <i class="fas fa-pen"></i>
-    <% end %>
-  </div>
-
-  <!-- パスワード -->
-  <div class="flex items-center justify-between border-b pb-2">
-    <div>
-      <p class="text-gray-600 text-sm"><i class="fas fa-lock me-2"></i>パスワード</p>
-      <p class="text-lg font-medium">••••••••</p>
-    </div>
-    <% unless current_user.guest? %>
-      <%= link_to new_user_password_path, class: "text-blue-500 hover:text-blue-700" do %>
-        <i class="fas fa-pen"></i>
-      <% end %>
-    <% end %>
-  </div>
-
-  <!-- プロフィール画像 -->
-  <div class="flex items-center justify-between border-b pb-2">
-    <div class="flex items-center gap-4">
-      <% if current_user.avatar.attached? %>
-        <%= image_tag current_user.avatar.variant(resize_to_limit: [64, 64]), class: "rounded-full w-16 h-16 object-cover" %>
-      <% else %>
-        <div class="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center text-white">
-          <i class="fas fa-user fa-lg"></i>
-        </div>
-      <% end %>
+  <div class="space-y-5">
+    <!-- ニックネーム -->
+    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
       <div>
-        <p class="text-gray-600 text-sm"><i class="fas fa-image me-2"></i>プロフィール画像</p>
-        <p class="text-gray-500 text-xs">画像を変更できます</p>
+        <p class="text-sm text-gray-500"><i class="fa-solid fa-user mr-2 text-orange-500"></i>ニックネーム</p>
+        <p class="text-lg font-semibold text-gray-800"><%= current_user.nickname %></p>
       </div>
+      <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+        <i class="fa-solid fa-pen"></i>
+      <% end %>
     </div>
-    <%= link_to edit_profile_path, class: "text-blue-500 hover:text-blue-700" do %>
-      <i class="fas fa-pen"></i>
-    <% end %>
-  </div>
 
+    <!-- メールアドレス -->
+    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+      <div>
+        <p class="text-sm text-gray-500"><i class="fa-solid fa-envelope mr-2 text-orange-500"></i>メールアドレス</p>
+        <p class="text-lg font-semibold text-gray-800"><%= current_user.email %></p>
+      </div>
+      <%= link_to edit_email_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+        <i class="fa-solid fa-pen"></i>
+      <% end %>
+    </div>
+
+    <!-- パスワード -->
+    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+      <div>
+        <p class="text-sm text-gray-500"><i class="fa-solid fa-lock mr-2 text-orange-500"></i>パスワード</p>
+        <p class="text-lg font-semibold text-gray-800">••••••••</p>
+      </div>
+      <%= link_to new_user_password_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+        <i class="fa-solid fa-pen"></i>
+      <% end %>
+    </div>
+
+    <!-- プロフィール画像 -->
+    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+      <div class="flex items-center gap-4">
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar.variant(resize_to_limit: [64, 64]), class: "rounded-full w-16 h-16 object-cover border border-orange-200 shadow-sm" %>
+        <% else %>
+          <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+            <i class="fa-solid fa-user fa-lg"></i>
+          </div>
+        <% end %>
+        <div>
+          <p class="text-sm text-gray-500"><i class="fa-solid fa-image mr-2 text-orange-500"></i>プロフィール画像</p>
+          <p class="text-xs text-gray-400">画像を変更できます</p>
+        </div>
+      </div>
+      <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+        <i class="fa-solid fa-pen"></i>
+      <% end %>
+    </div>
+  </div>
 </div>

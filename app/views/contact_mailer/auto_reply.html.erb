@@ -4,29 +4,42 @@
     <meta charset="UTF-8">
     <title>【okaimonote】お問い合わせありがとうございます</title>
   </head>
-  <body>
-    <div style="background-color:#FFF9F3; padding:24px; font-family: 'Helvetica Neue', Arial, sans-serif; color:#333;">
-      <h2 style="color:#F97316;">お問い合わせありがとうございます</h2>
+  <body style="background-color:#FFF9F3; margin:0; padding:24px; font-family:'Helvetica Neue', Arial, sans-serif; color:#333;">
+    <div style="max-width:600px; margin:0 auto; background-color:#FFF9F3;">
 
-      <p><%= @nickname %> 様</p>
-
-      <p>このたびは <strong>okaimonote</strong> にお問い合わせいただきありがとうございます。<br>
-      以下の内容で受け付けいたしました。</p>
-
-      <div style="background:white; border-radius:12px; padding:20px; margin-top:16px; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
-        <p><strong>お問い合わせ内容：</strong></p>
-        <p style="white-space: pre-wrap;"><%= @message %></p>
+      <!-- ロゴ -->
+      <div style="text-align:center; margin-bottom:24px;">
+        <img src="https://okaimonote.com/assets/kaimonote_logo.png" alt="okaimonote logo" width="96" style="border-radius:16px;">
       </div>
 
-      <p style="margin-top:24px;">
-      内容を確認のうえ、数日以内にご返信させていただきます。<br>
-      しばらくお待ちくださいませ。
-      </p>
+      <!-- 本文 -->
+      <div style="background:#fff; border-radius:16px; padding:24px; box-shadow:0 3px 8px rgba(0,0,0,0.05);">
+        <h2 style="color:#F97316; margin-top:0;">お問い合わせありがとうございます</h2>
 
-      <p style="margin-top:32px; font-size:13px; color:#777;">
-      okaimonote運営チーム<br>
-      <a href="https://okaimonote.com" style="color:#F97316; text-decoration:none;">okaimonote.com</a>
-      </p>
+        <p style="margin-bottom:16px;"><%= @nickname %> 様</p>
+
+        <p style="margin-bottom:24px;">
+          このたびは <strong>okaimonote</strong> にお問い合わせいただきありがとうございます。<br>
+          以下の内容で受け付けいたしました。
+        </p>
+
+        <div style="background-color:#FFF9F3; border-radius:12px; padding:16px; margin-bottom:24px;">
+          <p style="font-weight:bold; margin-bottom:8px;">お問い合わせ内容：</p>
+          <p style="white-space:pre-wrap; margin:0;"><%= @message %></p>
+        </div>
+
+        <p style="margin-bottom:0;">
+          内容を確認のうえ、<br>
+          数日以内にご返信させていただきます。<br>
+          しばらくお待ちくださいませ。
+        </p>
+      </div>
+
+      <!-- フッター -->
+      <div style="text-align:center; font-size:12px; color:#888; margin-top:32px;">
+        okaimonote運営チーム<br>
+        <a href="https://okaimonote.com" style="color:#F97316; text-decoration:none;">okaimonote.com</a>
+      </div>
     </div>
   </body>
 </html>

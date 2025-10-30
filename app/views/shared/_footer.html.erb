@@ -1,20 +1,38 @@
-<footer class="fixed bottom-0 left-0 w-full bg-white border-t shadow-inner flex justify-around items-center py-3 md:py-4 z-50 pb-[env(safe-area-inset-bottom)]">
+<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-orange-100 shadow-inner flex justify-around items-center py-2 md:py-3 z-50 pb-[env(safe-area-inset-bottom)]">
   <% footer_links = [
-    { path: home_path, icon: 'fa-solid fa-home', label: 'HOME' },
-    { path: lists_path, icon: 'fa-solid fa-list', label: '登録リスト' },
-    { path: new_price_record_path, icon: 'fa-solid fa-plus-square', label: '追加' },
-    { path: shopping_list_path, icon: 'fa-solid fa-shopping-cart', label: 'カート' },
-    { path: settings_path, icon: 'fa-solid fa-cog', label: '設定' }
+    { path: home_path, icon: 'fa-solid fa-house', label: 'ホーム' },
+    { path: lists_path, icon: 'fa-solid fa-list', label: '登録' },
+    { path: new_price_record_path, icon: 'fa-solid fa-plus-circle', label: '追加' },
+    { path: shopping_list_path, icon: 'fa-solid fa-cart-shopping', label: 'カート' },
+    { path: settings_path, icon: 'fa-solid fa-gear', label: '設定' }
   ] %>
 
   <% footer_links.each do |link| %>
     <% active = current_page?(link[:path]) %>
+    <% is_settings = link[:label] == '設定' %>
+
     <%= link_to link[:path],
       data: { turbo: false },
-      class: "flex flex-col items-center justify-center w-1/5 md:w-auto #{active ? 'text-orange-500' : 'text-gray-400'} hover:text-orange-400 transition-colors" do %>
+      class: "flex flex-col items-center justify-center w-1/5 text-center
+              #{active ? 'text-orange-500' : 'text-gray-400 hover:text-orange-400'}
+              transition-colors duration-200" do %>
 
-      <i class="<%= link[:icon] %> fa-lg md:fa-xl mb-2"></i>
-      <span class="text-[11px] md:text-xs tracking-tight"><%= link[:label] %></span>
+      <!-- アイコン / プロフィール -->
+      <div class="relative flex justify-center items-center mb-2 h-3 md:h-4">
+        <% if is_settings && current_user&.avatar&.attached? %>
+          <%= image_tag current_user.avatar.variant(resize_to_fill: [32, 32]),
+                class: "w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border-2
+                        #{active ? 'border-orange-500' : 'border-gray-300'}
+                        transition-all duration-200 align-middle" %>
+        <% else %>
+          <i class="<%= link[:icon] %> fa-lg md:fa-xl align-middle"></i>
+        <% end %>
+      </div>
+
+      <!-- ラベル -->
+      <% unless is_settings && current_user&.avatar&.attached? %>
+        <span class="text-[11px] md:text-xs font-medium tracking-tight mt-0.5 leading-none"><%= link[:label] %></span>
+      <% end %>
     <% end %>
   <% end %>
 </footer>

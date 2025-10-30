@@ -1,13 +1,48 @@
-<div id= "summary" class="price-summary bg-white shadow p-4 mb-6">
-  <h2 class="text-lg font-semibold mb-3">価格サマリー</h2>
+<div id="summary" class="bg-white rounded-2xl shadow-md border border-orange-100 p-6 mb-8 transition hover:shadow-lg">
+  <!-- 見出し -->
+  <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+    <i class="fa-solid fa-chart-line text-orange-500"></i>
+    価格サマリー
+  </h2>
+
   <% if summary_empty?(@min_price, @max_price, @average_price, @last_price) %>
-    <p class="text-gray-500">まだ価格の登録がありません</p>
+    <p class="text-center text-gray-500 py-4">まだ価格の登録がありません。</p>
   <% else %>
-    <div class="flex justify-between">
-      <div>最安値: <span class="text-red-500"><%= display_price(@min_price) %></span></div>
-      <div>最高値: <span class="text-gray-700"><%= display_price(@max_price) %></span></div>
+    <div class="grid grid-cols-2 gap-4 text-center">
+      <!-- 最安値 -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl py-3">
+        <p class="text-sm text-gray-600">最安値</p>
+        <p class="text-lg font-bold text-orange-600 mt-1"><%= display_price(@min_price) %></p>
+      </div>
+
+      <!-- 最高値 -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl py-3">
+        <p class="text-sm text-gray-600">最高値</p>
+        <p class="text-lg font-bold text-gray-700 mt-1"><%= display_price(@max_price) %></p>
+      </div>
     </div>
-    <div class="mt-2">平均価格: <span class="text-gray-700"><%= display_price(@average_price) %></span></div>
-    <div class="mt-2">前回購入: <span class="text-gray-700"><%= display_price(@last_price) %></span>（<%= @last_purchased_at&.strftime('%Y/%m/%d') || '----/--/--' %>）</div>
+
+    <!-- 平均価格 -->
+    <div class="mt-5 flex justify-between items-center border-t border-orange-100 pt-4">
+      <p class="text-sm text-gray-600 flex items-center gap-2">
+        <i class="fa-solid fa-scale-balanced text-orange-400"></i>
+        平均価格
+      </p>
+      <p class="text-lg font-semibold text-gray-700"><%= display_price(@average_price) %></p>
+    </div>
+
+    <!-- 前回購入 -->
+    <div class="mt-3 flex justify-between items-center">
+      <p class="text-sm text-gray-600 flex items-center gap-2">
+        <i class="fa-solid fa-clock-rotate-left text-orange-400"></i>
+        前回購入
+      </p>
+      <p class="text-base text-gray-700 font-medium">
+        <%= display_price(@last_price) %>
+        <span class="text-sm text-gray-500 ml-1">
+          (<%= @last_purchased_at&.strftime('%Y/%m/%d') || '----/--/--' %>)
+        </span>
+      </p>
+    </div>
   <% end %>
 </div>

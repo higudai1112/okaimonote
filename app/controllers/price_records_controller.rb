@@ -99,8 +99,7 @@ class PriceRecordsController < ApplicationController
       if success
         puts "=== SUCCESS DEBUG ==="
         flash[:notice] = "価格を登録しました"
-        puts "Flash設定完了: #{flash[:notice]}"
-        format.html { redirect_to home_path, notice: "価格を登録しました" }
+        format.html { redirect_to home_path }
         format.turbo_stream do
           render turbo_stream: turbo_stream.action(:redirect, home_path)# ← 成功時: create.turbo_stream.erb を探す
         end
@@ -136,8 +135,9 @@ class PriceRecordsController < ApplicationController
   end
 
   def destroy
+    product = @price_record.product
     @price_record.destroy!
-    redirect_to product_path(@price_record.product), notice: "削除しました", status: :see_other
+    redirect_to product_path(product), notice: "削除しました", status: :see_other
   end
 
   private

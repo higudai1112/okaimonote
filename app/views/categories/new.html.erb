@@ -1,30 +1,40 @@
-<div class="max-w-lg mx-auto bg-white shadow-lg rounded-2xl p-6 mt-4 mb-24 border border-orange-100">
-  <!-- 戻るボタン -->
-  <%= link_to categories_path, class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
-    <i class="fa-solid fa-arrow-left mr-2"></i>
-    一覧に戻る
-  <% end %>
+<div class="min-h-screen bg-base text-gray-800 flex flex-col items-center py-10 px-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
-  <!-- 見出し -->
-  <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center tracking-tight">カテゴリーを追加</h1>
+    <!-- 戻るボタン -->
+    <%= link_to categories_path, class: "inline-flex items-center text-gray-600 hover:text-brand mb-4 transition-colors duration-200" do %>
+      <i class="fa-solid fa-arrow-left mr-2"></i>
+      一覧に戻る
+    <% end %>
 
-  <!-- エラーメッセージ -->
-  <%= render "shared/error_message", resource: @category %>
+    <!-- 見出し -->
+    <h1 class="text-2xl font-bold text-center text-brand mb-6">カテゴリーを追加</h1>
 
-  <!-- フォーム -->
-  <%= form_with model: @category, local: true, class: "space-y-5" do |f| %>
-    <div>
-      <%= f.label :name, "カテゴリー名", class: "block text-sm font-semibold text-gray-700 mb-1" %>
-      <%= f.text_field :name, placeholder: "例：食料品", class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
-    </div>
+    <!-- エラーメッセージ -->
+    <%= render "shared/error_message", resource: @category %>
 
-    <div>
-      <%= f.label :memo, "メモ", class: "block text-sm font-semibold text-gray-700 mb-1" %>
-      <%= f.text_area :memo, rows: 3, placeholder: "補足情報など", class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
-    </div>
+    <!-- フォーム -->
+    <%= form_with model: @category, local: true, class: "space-y-6" do |f| %>
+      <div>
+        <%= f.label :name, "カテゴリー名", class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.text_field :name,
+              placeholder: "例：食料品",
+              class: "w-full rounded-xl border-gray-300 px-4 py-2 focus:ring-2 focus:ring-brand focus:outline-none transition placeholder-gray-400" %>
+      </div>
 
-    <div class="pt-3">
-      <%= f.submit "登録する", class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl shadow-md transition-transform active:scale-[0.98]" %>
-    </div>
-  <% end %>
+      <div>
+        <%= f.label :memo, "メモ", class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.text_area :memo,
+              rows: 3,
+              placeholder: "補足情報など",
+              class: "w-full rounded-xl border-gray-300 px-4 py-2 focus:ring-2 focus:ring-brand focus:outline-none transition placeholder-gray-400" %>
+      </div>
+
+      <!-- 登録ボタン -->
+      <div class="pt-3 text-center">
+        <%= f.submit "登録する",
+              class: "w-full bg-brand text-white font-semibold py-2.5 rounded-full shadow hover:bg-orange-600 transition duration-200 active:scale-[0.98]" %>
+      </div>
+    <% end %>
+  </div>
 </div>

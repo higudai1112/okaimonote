@@ -13,7 +13,7 @@ ja:
         password: "パスワード"
         password_confirmation: "パスワード（確認用）"
         remember_me: "ログイン情報を記憶"
-        name: "名前"
+        nickname: "ニックネーム"
 
       product:
         name: "商品名"
@@ -83,7 +83,6 @@ ja:
       not_saved: "エラーが発生しました"
       blank: "を入力してください"
       taken: "は既に使用されています"
-      record_invalid: "バリデーションに失敗しました: %{errors}"
       too_short: "は%{count}文字以上で入力してください"
       too_long: "は%{count}文字以内で入力してください"
       wrong_length: "は%{count}文字で入力してください"
@@ -99,20 +98,25 @@ ja:
       required: "を入力してください"
 
   devise:
+    mailer:
+      reset_password_instructions:
+        subject: "【おかいもノート】パスワード再設定のご案内"
     failure:
       already_authenticated: "すでにログインしています。"
       unauthenticated: "ログインしてください。"
       invalid: "メールアドレスまたはパスワードが違います"
       not_found_in_database: "メールアドレスまたはパスワードが違います"
-      timeout: "一定時間が経過したため、再度ログインが必要です。"
-      unconfirmed: "メールアドレスの確認が必要です。"
     registrations:
-      signed_up: "アカウントを登録しました。"
+      signed_up: "ようこそ、%{name}さん！<br>さっそく始めましょう！"
       updated: "アカウント情報を変更しました。"
       destroyed: "アカウントを削除しました。"
     sessions:
-      signed_in: "ログインしました。"
+      signed_in: "お帰りなさい、%{name}さん！"
       signed_out: "ログアウトしました。"
+    passwords:
+      send_instructions: "パスワード再設定のメールをお送りしました。"
+      updated: "パスワードを変更しました。引き続きおかいもノートをご利用ください。"
+      no_token: "このリンクは無効になっています。もう一度お試しください。"
   date:
     formats:
       default: "%Y/%m/%d"

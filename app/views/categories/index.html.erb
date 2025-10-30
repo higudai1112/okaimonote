@@ -1,50 +1,58 @@
-<div class="container mx-auto px-4 py-6">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">カテゴリーリスト</h1>
-  </div>
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
-  <!-- 検索部分 -->
-  <div class="mb-4">
-    <div class="relative">
-      <%= form_with url: categories_path,method: :get, local: true do |f| %>
-        <%= f.search_field :name_cont, placeholder: "検索", class: "border rounded py-2 px-3 pl-10 w-full" %>
-        <div class="absolute left-3 top-2.5 text-gray-500">
-          <i class="fas fa-search"></i>
-        </div>
+    <!-- タイトル -->
+    <h1 class="text-2xl font-bold text-center text-brand mb-8">
+      カテゴリーリスト
+    </h1>
+
+    <!-- カテゴリーリスト -->
+    <ul class="divide-y divide-gray-200 mb-6">
+      <!-- すべての商品 -->
+      <li class="py-3 px-2 flex items-center justify-between hover:bg-orange-50 rounded-lg transition">
+        <%= link_to products_path,
+              class: "flex items-center gap-2 text-lg text-gray-800 font-medium hover:text-orange-600 transition w-full" do %>
+          <i class="fa-solid fa-box-open text-orange-400"></i>
+          すべての商品
+        <% end %>
+      </li>
+
+      <!-- 各カテゴリー -->
+      <% @categories.each do |category| %>
+        <li class="py-3 px-2 flex items-center justify-between hover:bg-orange-50 rounded-lg transition">
+          <div class="flex items-center gap-2 text-gray-700">
+            <i class="fa-solid fa-folder text-orange-400"></i>
+            <%= link_to category.name, category_path(category),
+                  class: "text-lg font-medium hover:text-orange-600 transition w-full" %>
+            <% if category.memo.present? %>
+              <i class="fa-solid fa-sticky-note text-gray-400 ml-1" title="メモあり"></i>
+            <% end %>
+          </div>
+
+          <%= link_to edit_category_path(category),
+                class: "text-gray-400 hover:text-orange-500 transition text-lg" do %>
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <!-- 追加ボタン群 -->
+    <div class="flex justify-center gap-4 mt-8">
+      <%= link_to new_product_path,
+            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-full shadow-md transition" do %>
+        <i class="fa-solid fa-plus text-2xl mb-1"></i>
+        <span class="text-sm font-semibold">商品を追加</span>
+      <% end %>
+
+      <%= link_to new_category_path,
+            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-full shadow-md transition" do %>
+        <i class="fa-solid fa-folder-plus text-2xl mb-1"></i>
+        <span class="text-sm font-semibold">カテゴリーを追加</span>
       <% end %>
     </div>
   </div>
 
-  <!-- カテゴリーリスト -->
-  <ul class="divide-y divide-gray-200 rounded bg-white shadow mb-6">
-    <li class="p-4 flex items-center hover:bg-gray-50">
-      <%= link_to "すべての商品", products_path, class: "text-lg text-black hover:underline w-full" %>
-    </li>
-
-    <% @categories.each do |category| %>
-      <li class="p-4 flex items-center hover:bg-gray-50">
-        <%= link_to category.name, category_path(category), class: "text-lg text-gray-800 hover:underline w-full" %>
-        <% if category.memo.present? %>
-          <i class="fas fa-sticky-note text-gray-400 ml-2" title="メモあり"></i>
-        <% end %>
-        <%= link_to edit_category_path(category), class: "text-xl text-gray-500 hover:text-gray-700" do %>
-          <i class="fa fa-ellipsis-v"></i>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-
-  <!-- 追加ボタン -->
-  <div class="flex gap-4 justify-center">
-    <%= link_to new_product_path,
-                class: "btn btn-circle bg-orange-400 text-white" do %>
-      <i class="fa fa-plus text-2xl"></i>
-      <span class="text-xs mt-1">商品を追加</span>
-    <% end %>
-    <%= link_to new_category_path,
-                class: "bg-orange-400 hover:bg-orange-500 text-white p-4 rounded-full shadow-md" do %>
-      <i class="fa fa-folder-plus text-2xl"></i>
-      <span class="text-xs mt-1">カテゴリーを追加</span>
-    <% end %>
-  </div>
+  <!-- モーダル挿入用コンテナ -->
+  <div id="modal_container"></div>
 </div>

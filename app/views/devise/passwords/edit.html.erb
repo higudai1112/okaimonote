@@ -1,24 +1,43 @@
-<h2 class= "text-xl text-center mb-4">新しいパスワードの設定</h2>
+<div class="min-h-screen bg-base text-gray-800 flex items-center justify-center px-4 py-10">
+  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 w-full max-w-md">
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+    <!-- 見出し -->
+    <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">
+      新しいパスワードの設定
+    </h2>
 
-  <div class="form-group">
-    <%= f.label :password, "新しいパスワード" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+    <!-- フォーム -->
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "space-y-5" }) do |f| %>
+      <%= render "shared/error_message", resource: resource %>
+      <%= f.hidden_field :reset_password_token %>
+
+      <!-- 新しいパスワード -->
+      <div>
+        <%= f.label :password, "新しいパスワード", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <% if @minimum_password_length %>
+          <p class="text-xs text-gray-500 mb-2">※ <%= @minimum_password_length %>文字以上で入力してください</p>
+        <% end %>
+        <%= f.password_field :password,
+              autofocus: true,
+              autocomplete: "new-password",
+              placeholder: "新しいパスワードを入力",
+              class: "w-full border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition" %>
+      </div>
+
+      <!-- 確認用パスワード -->
+      <div>
+        <%= f.label :password_confirmation, "確認用パスワード", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              placeholder: "確認のため再入力",
+              class: "w-full border-gray-300 rounded-xl p-2.5 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition" %>
+      </div>
+
+      <!-- 送信ボタン -->
+      <div class="pt-2">
+        <%= f.submit "パスワードを変更する",
+              class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-full shadow-md transition-transform active:scale-[0.98]" %>
+      </div>
     <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control" %>
   </div>
-
-  <div class="form-group mt-2">
-    <%= f.label :password_confirmation, "確認用パスワード" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-  </div>
-
-  <div class="actions mt-4">
-    <%= f.submit "パスワードを変更する", class: "btn btn-success" %>
-  </div>
-<% end %>
-
+</div>

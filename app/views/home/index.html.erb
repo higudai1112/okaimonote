@@ -1,82 +1,102 @@
-<div class= "container mx-auto px-4 py-6">
-  <h1 class= "text-2xl font-bold mb-4">HOME</h1>
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
+  <div class="max-w-3xl mx-auto">
 
-  <div id="flash_messages">
-    <% if params[:notice].present? %>
-      <div class="alert alert-success text-green-600 bg-green-100 p-3 rounded mb-4">
-        <%= params[:notice] %>
+    <!-- タイトル -->
+    <h1 class="text-3xl font-extrabold text-center text-orange-500 mb-10 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-house"></i>
+      ホーム
+    </h1>
+
+    <!-- 検索切替ボタン -->
+    <div data-controller="toggle" class="mb-6 text-center">
+      <button data-action="click->toggle#toggle"
+              class="px-5 py-2 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-orange-50 hover:border-orange-300 transition">
+        <i class="fa-solid fa-filter mr-1"></i> 絞り込み検索
+      </button>
+
+      <!-- 検索フォーム -->
+      <div data-toggle-target="content" class="hidden mt-5 bg-white p-6 rounded-2xl shadow-md border border-orange-100">
+        <%= search_form_for @q, url: home_path, method: :get do |f| %>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <%= f.label :product_name_cont, "商品名", class: "block text-sm text-gray-600 mb-1" %>
+              <%= f.search_field :product_name_cont, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-orange-400 outline-none" %>
+            </div>
+
+            <div>
+              <%= f.label :product_category_id_eq, "カテゴリー", class: "block text-sm text-gray-600 mb-1" %>
+              <%= f.select :product_category_id_eq,
+                    current_user.categories.pluck(:name, :id),
+                    { include_blank: "選択してください" },
+                    class: "w-full border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-orange-400 outline-none" %>
+            </div>
+
+            <div>
+              <%= f.label :shop_id_eq, "店舗", class: "block text-sm text-gray-600 mb-1" %>
+              <%= f.select :shop_id_eq,
+                    current_user.shops.pluck(:name, :id),
+                    { include_blank: "選択してください" },
+                    class: "w-full border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-orange-400 outline-none" %>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center">
+            <%= f.submit "検索", class: "bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full shadow-md transition" %>
+          </div>
+        <% end %>
       </div>
-    <% else %>
-      <%= render "shared/flash_message" %>
-    <% end %>
-  </div>
-
-  <!-- 検索機能(非表示) -->
-  <div data-controller="toggle">
-    <button data-action="click->toggle#toggle" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded mb-4">
-      絞り込み検索
-    </button>
-
-    <div data-toggle-target="content" class="hidden mb-4">
-      <%= search_form_for @q, url: home_path, method: :get, class: "bg-white p-4 rounded shadow" do |f| %>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <%= f.label :product_name_cont, "商品名" %>
-            <%= f.search_field :product_name_cont, class: "form-control w-full" %>
-          </div>
-
-          <div>
-            <%= f.label :product_category_id_eq, "カテゴリー" %>
-            <%= f.select :product_category_id_eq, current_user.categories.pluck(:name, :id), { include_blank: "選択してください" }, class: "form-control w-full" %>
-          </div>
-
-          <div>
-            <%= f.label :shop_id_eq, "店舗" %>
-            <%= f.select :shop_id_eq, current_user.shops.pluck(:name, :id), { include_blank: "選択してください" }, class: "form-control w-full" %>
-          </div>
-
-        </div>
-
-        <div class="mt-4">
-          <%= f.submit "検索", class: "btn btn-primary" %>
-        </div>
-      <% end %>
     </div>
-  </div>
 
-  <!-- 価格サマリー -->
-  <%= render "summary" %>
+    <!-- 価格サマリー -->
+    <turbo-frame id="summary">
+      <%= render "summary" %>
+    </turbo-frame>
 
-  <!-- 価格登録履歴 -->
-  <h2 class="h5 mb-3">価格登録履歴（新着順）</h2>
-  <div class="price-records">
-    <% if @price_records.blank? && params[:q].present? %>
-      <p>条件に一致する履歴はありません</p>
-    <% elsif @price_records.blank? %>
-      <p>まだ価格の登録がありません</p>
-    <% else %>
-      <% @price_records.each do |record| %>
-        <div class="card mb-3 shadow-sm cursor-pointer"
-             data-action="click->summary#fetch"
-             data-summary-product-id="<%= record.product.id %>">
-          <div class="card-body">
-            <h5 class="card-title font-bold mb-2"><%= record.product.name %></h5>
+    <!-- 登録履歴タイトル -->
+    <h2 class="text-xl font-bold text-gray-700 mt-10 mb-5 flex items-center gap-2">
+      <i class="fa-solid fa-clock-rotate-left text-orange-400"></i>
+      価格登録履歴（新着順）
+    </h2>
 
-            <p class="fs-5 mb-1 text-primary"><%= "#{number_with_delimiter(record.price)}円" %></p>
+    <!-- 価格履歴リスト -->
+    <div data-controller="summary" class="space-y-4">
+      <% if @price_records.blank? && params[:q].present? %>
+        <p class="text-gray-500 text-center">条件に一致する履歴はありません。</p>
+      <% elsif @price_records.blank? %>
+        <p class="text-gray-500 text-center">まだ価格の登録がありません。</p>
+      <% else %>
+        <% @price_records.each do |record| %>
+          <div class="bg-white border border-orange-100 shadow-sm hover:shadow-md transition rounded-2xl p-5 cursor-pointer"
+               data-action="click->summary#fetch"
+               data-summary-product-id="<%= record.product.id %>">
 
-            <p class="text-muted small mb-2">
-              店舗：<%= record.shop&.name || "未登録" %> ／ 登録日：<%= l(record.created_at, format: :default) %>
+            <!-- 商品名と価格 -->
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-semibold text-gray-800">
+                <%= link_to record.product.name, product_path(record.product),
+                      class: "hover:text-orange-500 transition underline-offset-2 hover:underline"%>
+              </h3>
+              <p class="text-lg font-bold text-orange-500"><%= number_with_delimiter(record.price) %>円</p>
+            </div>
+
+            <!-- 店舗・日付 -->
+            <p class="text-sm text-gray-600 mb-1">
+              店舗：<%= record.shop&.name || "未登録" %>
+              ／ 登録日：<%= l(record.created_at, format: :short) %>
             </p>
 
+            <!-- メモ -->
             <% if record.memo.present? %>
-              <details>
-                <summary class="text-muted small">▼ メモを見る</summary>
-                <p class="mt-1 small text-secondary"><%= simple_format(record.memo) %></p>
+              <details class="mt-1">
+                <summary class="text-xs text-gray-500 cursor-pointer hover:text-orange-400 transition">メモを見る</summary>
+                <div class="mt-2 text-sm text-gray-700 leading-relaxed whitespace-pre-line bg-orange-50 p-2 rounded-md border border-orange-100">
+                  <%= record.memo %>
+                </div>
               </details>
             <% end %>
           </div>
-        </div>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>

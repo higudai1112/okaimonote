@@ -16,7 +16,7 @@
   }
 
   .logo img {
-    @apply w-32 mx-auto mb-8;
+    @apply mx-auto mb-8;
   }
 
   .buttons {
@@ -51,5 +51,39 @@
   .fa-brands {
     font-family: "Font Awesome 6 Free" !important;
     font-weight: 900 !important;
+  }
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 1.2s ease-out forwards;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
   }
 }

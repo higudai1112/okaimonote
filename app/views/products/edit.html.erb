@@ -1,34 +1,81 @@
-<%= link_to "← 戻る", request.referer || products_path, class: "text-sm text-gray-500 mb-4 inline-block" %>
-<h1 class="text-xl font-bold mb-6">商品を編集</h1>
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-2xl p-6 mt-4 mb-24 border border-orange-100">
+  <!-- 戻るボタン -->
+  <%= link_to category_path(@product.category), class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
+    <i class="fa-solid fa-arrow-left mr-2"></i>
+    一覧に戻る
+  <% end %>
 
-<%= render "shared/error_message", resource: @product %>
+  <!-- 見出し -->
+  <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center tracking-tight">商品を編集</h1>
 
-<%= form_with model: @product, local: true do |f| %>
-  <div class="mb-4">
-    <%= f.label :name, "商品名", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_field :name, placeholder: "例：牛乳", class: "form-control w-full" %>
-  </div>
+  <!-- エラーメッセージ -->
+  <%= render "shared/error_message", resource: @product %>
 
-  <div class="mb-4">
-    <%= f.label :category_id, "カテゴリー選択", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.select :category_id,
-          options_from_collection_for_select(@categories, :id, :name, @product.category_id),
-          { include_blank: "選択してください" },
-          class: "form-control w-full" %>
-  </div>
+  <!-- 編集フォーム -->
+  <%= form_with model: @product, local: true, class: "space-y-5" do |f| %>
+    <!-- 商品名 -->
+    <div>
+      <%= f.label :name, "商品名", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+      <%= f.text_field :name,
+            placeholder: "例：牛乳",
+            class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
+    </div>
 
-  <div class="mb-6">
-    <%= f.label :memo, "メモ", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_area :memo, rows: 3, placeholder: "備考などを記入", class: "form-control w-full" %>
-  </div>
+    <!-- カテゴリー選択 -->
+    <div>
+      <%= f.label :category_id, "カテゴリー選択", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+      <%= f.select :category_id,
+            options_from_collection_for_select(@categories, :id, :name, @product.category_id),
+            { include_blank: "選択してください" },
+            class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 bg-white outline-none transition" %>
+    </div>
 
-  <%= f.submit "更新する", class: "btn btn-primary w-full py-2 text-white font-semibold rounded" %>
-<% end %>
+    <!-- メモ -->
+    <div>
+      <%= f.label :memo, "メモ", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+      <%= f.text_area :memo,
+            rows: 3,
+            placeholder: "備考などを記入",
+            class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
+    </div>
 
-<div class="text-center">
+    <!-- 更新ボタン -->
+    <div class="pt-3">
+      <%= f.submit "更新する",
+            class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl shadow-md transition-transform active:scale-[0.98]" %>
+    </div>
+  <% end %>
+
+  <!-- Stimulus confirm対応 削除ボタン -->
+  <div data-controller="confirm" class="mt-6 text-center relative">
     <%= button_to "削除する",
           product_path(@product),
           method: :delete,
-          data: { turbo_confirm: "本当に削除しますか？" },
-          class: "text-red-500 hover:text-red-700 text-sm" %>
+          data: {
+            action: "click->confirm#confirm",
+            confirm_message: "この商品を削除しますか？"
+          },
+          class: "w-full text-red-600 border border-red-400 hover:bg-red-50 font-semibold py-2.5 rounded-xl shadow-sm transition" %>
+
+    <!-- 共通確認モーダル -->
+    <div data-confirm-target="modal"
+         class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+      <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+        <p data-confirm-target="message" class="text-gray-700 mb-4">
+          この商品を削除しますか？
+        </p>
+
+        <div class="flex justify-center gap-4">
+          <button data-action="click->confirm#proceed"
+                  class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+            削除
+          </button>
+          <button data-action="click->confirm#cancel"
+                  class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+            キャンセル
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
