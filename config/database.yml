@@ -17,16 +17,16 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  host: db               # ← Dockerのサービス名
-  username: postgres
-  password: password
-  port: 5432
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
 development:
   <<: *default
   database: app_development
+  host: db               # ← Dockerのサービス名
+  username: postgres
+  password: password
+  port: 5432
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -61,6 +61,10 @@ development:
 test:
   <<: *default
   database: app_test
+  host: db
+  username: postgres
+  password: password
+  port: 5432
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,20 +86,6 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-primary: &primary_production
+production:
   <<: *default
-  database: app_production
-  username: app
-  password: <%= ENV["APP_DATABASE_PASSWORD"] %>
-cache:
-  <<: *primary_production
-  database: app_production_cache
-  migrations_paths: db/cache_migrate
-queue:
-  <<: *primary_production
-  database: app_production_queue
-  migrations_paths: db/queue_migrate
-cable:
-  <<: *primary_production
-  database: app_production_cable
-  migrations_paths: db/cable_migrate
+  url: <%= ENV["DATABASE_URL"] %>
