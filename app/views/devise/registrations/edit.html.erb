@@ -1,0 +1,46 @@
+<div class="min-h-screen bg-base text-gray-800 flex items-center justify-center px-4 py-10">
+  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 w-full max-w-md">
+
+    <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">
+      パスワード変更
+    </h2>
+
+    <%= render "shared/error_message", resource: resource %>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+
+      <!-- 現在のパスワード -->
+      <div class="mb-4">
+        <%= f.label :current_password, "現在のパスワード", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :current_password,
+              autocomplete: "current-password",
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+      </div>
+
+      <!-- 新しいパスワード -->
+      <div class="mb-4">
+        <%= f.label :password, "新しいパスワード", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password,
+              autocomplete: "new-password",
+              placeholder: "6文字以上",
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+      </div>
+
+      <!-- 新しいパスワード確認 -->
+      <div class="mb-6">
+        <%= f.label :password_confirmation, "新しいパスワード確認用", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+      </div>
+
+      <%= f.submit "変更する",
+            class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-full shadow-md transition-transform active:scale-[0.98]" %>
+    <% end %>
+
+    <div class="mt-6 text-center">
+      <%= link_to "戻る", profile_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+    </div>
+
+  </div>
+</div>

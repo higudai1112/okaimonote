@@ -17,11 +17,11 @@ class ProfilesController < ApplicationController
   end
 
   def edit_email
-    @user = current.user
+    @user = current_user
   end
 
   def update_email
-    @user = current.user
+    @user = current_user
 
     if @user.valid_password?(params[:user][:current_password])
       if @user.update(user_params)
