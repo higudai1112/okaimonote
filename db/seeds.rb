@@ -21,9 +21,9 @@ demo_user2 = User.find_or_create_by!(email: "demo2@example.com") do |user|
   user.nickname = "デモ子"
 end
 
-[demo_user1, demo_user2].each do |user|
+[ demo_user1, demo_user2 ].each do |user|
   # --- 店舗 ---
-  shops = ["イオン", "業務スーパー", "成城石井", "ライフ"]
+  shops = [ "イオン", "業務スーパー", "成城石井", "ライフ" ]
   shops.each { |name| user.shops.find_or_create_by!(name: name) }
 
   # --- 商品例 ---
@@ -46,14 +46,14 @@ end
         shop: user.shops.sample,
         price: rand(100..400),
         purchased_at: rand(1..30).days.ago,
-        memo: ["特売品", "いつもより高め", "広告の品", nil].sample
+        memo: [ "特売品", "いつもより高め", "広告の品", nil ].sample
       )
     end
   end
 
   # --- お買い物リスト ---
   shopping_list = user.shopping_list
-  ["玉ねぎ", "バナナ", "豚バラ"].each do |item|
+  [ "玉ねぎ", "バナナ", "豚バラ" ].each do |item|
     shopping_list.shopping_items.find_or_create_by!(name: item)
   end
 end
