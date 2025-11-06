@@ -23,9 +23,35 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= turbo_page_requires_reload %>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'G-64G3BYVZCJ');
+    </script>
+    <!-- End Google Tag Manager -->
   </head>
 
   <body class="min-h-screen bg-base text-gray-800 flex flex-col">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-MW8CKGL2"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden">
+      </iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <main class="flex-grow pt-6 pb-20 px-0 md:px-0">
       <%= yield %>
     </main>
@@ -35,9 +61,9 @@
       <div class="fixed bottom-20 left-1/2 transform -translate-x-1/2
                 bg-green-500 text-white font-semibold py-2 px-4 rounded-full
                   shadow-lg z-[60] text-sm whitespace-nowrap max-w-[90vw]">
-      <%= message %>
-    </div>
-<% end %>
+        <%= message %>
+      </div>
+    <% end %>
 
     <!-- モーダルエリア -->
     <div id="modal_container"></div>
