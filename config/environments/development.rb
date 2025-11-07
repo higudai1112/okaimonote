@@ -57,9 +57,9 @@ Rails.application.configure do
   }
 
   # 対不正アクセス 確認用ok
-  #Rails.application.configure do
-    #config.middleware.use Rack::Attack
-  #end
+  # Rails.application.configure do
+  # config.middleware.use Rack::Attack
+  # end
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
