@@ -56,6 +56,11 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
+  # 対不正アクセス 確認用ok
+  # Rails.application.configure do
+  # config.middleware.use Rack::Attack
+  # end
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
