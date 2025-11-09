@@ -1,48 +1,21 @@
-<!-- products/showのページネーション(Tailwind) -->
-<% if total_pages > 1 %>
-  <nav class="flex justify-center mt-8 mb-4" role="navigation" aria-label="Pagination">
+<%= paginator.render do -%>
+  <nav class="flex justify-center mt-6 mb-4" role="navigation" aria-label="Pagination">
     <ul class="inline-flex items-center space-x-2">
-      
-      <%# ← 前へボタン %>
-      <% if current_page > 1 %>
-        <li>
-          <%= link_to raw("&laquo;"), url_for(page: current_page - 1),
-                      class: "px-3 py-1.5 border border-gray-300 rounded-lg text-gray-500 hover:bg-orange-50 hover:text-orange-500 transition" %>
-        </li>
-      <% else %>
-        <li>
-          <span class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300 cursor-not-allowed">&laquo;</span>
-        </li>
-      <% end %>
+      <%= first_page_tag unless current_page.first? %>
+      <%= prev_page_tag  unless current_page.first? %>
 
-      <%# ページ番号 %>
-      <% each_page do |page| %>
-        <% if page %>
-          <% if page == current_page %>
-            <li>
-              <span class="px-3 py-1.5 bg-orange-500 text-white rounded-lg font-semibold shadow-sm"><%= page %></span>
-            </li>
-          <% else %>
-            <li>
-              <%= link_to page, url_for(page: page),
-                          class: "px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-orange-50 hover:text-orange-500 transition" %>
-            </li>
-          <% end %>
-        <% end %>
-      <% end %>
+      <% each_page do |page| -%>
+        <% if page.display_tag? -%>
+          <%= page_tag page %>
+        <% elsif !page.was_truncated? -%>
+          <%= gap_tag %>
+        <% end -%>
+      <% end -%>
 
-      <%# → 次へボタン %>
-      <% if current_page < total_pages %>
-        <li>
-          <%= link_to raw("&raquo;"), url_for(page: current_page + 1),
-                      class: "px-3 py-1.5 border border-gray-300 rounded-lg text-gray-500 hover:bg-orange-50 hover:text-orange-500 transition" %>
-        </li>
-      <% else %>
-        <li>
-          <span class="px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300 cursor-not-allowed">&raquo;</span>
-        </li>
+      <% unless current_page.last? %>
+        <%= next_page_tag %>
+        <%= last_page_tag %>
       <% end %>
-
     </ul>
   </nav>
-<% end %>
+<% end -%>
