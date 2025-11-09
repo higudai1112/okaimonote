@@ -58,12 +58,32 @@
 
     <!-- フラッシュメッセージ -->
     <% flash.each do |type, message| %>
-      <div class="fixed bottom-20 left-1/2 transform -translate-x-1/2
-                bg-green-500 text-white font-semibold py-2 px-4 rounded-full
-                  shadow-lg z-[60] text-sm whitespace-nowrap max-w-[90vw]">
+      <% color = type == "alert" ? "bg-red-500" : "bg-green-500" %>
+
+      <div class="flash-message fixed bottom-20 left-1/2 transform -translate-x-1/2
+                  <%= color %> text-white font-semibold py-2 px-4 rounded-full
+                  shadow-lg z-[60] text-sm whitespace-nowrap max-w-[90vw] transition-opacity duration-500">
         <%= message %>
       </div>
     <% end %>
+
+    <!-- フラッシュ自動フェードアウト -->
+    <script>
+      function fadeFlashMessage() {
+        const flash = document.querySelector(".flash-message");
+        if (!flash) return;
+
+        setTimeout(() => {
+          flash.style.opacity = "0";
+
+          // 完全に消えたら削除（フッターと重なるのを防ぐ）
+          setTimeout(() => flash.remove(), 500);
+        }, 2500); // 表示後 2.5秒でフェードアウト
+      }
+
+      document.addEventListener("DOMContentLoaded", fadeFlashMessage);
+      document.addEventListener("turbo:load", fadeFlashMessage);
+    </script>
 
     <!-- モーダルエリア -->
     <div id="modal_container"></div>
