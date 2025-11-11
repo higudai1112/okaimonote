@@ -1,6 +1,4 @@
 class ContactMailer < ApplicationMailer
-  default from: "okaimonote.team@gmail.com"
-
   # 管理者宛
   def contact_email(nickname, email, message)
     @nickname = nickname
@@ -9,7 +7,8 @@ class ContactMailer < ApplicationMailer
 
     mail(
       to: "okaimonote.team@gmail.com",
-      subject: "【okaimonote】お問い合わせをいただきました"
+      subject: "【okaimonote】お問い合わせをいただきました",
+      reply_to: email
     ) do |format|
       format.html { render layout: "mailer" }
     end
@@ -22,7 +21,8 @@ class ContactMailer < ApplicationMailer
 
     mail(
       to: email,
-      subject: "【okaimonote】お問い合わせありがとうどざいます"
+      subject: "【okaimonote】お問い合わせありがとうどざいます",
+      reply_to: "okaimonote.team@gmail.com"
     ) do |format|
       format.html { render layout: "mailer" }
     end
