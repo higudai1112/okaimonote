@@ -22,7 +22,7 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
@@ -61,27 +61,28 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "okaimonote.com" }
+  config.action_mailer.default_url_options = { host: "okaimonote.com", protocol: "https" }
 
   config.action_mailer.default_options = {
-  from: "おかいもノート <noreply@example.com>"
+  from: "おかいもノート <noreply@mail.okaimonote.com>"
   }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "email-smtp.ap-northeast-3.amazonaws.com",
     port: 587,
-    user_name: ENV["GMAIL_USER"],
-    password: ENV["GMAIL_PASS"],
-    authentication: "plain",
+    user_name: ENV["SES_SMTP_USERNAME"],
+    password: ENV["SES_SMTP_PASSWORD"],
+    authentication: "login",
     enable_starttls_auto: true
   }
 
+  config.hosts << "okaimonote.com"
+  config.hosts << "www.okaimonote.com"
+
   config.active_storage.service = :amazon
 
-  Rails.application.configure do
-    config.middleware.use Rack::Attack
-  end
+  config.middleware.use Rack::Attack
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
