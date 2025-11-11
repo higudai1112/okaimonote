@@ -87,7 +87,7 @@ MVP
 
 ### 🚀 デモ環境
 
-https://okaimonote.onrender.com
+https://okaimonote.com
 
 **デモユーザー①**
 メール: demo1@example.com
