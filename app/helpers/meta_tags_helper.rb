@@ -2,8 +2,8 @@ module MetaTagsHelper
   def default_meta
     {
       site: "おかいもノート | okaimonote",
-      title: content_for?(:page_title) ? content_for(:page_title) : "家計にやさしい買い物ノート",
-      description: content_for?(:page_description) ? content_for(:page_description) : "日用品や食材の価格を記録して、最安値・平均・高値を可視化。買い物リストもサクッと管理。",
+      title: content_for?(:page_title) ? content_for(:page_title) : "買い物リストと価格記録がひとつに",
+      description: content_for?(:page_description) ? content_for(:page_description) : "日用品や食材の価格を記録して、最安値・平均・高値をかんたんにチェック。節約をもっと身近に。",
       image: og_image_url,
       url: request.original_url,
       type: content_for?(:og_type) ? content_for(:og_type) : "website",
