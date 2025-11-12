@@ -38,6 +38,17 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= turbo_page_requires_reload %>
+
+    <!-- OGP設定 -->
+    <% meta = default_meta %>
+    <meta property="og:site_name" content="<%= meta[:site] %>">
+    <meta property="og:title" content="<%= meta[:title] %>">
+    <meta property="og:description" content="<%= meta[:description] %>">
+    <meta property="og:image" content="<%= meta[:image] %>">
+    <meta property="og:url" content="<%= meta[:url] %>">
+    <meta property="og:type" content="<%= meta[:type] %>">
+    <meta property="og:locale" content="<%= meta[:locale] %>">
+    <meta name="twitter:card" content="summary_large_image">
   </head>
 
   <body class="min-h-screen bg-base text-gray-800 flex flex-col">
