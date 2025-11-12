@@ -470,6 +470,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  addressable
   aws-sdk-s3
   bootsnap
   bootstrap5-kaminari-views

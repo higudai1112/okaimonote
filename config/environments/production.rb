@@ -104,6 +104,10 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
+  # デフォルトURLオプションを設定（OGP・メールURL生成などに使用）
+  Rails.application.routes.default_url_options[:host] = ENV.fetch("APP_HOST", "https://okaimonote.com")
+
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
