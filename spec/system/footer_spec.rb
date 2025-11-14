@@ -11,21 +11,27 @@ RSpec.describe "フッターの表示と機能", type: :system do
     expect(page).to have_current_path(home_path) # ログイン成功の確認
   end
 
-  it 'HOMEアイコンが表示されている' do
-    expect(page).to have_css('i.fa.fa-home')
-    expect(page).to have_content('HOME')
-  end
+  describe "フッター" do
+    context "表示" do
+      it 'HOMEアイコンが表示されている' do
+        expect(page).to have_css('i.fa.fa-home')
+        expect(page).to have_content('HOME')
+      end
+    end
 
-  it '登録リストに遷移できる' do
-    find('p', text: '登録リスト').click
-    expect(current_path).to eq(lists_path)
-  end
+    context "遷移" do
+      it '登録リストに遷移できる' do
+        find('p', text: '登録リスト').click
+        expect(current_path).to eq(lists_path)
+      end
 
-  it '選択中のリンクにtext-orange-500が付与されている' do
-    expect(page).to have_css("a.footer-link.text-orange-500", text: "HOME")
+      it '選択中のリンクにtext-orange-500が付与されている' do
+        expect(page).to have_css("a.footer-link.text-orange-500", text: "HOME")
 
-    find('p', text: '設定').click
-    expect(page).to have_current_path(settings_path)
-    expect(page).to have_css("a.footer-link.text-orange-500", text: "設定")
+        find('p', text: '設定').click
+        expect(page).to have_current_path(settings_path)
+        expect(page).to have_css("a.footer-link.text-orange-500", text: "設定")
+      end
+    end
   end
 end

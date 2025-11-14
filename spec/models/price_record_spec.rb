@@ -7,28 +7,37 @@ RSpec.describe PriceRecord, type: :model do
   let(:product) { create(:product, user: user, category: category) }
   let(:price_record) { build(:price_record, user: user, product: product, shop: shop) }
 
-  it "有効なファクトリーであること" do
-    expect(price_record).to be_valid
-  end
+  describe "バリデーション" do
+    context "有効な場合" do
+      it "有効なファクトリーであること" do
+        expect(price_record).to be_valid
+      end
+    end
 
-  it "価格がないと無効" do
-    price_record.price = nil
-    expect(price_record).not_to be_valid
-  end
+    context "無効な場合" do
+      it "価格がないと無効" do
+        price_record.price = nil
+        price_record.validate
+        expect(price_record.errors[:price]).to include("を入力してください")
+      end
 
-  it "購入日がないと無効" do
-    price_record.purchased_at = nil
-    expect(price_record).not_to be_valid
-  end
+      it "購入日がないと無効" do
+        price_record.purchased_at = nil
+        price_record.validate
+        expect(price_record.errors[:purchased_at]).to include("を入力してください")
+      end
 
-  it "商品がないと無効" do
-    price_record.product = nil
-    expect(price_record).not_to be_valid
+      it "商品がないと無効" do
+        price_record.product = nil
+        price_record.validate
+        expect(price_record.errors[:product]).to include("を入力してください")
+      end
+    end
   end
 
   describe 'アソシエーション' do
-    it { should belong_to(:user) }
-    it { should belong_to(:product) }
-    it { should belong_to(:shop).optional }
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:product) }
+    it { is_expected.to belong_to(:shop).optional }
   end
 end

@@ -69,6 +69,11 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      # Dockerビルド検証を追加
+      - name: Verify Docker build (production image)
+        run: |
+          docker build -t okaimonote-test -f Dockerfile .
+
       - name: Run tests
         env:
           RAILS_ENV: test
@@ -83,3 +88,15 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [scan_ruby, lint, test]  # すべて成功後に実行
+    if: github.ref == 'refs/heads/main'  # mainブランチ限定で自動デプロイ
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          echo "Triggering Render deployment..."
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
