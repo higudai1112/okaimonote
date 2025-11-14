@@ -98,7 +98,7 @@
 
     <div class="text-center mt-10">
       <%= link_to '戻る',
-        settings_path,
+            user_signed_in? ? settings_path : root_path,
         class: "inline-block bg-brand text-white px-6 py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
     </div>
   </div>
