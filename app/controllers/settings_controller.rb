@@ -1,4 +1,5 @@
 class SettingsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:terms, :privacy, :contact, :send_contact, :thank_you]
   def show
     render :logged_in
   end
@@ -22,4 +23,6 @@ class SettingsController < ApplicationController
 
     redirect_to thank_you_path, notice: "お問い合わせを送信しました。"
   end
+
+  def thank_you; end
 end

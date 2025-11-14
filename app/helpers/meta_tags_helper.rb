@@ -1,3 +1,5 @@
+require "addressable/uri"
+
 module MetaTagsHelper
   def default_meta
     {

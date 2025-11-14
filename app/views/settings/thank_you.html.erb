@@ -6,8 +6,8 @@
       担当者より順次ご連絡いたします。
     </p>
 
-    <%= link_to "設定に戻る",
-      settings_path,
+    <%= link_to "戻る",
+          user_signed_in? ? settings_path : root_path,
       class: "inline-block bg-brand text-white px-6 py-2.5 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
   </div>
 </div>
