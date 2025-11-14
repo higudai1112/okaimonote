@@ -1,5 +1,5 @@
 class SettingsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:terms, :privacy, :contact, :send_contact, :thank_you]
+  skip_before_action :authenticate_user!, only: [ :terms, :privacy, :contact, :send_contact, :thank_you ]
   def show
     render :logged_in
   end
