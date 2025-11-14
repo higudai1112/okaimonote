@@ -67,7 +67,12 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+ENV RAILS_DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
+    DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
+    DATABASE_URL="postgres://dummy:dummy@localhost:5432/dummy"
+
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+
 
 
 RUN rm -rf node_modules
