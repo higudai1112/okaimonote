@@ -17,90 +17,102 @@ RSpec.describe "店舗機能", type: :system do
   end
 
   describe "お店一覧ページ" do
-    it "お店一覧が表示されること" do
-      expect(page).to have_content "イオン"
-      expect(page).to have_content "業務スーパー"
-    end
-
-    it "メモがあるお店にメモアイコンが表示されること" do
-      within("li", text: "業務スーパー") do
-        expect(page).to have_selector(".fa-sticky-note")
-      end
-    end
-
-    it "編集ページへ遷移できること" do
-      within("li", text: "イオン") do
-        find("a i.fa-ellipsis-v").click
+    context "正常系" do
+      it "お店一覧が表示されること" do
+        expect(page).to have_content "イオン"
+        expect(page).to have_content "業務スーパー"
       end
 
-      expect(page).to have_current_path(edit_shop_path(shop1))
-      expect(page).to have_field "店名", with: "イオン"
+      it "メモがあるお店にメモアイコンが表示されること" do
+        within("li", text: "業務スーパー") do
+          expect(page).to have_selector(".fa-sticky-note")
+        end
+      end
+
+      it "編集ページへ遷移できること" do
+        within("li", text: "イオン") do
+          find("a i.fa-ellipsis-v").click
+        end
+
+        expect(page).to have_current_path(edit_shop_path(shop1))
+        expect(page).to have_field "店名", with: "イオン"
+      end
     end
   end
 
   describe "新規登録" do
-    it "正しい情報でお店を登録できること" do
-      find('a .fa-plus').click
-      fill_in "店名", with: "コープ"
-      fill_in "メモ", with: "近所のスーパー"
-      click_button "登録する"
+    context "正常系" do
+      it "正しい情報でお店を登録できること" do
+        find('a .fa-plus').click
+        fill_in "店名", with: "コープ"
+        fill_in "メモ", with: "近所のスーパー"
+        click_button "登録する"
 
-      expect(page).to have_content "登録しました"
-      expect(page).to have_content "コープ"
+        expect(page).to have_content "登録しました"
+        expect(page).to have_content "コープ"
+      end
     end
 
-    it "店名が空だとエラーになること" do
-      find('a .fa-plus').click
-      fill_in "店名", with: ""
-      click_button "登録する"
+    context "異常系" do
+      it "店名が空だとエラーになること" do
+        find('a .fa-plus').click
+        fill_in "店名", with: ""
+        click_button "登録する"
 
-      expect(page).to have_content "店名を入力してください"
+        expect(page).to have_content "店名を入力してください"
+      end
     end
   end
 
   describe "編集" do
-    it "お店の情報を更新できること" do
-      within("li", text: "イオン") do
-        find("a i.fa-ellipsis-v").click
+    context "正常系" do
+      it "お店の情報を更新できること" do
+        within("li", text: "イオン") do
+          find("a i.fa-ellipsis-v").click
+        end
+
+        fill_in "店名", with: "イオンモール"
+        fill_in "メモ", with: "ショッピングモール内"
+        click_button "更新する"
+
+        expect(page).to have_content "更新しました"
+        expect(page).to have_content "イオンモール"
       end
-
-      fill_in "店名", with: "イオンモール"
-      fill_in "メモ", with: "ショッピングモール内"
-      click_button "更新する"
-
-      expect(page).to have_content "更新しました"
-      expect(page).to have_content "イオンモール"
     end
 
-    it "空欄では更新できないこと" do
-      within("li", text: "イオン") do
-        find("a i.fa-ellipsis-v").click
+    context "異常系" do
+      it "空欄では更新できないこと" do
+        within("li", text: "イオン") do
+          find("a i.fa-ellipsis-v").click
+        end
+
+        fill_in "店名", with: ""
+        click_button "更新する"
+
+        expect(page).to have_content "店名を入力してください"
       end
-
-      fill_in "店名", with: ""
-      click_button "更新する"
-
-      expect(page).to have_content "店名を入力してください"
     end
   end
 
-  describe "削除" do
-    it "お店を削除できること" do
-      shop = create(:shop, name: "削除用店舗", user: user)
-      visit shops_path
+  describe "削除", js: true do
+    context "正常系" do
+      it "お店を削除できること" do
+        shop = create(:shop, name: "削除用店舗", user: user)
+        visit shops_path
 
-      within(:xpath, "//li[contains(., '削除用店舗')]") do
-        find("a i.fa-ellipsis-v").click
+        within(:xpath, "//li[contains(., '削除用店舗')]") do
+          find("a i.fa-ellipsis-v").click
+        end
+
+        expect(page).to have_current_path(edit_shop_path(shop))
+
+        accept_confirm do
+          click_button "削除する"
+        end
+
+        expect(page).to have_content "削除しました"
+        expect(page).not_to have_content "削除用店舗"
       end
-
-      expect(page).to have_current_path(edit_shop_path(shop))
-
-      accept_confirm do
-        click_button "削除する"
-      end
-
-      expect(page).to have_content "削除しました"
-      expect(page).not_to have_content "削除用店舗"
     end
   end
 end

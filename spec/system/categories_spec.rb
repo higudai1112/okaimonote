@@ -18,67 +18,77 @@ RSpec.describe "カテゴリー機能", type: :system do
   end
 
   describe "カテゴリーリストページ" do
-    it "カテゴリーリストが表示されること" do
-      expect(page).to have_content "野菜"
-      expect(page).to have_content "お肉"
-    end
+    context "正常系" do
+      it "カテゴリーリストが表示されること" do
+        expect(page).to have_content "野菜"
+        expect(page).to have_content "お肉"
+      end
 
-    it "メモがあるカテゴリーにメモアイコンが表示されること" do
-      within("li", text: "お肉") do
-        expect(page).to have_selector(".fa-sticky-note")
+      it "メモがあるカテゴリーにメモアイコンが表示されること" do
+        within("li", text: "お肉") do
+          expect(page).to have_selector(".fa-sticky-note")
+        end
       end
     end
   end
 
   describe "新規作成" do
-    it "カテゴリーを新規作成できる" do
-      find('a .fa-folder-plus').click
-      fill_in "カテゴリー名", with: unique_name
-      fill_in "メモ", with: "洗剤・ティッシュなど"
-      click_button "登録する"
+    context "正常系" do
+      it "カテゴリーを新規作成できる" do
+        find('a .fa-folder-plus').click
+        fill_in "カテゴリー名", with: unique_name
+        fill_in "メモ", with: "洗剤・ティッシュなど"
+        click_button "登録する"
 
-      expect(page).to have_content "カテゴリーを登録しました"
-      expect(page).to have_content "日用品"
+        expect(page).to have_content "カテゴリーを登録しました"
+        expect(page).to have_content "日用品"
+      end
     end
 
-    it "カテゴリー名が未入力では登録できない" do
-      find('a .fa-folder-plus').click
-      fill_in "カテゴリー名", with: ""
-      click_button "登録する"
+    context "異常系" do
+      it "カテゴリー名が未入力では登録できない" do
+        find('a .fa-folder-plus').click
+        fill_in "カテゴリー名", with: ""
+        click_button "登録する"
 
-      expect(page).to have_content "カテゴリー名を入力してください"
+        expect(page).to have_content "カテゴリー名を入力してください"
+      end
     end
   end
 
   describe "編集" do
-    it "カテゴリーを編集できる" do
-      within("li", text: "お肉") do
-        find("a i.fa-ellipsis-v").click
-      end
-      fill_in "カテゴリー名", with: "新しい名前"
-      click_button "更新する"
+    context "正常系" do
+      it "カテゴリーを編集できる" do
+        within("li", text: "お肉") do
+          find("a i.fa-ellipsis-v").click
+        end
+        fill_in "カテゴリー名", with: "新しい名前"
+        click_button "更新する"
 
-      expect(page).to have_content "更新しました"
-      expect(page).to have_content "新しい名前"
+        expect(page).to have_content "更新しました"
+        expect(page).to have_content "新しい名前"
+      end
     end
   end
 
   describe "削除", js: true do
-    it "カテゴリーを削除できる" do
-      category = create(:category, name: "削除対象", user: user)
-      visit categories_path
+    context "正常系" do
+      it "カテゴリーを削除できる" do
+        category = create(:category, name: "削除対象", user: user)
+        visit categories_path
 
-      within(:xpath, "//li[contains(., '削除対象')]") do
-        find("a i.fa-ellipsis-v").click
+        within(:xpath, "//li[contains(., '削除対象')]") do
+          find("a i.fa-ellipsis-v").click
+        end
+        expect(page).to have_current_path(edit_category_path(category))
+
+        accept_confirm do
+          click_button "削除する"
+        end
+
+        expect(page).to have_content "カテゴリーを削除しました"
+        expect(page).not_to have_content "削除対象"
       end
-      expect(page).to have_current_path(edit_category_path(category))
-
-      accept_confirm do
-        click_button "削除する"
-      end
-
-      expect(page).to have_content "カテゴリーを削除しました"
-      expect(page).not_to have_content "削除対象"
     end
   end
 end

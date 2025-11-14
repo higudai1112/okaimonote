@@ -1,13 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it "有効なファクトリを持つこと" do
-    user = create(:user)
-    expect(user).to be_valid
-  end
+  describe "バリデーション" do
+    context "有効な場合" do
+      it "有効なファクトリを持つこと" do
+        expect(build(:user)).to be_valid
+      end
+    end
 
-  it "ニックネームが空では無効であること" do
-    user = build(:user, nickname: nil)
-    expect(user).not_to be_valid
+    context "無効な場合" do
+      it "ニックネームが空では無効であること" do
+        user = build(:user, nickname: nil)
+        user.validate
+        expect(user.errors[:nickname]).to include("を入力してください")
+      end
+    end
   end
 end

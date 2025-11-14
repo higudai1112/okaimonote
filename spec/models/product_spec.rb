@@ -2,20 +2,24 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   describe 'バリデーション' do
-    it '商品名があれば有効' do
-      product = build(:product)
-      expect(product).to be_valid
+    context "有効な場合" do
+      it '商品名があれば有効' do
+        expect(build.(:product)).to be_valid
+      end
     end
 
-    it '商品名が無ければ無効' do
-      product = build(:product, name: nil)
-      expect(product).not_to be_valid
+    context "無効な場合" do
+      it '商品名が無ければ無効' do
+        product = build(:product, name: nil)
+        product.validate
+        expect(product.errors[:name]).to include("を入力してください")
+      end
     end
   end
 
   describe 'アソシエーション' do
-    it { should belong_to(:user) }
-    it { should belong_to(:category).optional }
-    it { should have_many(:price_records) }
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:category).optional }
+    it { is_expected.to have_many(:price_records) }
   end
 end

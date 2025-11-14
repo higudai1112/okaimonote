@@ -26,74 +26,82 @@ RSpec.describe 'HOME画面', type: :system do
       expect(page).to have_selector("form", visible: true, wait: 2)
     end
 
-    it "商品名で検索できること" do
-      fill_in "商品名", with: "牛乳"
-      click_button "検索"
+    content "単一条件" do
+      it "商品名で検索できること" do
+        fill_in "商品名", with: "牛乳"
+        click_button "検索"
 
-      expect(page).to have_content "牛乳"
-      expect(page).to have_content "200円"
-      expect(page).to have_content "150円"
-      expect(page).to have_content "イオン"
-    end
-
-    it "カテゴリーで検索できること" do
-      select "食料品", from: "カテゴリー"
-      click_button "検索"
-
-      expect(page).to have_content "牛乳"
-      expect(page).to have_content "200円"
-      expect(page).to have_content "イオン"
-      expect(page).to have_content "お肉"
-      expect(page).to have_content "600円"
-    end
-
-    it "店舗で検索できること" do
-      select "イオン", from: "店舗"
-      click_button "検索"
-      within(".price-records") do
-        expect(page).to have_content "牛乳"
+        expect(page).to have_content("牛乳", wait: 2)
+        expect(page).to have_content "200円"
         expect(page).to have_content "150円"
+        expect(page).to have_content "イオン"
+      end
+
+      it "カテゴリーで検索できること" do
+        select "食料品", from: "カテゴリー"
+        click_button "検索"
+
+        expect(page).to have_content("牛乳", wait: 2)
+        expect(page).to have_content "200円"
+        expect(page).to have_content "イオン"
         expect(page).to have_content "お肉"
-        expect(page).not_to have_content "200円"
+        expect(page).to have_content "600円"
+      end
+
+      it "店舗で検索できること" do
+        select "イオン", from: "店舗"
+        click_button "検索"
+        within(".price-records") do
+          expect(page).to have_content("牛乳", wait: 2)
+          expect(page).to have_content "150円"
+          expect(page).to have_content "お肉"
+          expect(page).not_to have_content "200円"
+        end
       end
     end
 
-    it "商品名 + カテゴリー + 店舗 の複合条件で検索できること" do
-      fill_in "商品名", with: "牛乳"
-      select "食料品", from: "カテゴリー"
-      select "イオン", from: "店舗"
-      click_button "検索"
+    content "複合検索" do
+      it "商品名 + カテゴリー + 店舗で検索できる" do
+        fill_in "商品名", with: "牛乳"
+        select "食料品", from: "カテゴリー"
+        select "イオン", from: "店舗"
+        click_button "検索"
 
-      expect(page).to have_content "牛乳"
-      expect(page).to have_content "150円"
-      expect(page).to have_content "イオン"
-      # 他条件に合わないデータは表示されないこと
-      expect(page).not_to have_content "お肉"
+        expect(page).to have_content("牛乳", wait: 2)
+        expect(page).to have_content "150円"
+        expect(page).to have_content "イオン"
+        # 他条件に合わないデータは表示されないこと
+        expect(page).not_to have_content "お肉"
+      end
     end
   end
 
   describe "価格サマリー" do
-    it "平均・最安値・最高値が表示されること" do
-      find_all(".card", text: "牛乳").first.click
+    content "正常系" do
+      it "平均・最安値・最高値が表示されること" do
+        find_all(".card", text: "牛乳").first.click
 
-      expect(page).to have_content "平均価格: 175円"
-      expect(page).to have_content "最安値: 150円"
-      expect(page).to have_content "最高値: 200円"
+        expect(page).to have_content "平均価格: 175円"
+        expect(page).to have_content "最安値: 150円"
+        expect(page).to have_content "最高値: 200円"
+      end
     end
   end
 
   describe "価格登録履歴" do
-    it "新着順に表示されること" do
-      within(".price-records") do
-        expect(page).to have_content "600円"
-        expect(page).to have_content "200円"
-        expect(page).to have_content "150円"
+    content "正常系" do
+      it "新着順に表示されること" do
+        within(".price-records") do
+          expect(page).to have_content "600円"
+          expect(page).to have_content "200円"
+          expect(page).to have_content "150円"
+        end
       end
-    end
 
-    it "メモがあればアイコンが表示されること" do
-      within(".price-records") do
-        expect(page).to have_content("▼ メモを見る")
+      it "メモがあればアイコンが表示されること" do
+        within(".price-records") do
+          expect(page).to have_content("▶︎ メモを見る")
+        end
       end
     end
   end
