@@ -1,0 +1,34 @@
+<turbo-stream action="update" target="home_autocomplete_results">
+  <template>
+    <% if @suggestions.present? %>
+      <ul class="bg-white border border-orange-200 rounded-xl shadow-lg">
+        <% @suggestions.each do |item| %>
+          <li
+            class="w-full px-4 py-2 hover:bg-orange-50 cursor-pointer transition flex flex-col"
+            data-action="click->home-autocomplete#select"
+            data-value="<%= item.name %>"
+          >
+            <!-- 1行目 -->
+            <div class="flex items-center gap-2 text-gray-800 font-medium">
+              <% if @frequent_ids.include?(item.id) %>
+                <span class="text-[10px] text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                  ⭐️ よく使う
+                </span>
+              <% end %>
+              <span><%= item.name %></span>
+            </div>
+
+            <!-- 2行目：カテゴリー -->
+            <% if item.category.present? %>
+              <span class="text-xs text-gray-500 mt-0.5">
+                <%= item.category.name %>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div></div>
+    <% end %>
+  </template>
+</turbo-stream>

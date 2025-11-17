@@ -30,6 +30,47 @@ class HomeController < ApplicationController
     end
   end
 
+  def autocomplete
+    query = params[:q].to_s.strip
+
+    # よく使う候補（上位3件）
+    frequent_items =
+      current_user.products
+                  .left_joins(:price_records)
+                  .where("price_records.created_at > ?", 30.days.ago)
+                  .group(:id)
+                  .order("COUNT(price_records.id) DESC")
+                  .limit(3)
+
+    if frequent_items.empty?
+      frequent_items =
+        current_user.products
+                    .left_joins(:price_records)
+                    .group(:id)
+                    .order("COUNT(price_records.id) DESC")
+                    .limit(3)
+    end
+
+    @frequent_ids = frequent_items.pluck(:id)
+
+    # 前方一致
+    starts_with = current_user.products
+                              .where("name LIKE ?", "#{query}%")
+
+    # 部分一致
+    contains = current_user.products
+                          .where("name LIKE ?", "%#{query}%")
+
+    # 結合して uniq
+    @suggestions = (frequent_items + starts_with + contains)
+                     .uniq
+                     .first(8)
+
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   private
 
   def set_summary(product)

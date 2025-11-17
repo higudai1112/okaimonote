@@ -9,8 +9,12 @@ Rails.application.routes.draw do
   get "guide", to: "pages#guide", as: :guide
   get "home", to: "home#index", as: :home
   get "home/summary/:id", to: "home#show_summary", as: :home_summary
+  get "home/autocomplete", to: "home#autocomplete"
 
   resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
+    collection do
+      get :autocomplete
+    end
     resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]
   end
   resources :price_records, only: [ :new, :create ]
@@ -27,6 +31,7 @@ Rails.application.routes.draw do
     delete :delete_purchased, on: :collection
   end
   get "lists", to: "lists#index", as: :lists
+  get "shopping_items/autocomplete", to: "shopping_items#autocomplete"
 
   resource :settings, only: [ :show ]
   get "register_info", to: "pages#register_info", as: :register_info
