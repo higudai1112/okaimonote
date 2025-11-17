@@ -1,0 +1,6 @@
+<ul id="shopping_items" class="space-y-3 text-left">
+  <% items.each do |item| %>
+    <%= render partial: "shopping_items/item_row",
+               locals: { shopping_item: item } %>
+  <% end %>
+</ul>

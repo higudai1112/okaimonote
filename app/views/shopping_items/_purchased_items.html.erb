@@ -1,0 +1,14 @@
+<ul id="purchased_items_list" class="space-y-3 text-left">
+  <% if items.blank? %>
+    <li class="text-center text-gray-500 bg-orange-50 border border-orange-100 rounded-xl py-4 shadow-sm">
+      <i class="fa-solid fa-circle-info text-orange-400 mr-2"></i>
+      購入済みの商品はありません
+    </li>
+  <% else %>
+    <% items.each do |item| %>
+      <%= render partial: "shopping_items/item_row",
+                 formats: [:html],
+                 locals: { shopping_item: item } %>
+    <% end %>
+  <% end %>
+</ul>

@@ -1,25 +1,34 @@
-<% if @shopping_item.purchased? %>
-  <!-- 「買うもの」リストから削除 -->
-  <turbo-stream action="remove" target="shopping_item_<%= @shopping_item.id %>"></turbo-stream>
+<%# ================================
+    未購入リストを更新
+================================ %>
+<turbo-stream action="replace" target="shopping_items">
+  <template>
+    <%= render partial: "shopping_items/not_purchased_list",
+               formats: [:html],
+               locals: {
+                 items: @shopping_list.shopping_items
+                                      .where(purchased: false)
+                                      .order(created_at: :desc)
+               } %>
+  </template>
+</turbo-stream>
 
-  <!-- 「購入済み」リストへ追加 -->
-  <turbo-stream action="append" target="purchased_items_list">
-    <template>
-      <%= render partial: "shopping_items/item_row", formats: [:html], locals: { shopping_item: @shopping_item } %>
-    </template>
-  </turbo-stream>
+<%# ================================
+    購入済みリストを更新
+================================ %>
+<turbo-stream action="replace" target="purchased_items_list">
+  <template>
+    <%= render partial: "shopping_items/purchased_items",
+               formats: [:html],
+               locals: {
+                 items: @shopping_list.shopping_items
+                                      .where(purchased: true)
+                                      .order(updated_at: :desc)
+               } %>
+  </template>
+</turbo-stream>
 
-<% else %>
-  <!-- 「購入済み」リストから削除 -->
-  <turbo-stream action="remove" target="shopping_item_<%= @shopping_item.id %>"></turbo-stream>
-
-  <!-- 「買うもの」リストへ追加 -->
-  <turbo-stream action="prepend" target="shopping_items">
-    <template>
-      <%= render partial: "shopping_items/item_row", formats: [:html], locals: { shopping_item: @shopping_item } %>
-    </template>
-  </turbo-stream>
-<% end %>
-
-<!-- 編集モーダルが開いていた場合は閉じる -->
-<%= turbo_stream.remove "modal" %>
+<%# ================================
+    編集モーダルが開いていれば閉じる
+================================ %>
+<turbo-stream action="remove" target="modal"></turbo-stream>

@@ -1,10 +1,7 @@
-<turbo-stream action="update" target="purchased_items_list">
+<turbo-stream action="replace" target="purchased_items_list">
   <template>
-    <ul id="purchased_items_list" class="space-y-3 text-left">
-      <li class="text-center text-gray-500 bg-orange-50 border border-orange-100 rounded-xl py-4 shadow-sm">
-        <i class="fa-solid fa-circle-info text-orange-400 mr-2"></i>
-        購入済みの商品はありません
-      </li>
-    </ul>
+    <%= render partial: "shopping_items/purchased_items",
+               formats: :html,
+               locals: { items: @shopping_list.shopping_items.where(purchased: true) } %>
   </template>
 </turbo-stream>

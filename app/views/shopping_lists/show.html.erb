@@ -95,11 +95,7 @@
       </div>
 
       <!-- 購入済み商品一覧 -->
-      <ul id="purchased_items_list" class="space-y-3 text-left">
-        <% purchased_items.order(updated_at: :desc).each do |item| %>
-          <%= render partial: "shopping_items/item_row", locals: { shopping_item: item } %>
-        <% end %>
-      </ul>
+      <div id="purchased_items_list"></div>
     </div>
   </div>
 
