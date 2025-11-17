@@ -21,3 +21,12 @@ application.register("toggle", ToggleController)
 
 import AvatarPreviewController from "./avatar_preview_controller"
 application.register("avatar-preview", AvatarPreviewController)
+
+import AutocompleteController from "./autocomplete_controller"
+application.register("autocomplete", AutocompleteController)
+
+import HomeAutocompleteController from "./home_autocomplete_controller"
+application.register("home-autocomplete", HomeAutocompleteController)
+
+import ShoppingAutocompleteController from "./shopping_autocomplete_controller"
+application.register("shopping-autocomplete", ShoppingAutocompleteController)

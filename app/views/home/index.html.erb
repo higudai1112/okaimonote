@@ -20,7 +20,18 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <%= f.label :product_name_cont, "商品名", class: "block text-sm text-gray-600 mb-1" %>
-              <%= f.search_field :product_name_cont, class: "w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-orange-400 outline-none" %>
+              <div class="relative" data-controller="home-autocomplete">
+                <%= f.search_field :product_name_cont,
+                      class: "w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-orange-400 outline-none",
+                      data: {
+                        "home-autocomplete-target": "input",
+                        action: "input->home-autocomplete#search"
+                      } %>
+                <!-- 検索候補欄 -->
+                <div id="home_autocomplete_results"
+                     data-home-autocomplete-target="results"
+                     class="absolute left-0 right-0 top-full z-[9999] mt-1 pointer-events-auto"></div>
+              </div>
             </div>
 
             <div>

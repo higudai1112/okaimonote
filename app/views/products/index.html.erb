@@ -13,12 +13,20 @@
   </h1>
 
   <!-- 検索フォーム -->
-  <%= search_form_for @q, url: products_path, method: :get, html: { class: "mb-6" } do |f| %>
+  <%= search_form_for @q, url: products_path, method: :get, html: { class: "mb-6", data: { controller: "autocomplete" } } do |f| %>
     <div class="relative">
       <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
       <%= f.search_field :name_cont,
             placeholder: "商品名で検索（例：牛乳）",
-            class: "w-full border border-gray-300 rounded-xl py-2 pl-10 pr-3 focus:ring-2 focus:ring-orange-400 focus:outline-none transition" %>
+            class: "w-full border border-gray-300 rounded-xl py-2 pl-10 pr-3 focus:ring-2 focus:ring-orange-400 focus:outline-none transition",
+            data: {
+              "autocomplete-target": "input",
+              action: "input->autocomplete#search"
+            } %>
+      <!-- 候補表示欄 -->
+      <div id="autocomplete_results"
+           data-autocomplete-target="results"
+           class="absolute left-0 right-0 top-full z-[9999] mt-1 pointer-events-auto"></div>
     </div>
   <% end %>
 
