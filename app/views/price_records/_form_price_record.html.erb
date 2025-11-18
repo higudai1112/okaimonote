@@ -1,0 +1,92 @@
+<% puts "🟧 FORM RENDERED - ERRORS: #{price_record.errors.full_messages}" %>
+<% Rails.logger.debug "🟧 FORM RENDERED - ERRORS: #{price_record.errors.full_messages}" %>
+
+<!-- エラーメッセージ -->
+<%= render "shared/error_message", resource: @price_record %>
+<%= form_with model: @price_record,
+              url: url,
+              data: { controller: "price-record-autocomplete" },
+              local: false,
+              class: "space-y-6" do |f| %>
+
+  <!-- 商品名 -->
+  <div data-price-record-autocomplete-target="wrapper" class="relative">
+
+    <%= f.label :product_name, "商品名",
+          class: "block text-sm font-semibold text-gray-700 mb-1" %>
+
+    <!-- 既存商品の ID（Stimulus が切り替える） -->
+    <%= f.hidden_field :product_id, value: @price_record.product_id %>
+
+    <!-- 入力欄 -->
+    <%= f.text_field :product_name,
+      value: @product_name || params.dig(:price_record, :product_name),
+      placeholder: "例：牛乳",
+      autocomplete: "off",
+      data: {
+        action: "input->price-record-autocomplete#search",
+        price_record_autocomplete_target: "input"
+      },
+      class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 
+              focus:ring-orange-400 focus:border-orange-400 outline-none shadow-sm" %>
+
+    <!-- オートコンプリート結果 -->
+    <div data-price-record-autocomplete-target="results"
+         class="absolute left-0 right-0 z-[9999] mt-1 bg-white 
+                border border-orange-200 rounded-xl shadow-xl hidden"></div>
+  </div>
+
+  <!-- カテゴリー（新規商品のときだけ Stimulus が表示） -->
+  <div data-price-record-autocomplete-target="categoryWrapper" class="hidden">
+    <%= f.label :category_id, "カテゴリー",
+          class: "block text-sm font-semibold text-gray-700 mb-1" %>
+
+    <%= f.collection_select :category_id, @categories, :id, :name,
+          { prompt: "選択してください",
+            selected: @category_id || params.dig(:price_record, :category_id) },
+          class: "w-full border border-gray-300 rounded-xl p-3 bg-white
+                  focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
+  </div>
+
+  <!-- 店舗 -->
+  <div>
+    <%= f.label :shop_id, "店名", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+    <%= f.collection_select :shop_id, @shops, :id, :name,
+        { prompt: "選択してください" },
+        class: "w-full border border-gray-300 rounded-xl p-3 bg-white
+                focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
+  </div>
+
+  <!-- 価格 -->
+  <div>
+    <%= f.label :price, "価格", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+    <%= f.number_field :price, step: 1, placeholder: "例：198",
+        class: "w-full border border-gray-300 rounded-xl p-3
+                focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
+  </div>
+
+  <!-- 日付 -->
+  <div>
+    <%= f.label :purchased_at, "日付", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+    <%= f.date_field :purchased_at,
+        value: @price_record.purchased_at || Date.today,
+        class: "w-full border border-gray-300 rounded-xl p-3
+                focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
+  </div>
+
+  <!-- メモ -->
+  <div>
+    <%= f.label :memo, "メモ", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+    <%= f.text_area :memo, rows: 3, placeholder: "例：広告の品、まとめ買いなど",
+        class: "w-full border border-gray-300 rounded-xl p-3
+                focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
+  </div>
+
+  <!-- 登録ボタン -->
+  <div>
+    <%= f.submit "登録する",
+        class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold 
+                py-3 rounded-xl shadow-md transition active:scale-[0.98]" %>
+  </div>
+
+<% end %>

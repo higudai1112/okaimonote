@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import CategoryFilterController from "./category_filter_controller"
-application.register("category-filter", CategoryFilterController)
-
 import ConfirmController from "./confirm_controller"
 application.register("confirm", ConfirmController)
 
@@ -30,3 +27,6 @@ application.register("home-autocomplete", HomeAutocompleteController)
 
 import ShoppingAutocompleteController from "./shopping_autocomplete_controller"
 application.register("shopping-autocomplete", ShoppingAutocompleteController)
+
+import PriceRecordAutocompleteController from "./price_record_autocomplete_controller"
+application.register("price-record-autocomplete", PriceRecordAutocompleteController)

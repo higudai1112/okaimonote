@@ -89,6 +89,56 @@ class ProductsController < ApplicationController
     end
   end
 
+  def search
+    keyword = params[:q].to_s.strip
+
+    # よく使う（上位3件）
+    frequent_items =
+      current_user.products
+                  .left_joins(:price_records)
+                  .where("price_records.created_at > ?", 30.days.ago)
+                  .group(:id)
+                  .order("COUNT(price_records.id) DESC")
+                  .limit(3)
+
+    # fallback（データが少ないユーザー用）
+    if frequent_items.empty?
+      frequent_items =
+        current_user.products
+                    .left_joins(:price_records)
+                    .group(:id)
+                    .order("COUNT(price_records.id) DESC")
+                    .limit(3)
+    end
+
+    # 前方一致（優先表示）
+    starts_with =
+      current_user.products
+                  .where("name LIKE ?", "#{keyword}%")
+
+    # 部分一致（補完）
+    contains =
+      current_user.products
+                  .where("name LIKE ?", "%#{keyword}%")
+
+    # 結合 → uniq → 8件まで
+    merged = (frequent_items + starts_with + contains)
+               .uniq
+               .first(8)
+
+    frequent_ids = frequent_items.pluck(:id)
+
+    # shopping_items の Turbo Stream と同じ構造を JSON に変換
+    render json: merged.map { |item|
+      {
+        id: item.id,
+        name: item.name,
+        category: item.category&.name,
+        frequent: frequent_ids.include?(item.id)
+      }
+    }
+  end
+
   private
 
   def set_product

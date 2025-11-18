@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     collection do
       get :autocomplete
+      get :search
     end
     resources :price_records, only: [ :new, :create, :edit, :update, :destroy ]
   end

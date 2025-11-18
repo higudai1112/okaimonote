@@ -1,126 +1,103 @@
 class PriceRecordsController < ApplicationController
   before_action :set_price_record, only: [ :edit, :update, :destroy ]
-  before_action :set_product, only: [ :new, :create, :edit, :update, :destroy ]
-  before_action :set_collections, only: [ :new, :create ]
+  before_action :set_product,      only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :set_collections,  only: [ :new, :create ]
 
   def new
-    Rails.logger.debug "=== params[:category_filter]: #{params[:category_filter]} ==="
-    Rails.logger.debug "=== params[:mode]: #{params[:mode]} ==="
-    # モードを最初に設定
-    @mode = params[:mode].presence_in(%w[new existing]) || "new"
-
-    # モデル準備
     @price_record = current_user.price_records.new
-    @price_record.product = @product if @product.present?
-
-    # カテゴリー・ショップは共通して必要
-    @categories = current_user.categories.order(:name)
-    @shops = current_user.shops.order(:name)
-
-    # 商品リストをモード別に設定
-    if @mode == "existing"
-      if params[:category_filter].present?
-        @products = current_user.products
-                                .where(category_id: params[:category_filter])
-                                .order(:name)
-      else
-        @products = current_user.products.order(:name)
-      end
-    else
-      # 新規登録モードではまだ商品リストは空
-      @products = []
-    end
-
-    # Turbo対応
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
   end
 
   def create
-    puts "=== MODE DEBUG ==="
-    puts "params[:mode]: #{params[:mode]}"
-    puts "presence_in result: #{params[:mode].presence_in(%w[new existing])}"
-    @mode = params[:mode].presence_in(%w[new existing]) ||
-            params.dig(:price_record, :mode) || "new"
-    success = false
-    puts "Final @mode: #{@mode}"
-    puts "==================="
+    @price_record = current_user.price_records.new(
+      price: params[:price_record][:price],
+      memo: params[:price_record][:memo],
+      purchased_at: params[:price_record][:purchased_at],
+      shop_id: params[:price_record][:shop_id]
+    )
 
-    # 一貫したインスタンス生成（ここで生成して以降使いまわす）
-    @price_record = current_user.price_records.new(price_record_params.except(:product_name, :category_id))
+    product_id   = params[:price_record][:product_id]
+    product_name = params[:price_record][:product_name]
+    category_id  = params[:price_record][:category_id]
 
-    ActiveRecord::Base.transaction do
-      if @mode == "new"
-        # --- 新規商品モード ---
-        product_name = params[:price_record][:product_name]
-        category_id  = params[:price_record][:category_id]
+    # ----------- ① 既存商品 ID 指定 ----------- #
+    if product_id.present?
+      existing = current_user.products.find_by(id: product_id)
 
-        if product_name.blank? || category_id.blank?
-          @price_record.errors.add(:base, "商品名とカテゴリーを入力してください")
-          raise ActiveRecord::Rollback
-        end
-
-        # 商品を作成または再利用
-        @product = current_user.products.find_or_create_by!(
-          name: product_name,
-          category_id: category_id
-        )
-
-        # 商品を紐づけ
-        @price_record.product = @product
-
-      elsif @mode == "existing"
-        # --- 既存商品モード ---
-        product_id = params[:price_record][:product_id]
-
-        if product_id.present?
-          @product = current_user.products.find_by(id: product_id)
-          if @product.nil?
-            @price_record.errors.add(:product, "を選択してください")
-            raise ActiveRecord::Rollback
-          end
-        else
-          @price_record.errors.add(:product, "を選択してください")
-          raise ActiveRecord::Rollback
-        end
-
-        @price_record.product = @product
+      unless existing
+        @price_record.errors.add(:base, "選択した商品が存在しません")
+        return render_error
       end
 
-      # 保存試行
-      success = @price_record.save
-      raise ActiveRecord::Rollback unless success
+      @price_record.product = existing
+
+    # ----------- ② 新規商品作成 ----------- #
+    else
+      if product_name.blank? || category_id.blank?
+        @price_record.errors.add(:base, "商品名とカテゴリーを入力してください")
+        return render_error
+      end
+
+      new_product = current_user.products.create(
+        name: product_name,
+        category_id: category_id
+      )
+
+      unless new_product.persisted?
+        @price_record.errors.add(:base, "商品名またはカテゴリーが不正です")
+        return render_error
+      end
+
+      @price_record.product = new_product
     end
 
-    # --- トランザクション後 ---
-    respond_to do |format|
-      if success
-        puts "=== SUCCESS DEBUG ==="
-        flash[:notice] = "価格を登録しました"
-        format.html { redirect_to home_path }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.action(:redirect, home_path)# ← 成功時: create.turbo_stream.erb を探す
-        end
-        puts "=== Turbo Stream実行 ==="
-      else
-        puts "=== VALIDATION DEBUG ==="
-        puts "Price param: #{params[:price_record][:price]}"
-        puts "@price_record.price: #{@price_record.price}"
-        puts "@price_record.valid?: #{@price_record.valid?}"
-        puts "@price_record.errors.full_messages: #{@price_record.errors.full_messages}"
-        puts "Success: #{success}"
+    # ----------- 保存 ----------- #
+    if @price_record.save
+      message = { notice: "価格を登録しました" }
 
-        set_collections
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render :create, status: :unprocessable_entity } # ← 失敗時: create.turbo_stream.erb を探す
+      respond_to do |format|
+        format.html { redirect_to home_path, message }
+        format.turbo_stream { redirect_to home_path, message }
       end
+    else
+      Rails.logger.debug "❌ SAVE FAILED - #{@price_record.errors.full_messages}"
+      render_error
     end
   end
 
+
+  def render_error
+    Rails.logger.debug "🔥🔥 render_error CALLED"
+    Rails.logger.debug "🔥 errors = #{@price_record.errors.full_messages}"
+    set_collections
+
+    @product_name = params[:price_record][:product_name]
+    @category_id  = params[:price_record][:category_id]
+
+    @price_record.assign_attributes(
+      price: params[:price_record][:price],
+      memo: params[:price_record][:memo],
+      purchased_at: params[:price_record][:purchased_at],
+      shop_id: params[:price_record][:shop_id]
+    )
+
+    Rails.logger.debug "📡 RENDERING TURBO STREAM ERROR RESPONSE"
+    respond_to do |format|
+      format.html { render :new, status: :unprocessable_entity }
+      format.turbo_stream {
+        render turbo_stream: turbo_stream.replace(
+          "price_record_form",
+          partial: "price_records/form_price_record",
+          locals: {
+            price_record: @price_record,
+            url: price_records_path
+          }
+        )
+      }
+    end
+  end
+
+
   def edit
-    @products = current_user.products
     @shops = current_user.shops
   end
 
@@ -128,7 +105,6 @@ class PriceRecordsController < ApplicationController
     if @price_record.update(price_record_params)
       redirect_to product_path(@price_record.product), notice: "更新しました"
     else
-      @products = current_user.products
       @shops = current_user.shops
       render :edit, status: :unprocessable_entity
     end
@@ -139,6 +115,7 @@ class PriceRecordsController < ApplicationController
     @price_record.destroy!
     redirect_to product_path(product), notice: "削除しました", status: :see_other
   end
+
 
   private
 
@@ -155,28 +132,14 @@ class PriceRecordsController < ApplicationController
   end
 
   def price_record_params
-    params.require(:price_record).permit(:price, :memo, :purchased_at, :shop_id, :product_id)
+    params.require(:price_record).permit(
+      :price, :memo, :purchased_at, :shop_id,
+      :product_id, :product_name, :category_id
+    )
   end
 
   def set_collections
-    Rails.logger.debug "params[:category_filter]: #{params[:category_filter]}"
-    Rails.logger.debug "params[:mode]: #{params[:mode]}"
     @categories = current_user.categories.order(:name)
-    @shops = current_user.shops.order(:name)
-
-    case @mode
-    when "new"
-      @products = []
-    when "existing"
-      if params[:category_filter].present?
-        @products = current_user.products
-                                .where(category_id: params[:category_filter])
-                                .order(:name)
-      else
-        @products = current_user.products.order(:name)
-      end
-    else
-      @products = current_user.products.order(:name)
-    end
+    @shops      = current_user.shops.order(:name)
   end
 end
