@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_155334) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_19_080728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pgcrypto"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +49,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_155334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
+    t.index ["public_id"], name: "index_categories_on_public_id", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
@@ -72,7 +75,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_155334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["public_id"], name: "index_products_on_public_id", unique: true
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
@@ -92,6 +97,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_155334) do
     t.string "shared_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
+    t.index ["public_id"], name: "index_shopping_lists_on_public_id", unique: true
     t.index ["shared_token"], name: "index_shopping_lists_on_shared_token", unique: true
     t.index ["user_id"], name: "index_shopping_lists_on_user_id"
   end

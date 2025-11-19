@@ -40,7 +40,9 @@ class CategoriesController < ApplicationController
   private
 
   def set_category
-    @category = current_user.categories.find(params[:id])
+    @category = current_user.categories.find_by(public_id: params[:id])
+    @category ||= current_user.categories.find_by(id: params[:id])
+    raise ActiveRecord::RecordNotFound unless @category
   end
 
   def category_params
