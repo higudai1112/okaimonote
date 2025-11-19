@@ -142,7 +142,12 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = current_user.products.find(params[:id])
+    @product = current_user.products.find_by(public_id: params[:id])
+
+    # 念の為に整数idも救済で入れとく
+    @product ||= current_user.products.find_by(id: params[:id])
+
+    raise ActiveRecord::RecordNotFound unless @product
   end
 
   def product_params

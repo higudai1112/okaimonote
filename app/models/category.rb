@@ -8,4 +8,8 @@ class Category < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[name memo]
   end
+
+  def to_param
+    public_id
+  end
 end
