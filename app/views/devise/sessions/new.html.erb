@@ -68,6 +68,32 @@
       <% end %>
     </div>
 
+    <!-- LINEログインボタン -->
+    <div class="mt-3">
+      <%= button_to user_line_omniauth_authorize_path,
+          method: :post,
+          data: { turbo: false },
+          class: "relative w-full flex items-center gap-3 justify-center
+                  font-semibold py-2.5 rounded-full shadow-sm
+                  text-white bg-[#06C755] transition-all
+                  hover:bg-[#06C755] hover:after:content-['']
+                  hover:after:absolute hover:after:inset-0
+                  hover:after:bg-black hover:after:opacity-10
+                  hover:after:rounded-full
+                  active:bg-[#06C755] active:after:content-['']
+                  active:after:absolute active:after:inset-0
+                  active:after:bg-black active:after:opacity-30
+                  active:after:rounded-full" do %>
+
+        <!-- LINEアイコン -->
+        <%= image_tag "line_logo.png",
+              alt: "LINE Icon",
+              class: "w-8 h-8" %>
+
+        <span>LINEでログイン</span>
+      <% end %>
+    </div>
+
     <!-- 新規登録リンク -->
     <div class="text-center">
       <p class="text-sm text-gray-600 mb-2">まだアカウントをお持ちでない方</p>

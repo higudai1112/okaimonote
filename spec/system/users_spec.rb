@@ -57,6 +57,40 @@ RSpec.describe 'ユーザー登録', type: :system do
         expect(user.nickname).to eq("Google太郎")
         expect(user.avatar).to be_attached
       end
+
+      it "LINEアカウントで新規登録できること" do
+        mock_line_oauth(
+          email: "line_user@example.com",  # Email scope ON の場合
+          name:  "LINEユーザー",
+          image: "https://example.com/line_test_image.jpg"
+        )
+
+        visit new_user_registration_path
+        click_button "LINEで登録"
+
+        expect(page).to have_current_path(home_path)
+        expect(page).to have_content "LINEアカウントでログインしました"
+
+        user = User.find_by(email: "line_user@example.com")
+        expect(user).not_to be_nil
+        expect(user.nickname).to eq("LINEユーザー")
+      end
+
+      it "LINEでメールなしでも登録できること（email scope OFF の場合）" do
+        mock_line_oauth(
+          email: nil,
+          name:  "LINEユーザーNoMail",
+          image: nil
+        )
+
+        visit new_user_registration_path
+        click_button "LINEで登録"
+
+        expect(page).to have_current_path(home_path)
+
+        user = User.find_by(nickname: "LINEユーザーNoMail")
+        expect(user).not_to be_nil
+      end
     end
 
     context '異常系' do
