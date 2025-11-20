@@ -33,13 +33,15 @@ Devise.setup do |config|
   config.omniauth :google_oauth2,
     Rails.application.credentials.dig(:google_oauth, :client_id),
     Rails.application.credentials.dig(:google_oauth, :client_secret),
-    scope: "email,profile"
+    scope: "email,profile",
+    callback_url: "https://www.okaimonote.com/users/auth/google_oauth2/callback"
 
   # LINE認証用
   config.omniauth :line,
     Rails.application.credentials.dig(:line, :client_id),
     Rails.application.credentials.dig(:line, :client_secret),
-    scope: "profile openid email" # emailが不要なら 'openid profile'
+    scope: "profile openid email", # emailが不要なら 'openid profile'
+    callback_url: "https://www.okaimonote.com/users/auth/line/callback"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
