@@ -3,7 +3,7 @@ require "open-uri"
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :omniauthable, omniauth_providers: %i[google_oauth2 line]
 
   validates :nickname, presence: true, length: { maximum: 20 }
   has_one_attached :avatar
@@ -18,33 +18,45 @@ class User < ApplicationRecord
   after_create :setup_default_categories
   after_create :setup_default_shopping_list
 
+  #==========================================
+  # Google / LINE 共通の OmniAuth 処理
+  #==========================================
   def self.from_omniauth(auth)
     # ① provider + uid で既存ユーザーを探す
     user = find_by(provider: auth.provider, uid: auth.uid)
     return user if user
 
-    # ② 同じメールのユーザーを発見したら紐付けて返す
-    existing_user = find_by(email: auth.info.email)
-    if existing_user
-      existing_user.update(provider: auth.provider, uid: auth.uid)
-      return existing_user
+    # ② email がある場合は既存ユーザーを紐付ける
+    if auth.info.email.present?
+      existing_user = find_by(email: auth.info.email)
+      if existing_user
+        existing_user.update(provider: auth.provider, uid: auth.uid)
+        return existing_user
+      end
     end
 
-    # ③ なければ新規作成
+    # ③ email がない場合（LINEで多い）はダミー email を作成
+    email = auth.info.email.presence || "#{auth.provider}_#{auth.uid}@example.com"
+
+    # ④ 新規作成
     user = create!(
       provider: auth.provider,
       uid: auth.uid,
-      email: auth.info.email,
+      email: email,
       password: Devise.friendly_token[0, 20],
-      nickname: auth.info.name.presence || "ゲストユーザー"
+      nickname: auth.info.name.presence || "ユーザー"
     )
 
-    # Googleのプロフィール画像を保存
+    # ⑤ プロフィール画像を provider 不問で保存
     if auth.info.image.present?
-      user.avatar.attach(
-        io: URI.open(auth.info.image),
-        filename: "google_avatar.jpg"
-      )
+      begin
+        user.avatar.attach(
+          io: URI.open(auth.info.image),
+          filename: "#{auth.provider}_avatar.jpg"
+        )
+      rescue => e
+        Rails.logger.error("Avatar download failed: #{e.message}")
+      end
     end
 
     user

@@ -8,6 +8,8 @@
 #
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+require "omniauth-line"
+
 Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -32,6 +34,12 @@ Devise.setup do |config|
     Rails.application.credentials.dig(:google_oauth, :client_id),
     Rails.application.credentials.dig(:google_oauth, :client_secret),
     scope: "email,profile"
+
+  # LINE認証用
+  config.omniauth :line,
+    Rails.application.credentials.dig(:line, :client_id),
+    Rails.application.credentials.dig(:line, :client_secret),
+    scope: "profile openid email" # emailが不要なら 'openid profile'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

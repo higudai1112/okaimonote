@@ -11,12 +11,11 @@ RSpec.describe "ログイン機能", type: :system do
         fill_in "パスワード", with: user.password
         click_button "ログイン"
 
-        expect(page).to have_current_path(home_path) # ログイン後に遷移するパス
-        expect(page).to have_content "お帰りなさい、#{user.nickname}さん！"   # フラッシュメッセージがあれば
+        expect(page).to have_current_path(home_path)
+        expect(page).to have_content "お帰りなさい、#{user.nickname}さん！"
       end
 
       it "Googleアカウントで既存ユーザーとしてログインできる" do
-        # 既存ユーザーのメールと同じにする
         mock_google_oauth(
           email: user.email,
           name:  user.nickname,
@@ -28,10 +27,22 @@ RSpec.describe "ログイン機能", type: :system do
 
         expect(page).to have_current_path(home_path)
         expect(page).to have_content "Googleアカウントでログインしました"
+        expect(User.count).to eq(1) # 新規追加されない
+      end
 
-        # 既存ユーザーのままログインしているか
-        expect(User.count).to eq(1)
-        expect(User.first.email).to eq(user.email)
+      it "LINEアカウントで既存ユーザーとしてログインできる" do
+        mock_line_oauth(
+          email: user.email,
+          name:  user.nickname,
+          image: "https://example.com/line_image.jpg"
+        )
+
+        visit new_user_session_path
+        click_button "LINEでログイン"
+
+        expect(page).to have_current_path(home_path)
+        expect(page).to have_content "LINEアカウントでログインしました"
+        expect(User.count).to eq(1) # 既存ユーザーが使われる
       end
     end
 
@@ -43,7 +54,7 @@ RSpec.describe "ログイン機能", type: :system do
         click_button "ログイン"
 
         expect(page).to have_current_path(new_user_session_path)
-        expect(page).to have_content "メールアドレスまたはパスワードが違います" # Deviseのエラーメッセージ
+        expect(page).to have_content "メールアドレスまたはパスワードが違います"
       end
 
       it "未入力ではログインできない" do
