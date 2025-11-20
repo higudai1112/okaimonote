@@ -117,6 +117,9 @@ ja:
       send_instructions: "パスワード再設定のメールをお送りしました。"
       updated: "パスワードを変更しました。引き続きおかいもノートをご利用ください。"
       no_token: "このリンクは無効になっています。もう一度お試しください。"
+    omniauth_callbacks:
+      success: "%{kind}アカウントでログインしました。"
+      failure: "%{kind}でのログインに失敗しました。"
   date:
     formats:
       default: "%Y/%m/%d"

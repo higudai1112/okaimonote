@@ -38,6 +38,25 @@ RSpec.describe 'ユーザー登録', type: :system do
         expect(page).to have_content "アカウントを登録しました。"
         expect(User.last.avatar).to be_attached
       end
+
+      it "Googleアカウントで新規登録できること" do
+        mock_google_oauth(
+          email: "google_user@example.com",
+          name:  "Google太郎",
+          image: "https://example.com/test_image.jpg"
+        )
+
+        visit new_user_registration_path
+        click_button "Googleで登録"
+
+        expect(page).to have_current_path(home_path)
+        expect(page).to have_content "Googleアカウントでログインしました"
+
+        user = User.find_by(email: "google_user@example.com")
+        expect(user).not_to be_nil
+        expect(user.nickname).to eq("Google太郎")
+        expect(user.avatar).to be_attached
+      end
     end
 
     context '異常系' do

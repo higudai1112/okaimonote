@@ -53,6 +53,21 @@
       <div class="flex-grow border-t border-gray-200"></div>
     </div>
 
+    <!-- Googleログインボタン -->
+    <div class="mt-4">
+      <%= button_to user_google_oauth2_omniauth_authorize_path,
+            method: :post,
+            data: { turbo: false },
+            class: "w-full flex items-center justify-center gap-3 border border-gray-300 
+                    bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2.5 
+                    rounded-full shadow-sm transition-all active:scale-[0.98]" do %>
+
+        <%= image_tag "google_icon4.png", alt: "Google Icon", class: "w-7 h-7" %>
+
+        <span>Googleでログイン</span>
+      <% end %>
+    </div>
+
     <!-- 新規登録リンク -->
     <div class="text-center">
       <p class="text-sm text-gray-600 mb-2">まだアカウントをお持ちでない方</p>

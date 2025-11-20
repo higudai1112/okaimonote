@@ -14,6 +14,25 @@ RSpec.describe "ログイン機能", type: :system do
         expect(page).to have_current_path(home_path) # ログイン後に遷移するパス
         expect(page).to have_content "お帰りなさい、#{user.nickname}さん！"   # フラッシュメッセージがあれば
       end
+
+      it "Googleアカウントで既存ユーザーとしてログインできる" do
+        # 既存ユーザーのメールと同じにする
+        mock_google_oauth(
+          email: user.email,
+          name:  user.nickname,
+          image: "https://example.com/test_image.jpg"
+        )
+
+        visit new_user_session_path
+        click_button "Googleでログイン"
+
+        expect(page).to have_current_path(home_path)
+        expect(page).to have_content "Googleアカウントでログインしました"
+
+        # 既存ユーザーのままログインしているか
+        expect(User.count).to eq(1)
+        expect(User.first.email).to eq(user.email)
+      end
     end
 
     context "異常系" do
