@@ -19,6 +19,7 @@ RUN apt-get update -qq && apt-get install -y \
   chromium-driver \
   fonts-noto-cjk \
   fonts-freefont-ttf \
+  vim \
   && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Node.js（20系）とYarnのリポジトリ追加

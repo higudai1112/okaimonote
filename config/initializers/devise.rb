@@ -24,7 +24,14 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
+  # メアド登録
   config.mailer_sender = "okaimonote.team@gmail.com"
+
+  # Google認証用
+  config.omniauth :google_oauth2,
+    Rails.application.credentials.dig(:google_oauth, :client_id),
+    Rails.application.credentials.dig(:google_oauth, :client_secret),
+    scope: "email,profile"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
