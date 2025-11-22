@@ -30,3 +30,6 @@ application.register("shopping-autocomplete", ShoppingAutocompleteController)
 
 import PriceRecordAutocompleteController from "./price_record_autocomplete_controller"
 application.register("price-record-autocomplete", PriceRecordAutocompleteController)
+
+import LoadingController from "./loading_controller"
+application.register("loading", LoadingController)

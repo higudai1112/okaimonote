@@ -106,5 +106,23 @@
 
     <%# ログイン済みユーザーのみフッターを表示 %>
     <%= render "shared/footer" if user_signed_in? %>
+
+    <!-- ローディングオーバーレイ -->
+    <div
+      data-controller="loading"
+      data-loading-target="overlay"
+      class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm hidden"
+    >
+      <!-- ドット3つのアニメ -->
+      <div class="flex space-x-2 mb-3">
+        <div class="w-3 h-3 bg-orange-500 rounded-full animate-bounce"></div>
+        <div class="w-3 h-3 bg-orange-400 rounded-full rounded-full animate-bounce [animation-delay:0.15s]"></div>
+        <div class="w-3 h-3 bg-orange-300 rounded-full animate-bounce [animation-delay:0.3s]"></div>
+      </div>
+
+      <p class="text-sm text-gray-700 font-medium">
+        読み込み中です…
+      </p>
+    </div>
   </body>
 </html>
