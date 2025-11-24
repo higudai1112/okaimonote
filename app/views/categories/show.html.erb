@@ -25,9 +25,20 @@
       <ul class="divide-y divide-gray-200">
         <% @products.each do |product| %>
           <li class="py-3 flex justify-between items-center hover:bg-orange-50 px-2 rounded-lg transition">
-            <%= link_to product.name,
-                  product_path(product),
-                  class: "text-lg text-gray-800 font-medium hover:text-brand transition" %>
+            <!-- 商品名 + 画像 -->
+            <%= link_to product_path(product), class: "flex items-center gap-3 flex-1" do %>
+              <!-- 商品名 -->
+              <span class="text-lg text-gray-800 font-medium">
+                <%= product.name %>
+              </span>
+              <!-- 画像 -->
+              <% if product.image.attached? %>
+                <%= image_tag product.image,
+                      class: "w-10 h-10 rounded-full object-cover border border-orange-200 shadow-sm" %>
+              <% end %>
+            <% end %>
+
+            <!-- メニュー -->
             <%= link_to edit_product_path(product),
                   class: "text-gray-400 hover:text-orange-500 transition text-lg" do %>
               <i class="fa-solid fa-ellipsis-vertical"></i>

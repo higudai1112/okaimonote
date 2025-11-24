@@ -36,17 +36,28 @@
     <ul class="divide-y divide-gray-100 rounded-xl bg-orange-50/30 shadow-sm">
       <% @products.each do |product| %>
         <li class="flex justify-between items-center px-4 py-3 hover:bg-orange-50 rounded-xl transition">
-          <div class="flex flex-col">
-            <span class="text-gray-700 font-medium">
-              <%= link_to product.name, product_path(product),
-                    class: "hover:text-orange-500 transition" %>
-            </span>
-            <% if product.category.present? %>
-              <span class="text-sm text-gray-500 mt-0.5">
-                カテゴリー：<%= product.category.name %>
+          <!-- 商品名とカテゴリー -->
+          <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-gray-700 font-medium">
+                <%= link_to product.name, product_path(product),
+                      class: "hover:text-orange-500 transition" %>
               </span>
+              <% if product.category.present? %>
+                <span class="text-sm text-gray-500 mt-0.5">
+                  カテゴリー：<%= product.category.name %>
+                </span>
+              <% end %>
+            </div>
+
+            <!-- 丸画像 -->
+            <% if product.image.attached? %>
+              <%= image_tag product.image,
+                    class:"w-10 h-10 rounded-full object-cover border border-orange-200 shadow-sm" %>
             <% end %>
           </div>
+
+          <!-- メニュー -->
           <%= link_to edit_product_path(product),
                 class: "text-gray-400 hover:text-orange-500 transition" do %>
             <i class="fa-solid fa-ellipsis-vertical text-lg"></i>

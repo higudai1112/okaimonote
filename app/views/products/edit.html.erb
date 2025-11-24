@@ -39,6 +39,34 @@
             class: "w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition placeholder-gray-400" %>
     </div>
 
+    <!-- 商品画像　-->
+    <div>
+      <%= f.label :image, "商品画像", class:"block text-sm font-semibold text-gray-700 mb-1" %>
+      <% if @product.image.attached? %>
+        <!-- 画像プレビュー -->
+        <div class="flex items-center gap-3 mb-3">
+          <%= image_tag @product.image,
+                class: "w-20 h-20 rounded-full object-cover border border-orange-200 shadow-sm" %>
+          <div class="flex items-center gap-2">
+            <%= f.check_box :remove_image, class: "rounded" %>
+            <label class="text-sm text-gray-700">画像を削除する</label>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- 画像アップロード欄 -->
+      <%= f.file_field :image,
+            accept: "image/*",
+            class: "block w-full text-sm text-gray-700
+                    file:mr-3 file:py-1 file:px-3
+                    file:rounded-lg file:border file:border-orange-300
+                    file:bg-orange-50 file:text-orange-600
+                    hover:file:bg-orange-100 cursor-pointer" %>
+      <p class="text-xs text-gray-400 mt-1">
+        (任意) 画像の登録・変更ができます
+      </p>
+    </div>
+
     <!-- 更新ボタン -->
     <div class="pt-3">
       <%= f.submit "更新する",
