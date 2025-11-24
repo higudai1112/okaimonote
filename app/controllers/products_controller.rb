@@ -30,6 +30,9 @@ class ProductsController < ApplicationController
   end
 
   def update
+    # チェックボックスが押されたら画像を削除
+    @product.image.purge if params[:product][:remove_image] == "1"
+
     if @product.update(product_params)
       redirect_to category_path(@product.category), notice: "更新しました"
     else
@@ -151,6 +154,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :category_id, :memo)
+    params.require(:product).permit(:name, :category_id, :memo, :image)
   end
 end

@@ -2,6 +2,7 @@ class Product < ApplicationRecord
   belongs_to :category, optional: true
   belongs_to :user
   has_many :price_records, dependent: :destroy
+  has_one_attached :image
 
   validates :name, presence: true, uniqueness: { scope: :user_id }
 

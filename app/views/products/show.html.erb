@@ -6,14 +6,26 @@
     戻る
   <% end %>
 
-  <!-- 商品タイトル -->
-  <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center tracking-tight"><%= @product.name %></h1>
+  <!-- 商品タイトルと画像 -->
+  <div class="flex flex-col items-center mb-4">
+    <% if @product.image.attached? %>
+      <%= image_tag @product.image,
+          class: "w-20 h-20 rounded-full object-cover border border-orange-200 shadow-sm mb-3" %>
+    <% else %>
+      <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center
+                  text-xs text-gray-400 border border-orange-100 shadow-sm mb-3">
+        画像登録可
+      </div>
+    <% end %>
 
-  <% if @product.memo.present? %>
-    <p class="text-sm text-gray-600 mb-6 text-center whitespace-pre-line">
-      <%= @product.memo %>
-    </p>
-  <% end %>
+    <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center tracking-tight"><%= @product.name %></h1>
+
+    <% if @product.memo.present? %>
+      <p class="text-sm text-gray-600 mb-6 text-center whitespace-pre-line">
+        <%= @product.memo %>
+      </p>
+    <% end %>
+  </div>
 
   <!-- 価格履歴 -->
   <h2 class="text-lg font-semibold mb-3 text-orange-600 flex items-center gap-2">

@@ -81,12 +81,22 @@
                data-action="click->summary#fetch"
                data-summary-product-id="<%= record.product.id %>">
 
-            <!-- 商品名と価格 -->
+            <!-- 商品名と画像と価格 -->
             <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-semibold text-gray-800">
-                <%= link_to record.product.name, product_path(record.product),
-                      class: "hover:text-orange-500 transition underline-offset-2 hover:underline"%>
-              </h3>
+              <!-- 商品名 + 画像 -->
+              <div class="flex items-center gap-3">
+                <h3 class="text-lg font-semibold text-gray-800">
+                  <%= link_to record.product.name, product_path(record.product),
+                        class: "hover:text-orange-500 transition underline-offset-2 hover:underline"%>
+                </h3>
+
+                <% if record.product.image.attached? %>
+                  <%= image_tag record.product.image,
+                      class: "w-10 h-10 rounded-full object-cover border border-orange-200 shadow-sm" %>
+                <% end %>
+              </div>
+
+              <!-- 価格 -->
               <p class="text-lg font-bold text-orange-500"><%= number_with_delimiter(record.price) %>円</p>
             </div>
 
