@@ -14,4 +14,8 @@ class PriceRecord < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     [ "product", "shop" ]
   end
+
+  def to_param
+    public_id
+  end
 end
