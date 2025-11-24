@@ -120,15 +120,26 @@ class PriceRecordsController < ApplicationController
   private
 
   def set_price_record
-    @price_record = current_user.price_records.find(params[:id])
+    @price_record = current_user.price_records.find_by(public_id: params[:id])
+    @price_record ||= current_user.price_records.find_by(id: params[:id])
+
+    raise ActiveRecord::RecordNotFound if @price_record unless @price_record
   end
 
   def set_product
     if params[:product_id].present?
-      @product = current_user.products.find(params[:product_id])
-    elsif defined?(@price_record) && @price_record.present?
+      # public_idで検索
+      @product = current_user.products.find_by(public_id: params[:product_id])
+      # 念の為 通常idでも検索
+      @product ||= current_user.products.find_by(id: params[:product_id])
+    end
+
+    # price_recordから取り出すパターン
+    if @product.blank? && defined?(@price_record) && @price_record.present?
       @product = @price_record.product
     end
+
+    raise ActiveRecord::RecordNotFound unless @product
   end
 
   def price_record_params
