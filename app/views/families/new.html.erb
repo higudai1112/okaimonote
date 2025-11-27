@@ -1,0 +1,29 @@
+<div class="min-h-screen bg-base flex items-center justify-center px-4 py-10">
+  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 w-full max-w-md">
+
+    <!-- 見出し -->
+    <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">
+      ファミリーを作成
+    </h2>
+
+    <!-- フォーム -->
+    <%= form_with model: @family, url: family_path, local: true do |f| %>
+
+      <!-- 家族名 -->
+      <div class="mb-5">
+        <%= f.label :name, "グループ名", class: "block text-gray-700 font-semibold mb-2" %>
+        <%= f.text_field :name,
+              placeholder: "田中ファミリー",
+              class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-orange-300 focus:border-orange-400" %>
+      </div>
+
+      <!-- 作成ボタン -->
+      <%= f.submit "作成する",
+           class: "w-full bg-orange-500 text-white font-semibold py-3 rounded-lg shadow hover:bg-orange-600 transition" %>
+    <% end %>
+
+    <div class="text-center mt-4">
+      <%= link_to "戻る", settings_path, class: "text-gray-500 underline" %>
+    </div>
+  </div>
+</div>

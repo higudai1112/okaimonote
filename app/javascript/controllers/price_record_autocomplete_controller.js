@@ -1,13 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "results", "categoryWrapper"]
+  static targets = ["input", "results", "categoryWrapper", "productId"]
 
   connect() {
+    // 入力欄からフォーカスが外れたら閉じる（クリック選択保護）
     this.inputTarget.addEventListener("blur", () => {
       setTimeout(() => this.closeResults(), 150)
     })
 
+    // 外側クリックで閉じる
     this.outsideClickHandler = (event) => {
       if (!this.element.contains(event.target)) {
         this.closeResults()
@@ -20,10 +22,12 @@ export default class extends Controller {
     document.removeEventListener("click", this.outsideClickHandler)
   }
 
+  // 入力時の検索
   search() {
     const query = this.inputTarget.value.trim()
 
-    this._setProductNew() // 新規と想定（入力中）
+    // 入力開始＝新規の可能性 → product_id をクリア
+    this._setProductNew()
 
     if (query === "") {
       this.closeResults()
@@ -36,6 +40,7 @@ export default class extends Controller {
     }, 200)
   }
 
+  // API 呼び出し
   fetchResults(query) {
     fetch(`/products/search?q=${encodeURIComponent(query)}`)
       .then(res => res.json())
@@ -43,11 +48,12 @@ export default class extends Controller {
       .catch(e => console.error("❌ FETCH ERROR:", e))
   }
 
+  // 候補表示
   showResults(products) {
     this.resultsTarget.innerHTML = ""
     this.resultsTarget.classList.remove("hidden")
 
-    // ▼ 見つからない → 新規商品
+    // ▼ 候補なし → 新規商品
     if (products.length === 0) {
       this._setProductNew()
       return
@@ -58,7 +64,8 @@ export default class extends Controller {
 
     products.slice(0, 8).forEach(product => {
       const li = document.createElement("li")
-      li.className = "autocomplete-item px-4 py-2 hover:bg-orange-50 cursor-pointer flex flex-col"
+      li.className =
+        "autocomplete-item px-4 py-2 hover:bg-orange-50 cursor-pointer flex flex-col"
       li.addEventListener("click", () => this.selectProduct(product))
 
       // 上段：商品名 + ⭐ よく使う
@@ -93,16 +100,21 @@ export default class extends Controller {
     this.resultsTarget.appendChild(ul)
   }
 
+  // 候補選択
   selectProduct(product) {
+    // 商品名セット
     this.inputTarget.value = product.name
-    this.closeResults()
 
-    const hidden = document.getElementById("price_record_product_id")
-    if (hidden) hidden.value = product.id
+    // hidden_field に ID をセット
+    this.productIdTarget.value = product.id
 
+    // 新規商品 UI を非表示にする
     this._setProductExisting()
+
+    this.closeResults()
   }
 
+  // 候補欄を閉じる
   closeResults() {
     this.resultsTarget.classList.add("hidden")
     this.resultsTarget.innerHTML = ""
@@ -110,14 +122,21 @@ export default class extends Controller {
 
   // 新規商品扱い
   _setProductNew() {
-    const hidden = document.getElementById("price_record_product_id")
-    if (hidden) hidden.value = ""
-
+    if (this.hasProductIdTarget) {
+      this.productIdTarget.value = ""
+    }
     this.categoryWrapperTarget.classList.remove("hidden")
   }
 
   // 既存商品扱い
   _setProductExisting() {
     this.categoryWrapperTarget.classList.add("hidden")
+  }
+
+  clearProductId() {
+    if (this.hasProductIdTarget) {
+      this.productIdTarget.value = ""
+    }
+    console.log("Product ID cleared")
   }
 }

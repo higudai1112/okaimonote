@@ -2,11 +2,10 @@
 <% Rails.logger.debug "🟧 FORM RENDERED - ERRORS: #{price_record.errors.full_messages}" %>
 
 <!-- エラーメッセージ -->
-<%= render "shared/error_message", resource: @price_record %>
-<%= form_with model: @price_record,
+<%= render "shared/error_message", resource: price_record %>
+<%= form_with model: price_record,
               url: url,
-              data: { controller: "price-record-autocomplete" },
-              local: false,
+              data: { controller: "price-record-autocomplete",turbo_frame: "_top" },
               class: "space-y-6" do |f| %>
 
   <!-- 商品名 -->
@@ -16,15 +15,17 @@
           class: "block text-sm font-semibold text-gray-700 mb-1" %>
 
     <!-- 既存商品の ID（Stimulus が切り替える） -->
-    <%= f.hidden_field :product_id, value: @price_record.product_id %>
+    <%= f.hidden_field :product_id,
+          value: price_record.product_id,
+          data: { price_record_autocomplete_target: "productId" } %>
 
     <!-- 入力欄 -->
     <%= f.text_field :product_name,
-      value: @product_name || params.dig(:price_record, :product_name),
+      value: price_record.product&.name || params.dig(:price_record, :product_name),
       placeholder: "例：牛乳",
       autocomplete: "off",
       data: {
-        action: "input->price-record-autocomplete#search",
+        action: "input->price-record-autocomplete#search input->price-record-autocomplete#clearProductId",
         price_record_autocomplete_target: "input"
       },
       class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 
@@ -69,7 +70,7 @@
   <div>
     <%= f.label :purchased_at, "日付", class: "block text-sm font-semibold text-gray-700 mb-1" %>
     <%= f.date_field :purchased_at,
-        value: @price_record.purchased_at || Date.today,
+        value: price_record.purchased_at || Date.today,
         class: "w-full border border-gray-300 rounded-xl p-3
                 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm" %>
   </div>

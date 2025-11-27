@@ -1,0 +1,125 @@
+<div class="min-h-screen bg-base pt-8 pb-20 px-4 flex justify-center">
+  <div class="w-full max-w-md">
+
+    <!-- タイトル -->
+    <h1 class="text-2xl font-bold text-center mb-6">ファミリー情報</h1>
+    <div class="border-t border-gray-300 mb-6"></div>
+
+    <div class="bg-white rounded-lg shadow py-5 px-6 space-y-4">
+
+      <!-- グループ名 -->
+      <div>
+        <p class="text-gray-600 text-sm mb-1">グループ名</p>
+        <p class="font-bold text-gray-800"><%= @family.name %></p>
+      </div>
+
+      <!-- メンバー一覧 -->
+      <div>
+        <p class="text-gray-600 text-sm mb-2">メンバー一覧</p>
+        <%= render "members", members: @members %>
+      </div>
+
+      <!-- 招待リンク -->
+      <div>
+        <p class="text-gray-600 text-sm mb-1">招待リンク</p>
+        <div class="p-3 bg-orange-50 rounded-lg border border-orange-200 text-sm break-all">
+          <%= family_invite_url(@family.invite_token) %>
+        </div>
+      </div>
+
+      <!-- 管理者向けボタン -->
+      <% if current_user.family_admin? %>
+        <div class="space-y-3">
+
+          <!-- 招待リンク再発行 -->
+          <%= button_to regenerate_invite_family_path,
+                method: :post,
+                class: "w-full bg-orange-500 text-white font-semibold py-3 rounded-lg shadow hover:bg-orange-600 transition" do %>
+            <i class="fa-solid fa-arrows-rotate mr-2"></i>
+            招待リンクを再発行する
+          <% end %>
+
+          <!-- ファミリー削除（確認モーダル付き） -->
+          <div data-controller="confirm" class="relative">
+            <%= button_to family_path,
+                  method: :delete,
+                  data: {
+                    action: "click->confirm#confirm",
+                    confirm_message: "本当にファミリーを削除しますか？"
+                  },
+                  class: "w-full bg-red-500 text-white font-semibold py-3 rounded-lg shadow hover:bg-red-600 transition text-sm" do %>
+              <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+              ファミリーを削除する（管理者のみ）
+            <% end %>
+
+            <!-- 共通確認モーダル -->
+            <div data-confirm-target="modal"
+                  class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+              <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+
+                <p data-confirm-target="message" class="text-gray-700 mb-4">
+                  本当にファミリーを削除しますか？
+                </p>
+
+                <div class="flex justify-center gap-4">
+                  <button data-action="click->confirm#proceed"
+                          class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+                    削除
+                  </button>
+
+                  <button data-action="click->confirm#cancel"
+                          class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+                    キャンセル
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- ファミリー削除 END -->
+        </div>
+      <% else %>
+        <!-- メンバー向け：脱退ボタン -->
+        <div data-controller="confirm" class="relative">
+          <%= button_to leave_family_path,
+                method: :delete,
+                data: {
+                  action: "click->confirm#confirm",
+                  confirm_message: "本当にこのファミリーから脱退しますか？"
+                },
+                class: "w-full bg-red-500 text-white font-semibold py-3 rounded-lg shadow hover:bg-red-600 transition text-sm" do %>
+            <i class="fa-solid fa-person-walking-arrow-right mr-2"></i>
+            ファミリーから脱退する
+          <% end %>
+
+          <!-- モーダル -->
+          <div data-confirm-target="modal"
+               class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+            <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+              <p data-confirm-target="message" class="text-gray-700 mb-4">
+                本当にこのファミリーから脱退しますか？
+              </p>
+
+              <div class="flex justify-center gap-4">
+                <button data-action="click->confirm#proceed"
+                        class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+                  脱退
+                </button>
+
+                <button data-action="click->confirm#cancel"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-8 text-center">
+      <%= link_to "設定画面に戻る", settings_path, class: "text-gray-500 underline" %>
+    </div>
+  </div>
+</div>
+

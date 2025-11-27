@@ -8,6 +8,7 @@
             class="w-full px-4 py-2 hover:bg-orange-50 cursor-pointer transition flex flex-col"
             data-action="click->autocomplete#select"
             data-value="<%= item.name %>"
+            data-product-id="<%= item.id %>"
           >
             <!-- 1行目：商品名 + 最近ラベル -->
             <div class="flex items-center gap-2 text-gray-800 font-medium">
@@ -28,8 +29,9 @@
           </li>
         <% end %>
       </ul>
+
     <% else %>
-      <!-- 候補が0なら消す　-->
+      <!-- 候補が0なら消す -->
       <div></div>
     <% end %>
   </template>

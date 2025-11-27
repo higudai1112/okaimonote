@@ -2,8 +2,8 @@ require "open-uri"
 
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[google_oauth2 line]
+       :recoverable, :rememberable, :validatable,
+       :omniauthable, omniauth_providers: %i[google_oauth2 line]
 
   validates :nickname, presence: true, length: { maximum: 20 }
   has_one_attached :avatar
@@ -14,9 +14,16 @@ class User < ApplicationRecord
   has_many :products, dependent: :destroy
   has_one :shopping_list, dependent: :destroy
   has_many :shopping_items, through: :shopping_list
+  belongs_to :family, optional: true
 
   after_create :setup_default_categories
-  after_create :setup_default_shopping_list
+  after_create :create_initial_family
+
+  enum :family_role, {
+    personal: 0,
+    family_admin: 1,
+    family_member: 2
+  }
 
   #==========================================
   # Google / LINE 共通の OmniAuth 処理
@@ -62,6 +69,36 @@ class User < ApplicationRecord
     user
   end
 
+  # 家族共有用スコープ対象ユーザー
+  def family_scope_users
+    if family_id.present?
+      User.where(family_id: family_id)
+    else
+      User.where(id: id)
+    end
+  end
+
+  # 役割で設定画面切り替え
+  def family_role_view
+    if personal?
+      "personal"
+    elsif family_admin?
+      "admin"
+    else
+      "member"
+    end
+  end
+
+  def active_shopping_list
+    if family.present?
+      # 家族に属している場合はfamilyの共有リスト
+      family.shopping_lists.first
+    else
+      # 個人なら自分の分
+      shopping_list || create_shopping_list!(name: "マイリスト")
+    end
+  end
+
   private
 
   def setup_default_categories
@@ -70,7 +107,18 @@ class User < ApplicationRecord
     end
   end
 
-  def setup_default_shopping_list
-    create_shopping_list!(name: "マイリスト")
+  def create_initial_family
+    # すでに family を持っている場合（招待経由など）は何もしない
+    return if family_id.present?
+
+    family = Family.create!(
+      owner: self,
+      name: "#{nickname}のファミリー"
+    )
+
+    update!(
+      family: family,
+      family_role: :family_admin
+    )
   end
 end

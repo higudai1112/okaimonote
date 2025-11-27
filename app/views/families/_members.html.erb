@@ -1,0 +1,14 @@
+<ul class="space-y-1">
+  <% members.each do |member| %>
+    <li class="text-gray-700">
+      <i class="fa-solid fa-user mr-1"></i>
+      <%= member.nickname %>
+
+      <% if member.family_admin? %>
+        <span class="ml-1 px-2 py-0.5 text-xs bg-orange-100 text-orange-600 rounded">
+          管理者
+        </span>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_24_091119) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_27_070534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_091119) do
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["public_id"], name: "index_categories_on_public_id", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "families", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "invite_token", null: false
+    t.bigint "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invite_token"], name: "index_families_on_invite_token", unique: true
+    t.index ["owner_id"], name: "index_families_on_owner_id"
   end
 
   create_table "price_records", force: :cascade do |t|
@@ -100,6 +110,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_091119) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "family_id"
+    t.index ["family_id"], name: "index_shopping_lists_on_family_id"
     t.index ["public_id"], name: "index_shopping_lists_on_public_id", unique: true
     t.index ["shared_token"], name: "index_shopping_lists_on_shared_token", unique: true
     t.index ["user_id"], name: "index_shopping_lists_on_user_id"
@@ -125,7 +137,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_091119) do
     t.string "nickname"
     t.string "provider"
     t.string "uid"
+    t.bigint "family_id"
+    t.integer "family_role", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -133,12 +148,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_091119) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "users"
+  add_foreign_key "families", "users", column: "owner_id"
   add_foreign_key "price_records", "products"
   add_foreign_key "price_records", "shops"
   add_foreign_key "price_records", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "users"
   add_foreign_key "shopping_items", "shopping_lists"
+  add_foreign_key "shopping_lists", "families"
   add_foreign_key "shopping_lists", "users"
   add_foreign_key "shops", "users"
+  add_foreign_key "users", "families"
 end

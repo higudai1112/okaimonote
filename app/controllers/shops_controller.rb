@@ -2,7 +2,8 @@ class ShopsController < ApplicationController
   before_action :set_shops, only: [ :edit, :update, :destroy ]
 
   def index
-    @shops = current_user.shops.order(:name)
+    users = current_user.family_scope_users
+    @shops = Shop.where(user: users).order(:name)
   end
 
   def new
@@ -36,7 +37,8 @@ class ShopsController < ApplicationController
   private
 
   def set_shops
-    @shop = current_user.shops.find(params[:id])
+    users = current_user.family_scope_users
+    @shop = Shop.where(user: users).find(params[:id])
   end
 
   def shop_params

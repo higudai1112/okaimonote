@@ -1,18 +1,17 @@
 class HomeController < ApplicationController
   def index
-    @categories = current_user.categories
-    @shops = current_user.shops
+    users = current_user.family_scope_users
+    @categories = Category.where(user: users)
+    @shops = Shop.where(user: users)
 
-    @q = current_user.price_records.ransack(params[:q])
+    @q = PriceRecord.where(user: users).ransack(params[:q])
 
     @price_records = @q.result
                        .includes(:product, :shop, product: :category)
-                       .joins(product: [ :category, :user ])
-                       .joins(:shop)
                        .order(created_at: :desc)
                        .limit(5)
 
-    latest_record = current_user.price_records.where.not(purchased_at: nil).order(purchased_at: :desc).first
+    latest_record = PriceRecord.where(user: users).where.not(purchased_at: nil).order(purchased_at: :desc).first
 
     if latest_record.present?
       set_summary(latest_record.product)
@@ -22,7 +21,8 @@ class HomeController < ApplicationController
   end
 
   def show_summary
-    product = current_user.products.find(params[:id])
+    users = current_user.family_scope_users
+    product = Product.where(user: users).find(params[:id])
     set_summary(product)
 
     respond_to do |format|
@@ -32,34 +32,32 @@ class HomeController < ApplicationController
 
   def autocomplete
     query = params[:q].to_s.strip
-
+    users = current_user.family_scope_users
     # よく使う候補（上位3件）
     frequent_items =
-      current_user.products
-                  .left_joins(:price_records)
-                  .where("price_records.created_at > ?", 30.days.ago)
-                  .group(:id)
-                  .order("COUNT(price_records.id) DESC")
-                  .limit(3)
+      Product.where(user: users)
+             .left_joins(:price_records)
+             .where("price_records.created_at > ?", 30.days.ago)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
 
     if frequent_items.empty?
       frequent_items =
-        current_user.products
-                    .left_joins(:price_records)
-                    .group(:id)
-                    .order("COUNT(price_records.id) DESC")
-                    .limit(3)
+        Product.where(user: users)
+               .left_joins(:price_records)
+               .group(:id)
+               .order("COUNT(price_records.id) DESC")
+               .limit(3)
     end
 
     @frequent_ids = frequent_items.pluck(:id)
 
     # 前方一致
-    starts_with = current_user.products
-                              .where("name LIKE ?", "#{query}%")
+    starts_with = Product.where(user: users).where("name LIKE ?", "#{query}%")
 
     # 部分一致
-    contains = current_user.products
-                          .where("name LIKE ?", "%#{query}%")
+    contains = Product.where(user: users).where("name LIKE ?", "%#{query}%")
 
     # 結合して uniq
     @suggestions = (frequent_items + starts_with + contains)

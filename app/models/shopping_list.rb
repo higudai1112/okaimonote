@@ -1,5 +1,6 @@
 class ShoppingList < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
+  belongs_to :family, optional: true
   has_many :shopping_items, dependent: :destroy
 
   validates :name, presence: true

@@ -38,6 +38,19 @@ Rails.application.routes.draw do
   resource :settings, only: [ :show ]
   get "register_info", to: "pages#register_info", as: :register_info
 
+  # 家族関連(基本)
+  resource :family, only: [ :new, :create, :show, :destroy ] do
+    delete :leave
+    post   :regenerate_invite
+  end
+
+  # 招待リンク(URLにtokenあり)
+  get "/family/invite/:token", to: "family_invites#show", as: :family_invite
+  post "/family/invite/:token", to: "family_invites#join"
+  # ファミリー参加(招待コード手入力)
+  get  "/family/join", to: "family_invites#enter_code", as: :enter_family_code
+  post "/family/join", to: "family_invites#apply_code", as: :apply_family_code
+
   # 利用規約・プライバシー・お問い合わせ
   get "terms", to: "settings#terms", as: :terms
   get "privacy", to: "settings#privacy", as: :privacy

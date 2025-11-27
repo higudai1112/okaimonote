@@ -1,9 +1,14 @@
 class PriceRecordsController < ApplicationController
   before_action :set_price_record, only: [ :edit, :update, :destroy ]
-  before_action :set_product,      only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :set_product,      only: [ :edit, :update, :destroy ]
   before_action :set_collections,  only: [ :new, :create ]
 
   def new
+    users = current_user.family_scope_users
+    if params[:product_id].present?
+      @product = Product.where(user: users).find_by(public_id: params[:product_id])
+    end
+
     @price_record = current_user.price_records.new
   end
 
@@ -21,7 +26,8 @@ class PriceRecordsController < ApplicationController
 
     # ----------- ① 既存商品 ID 指定 ----------- #
     if product_id.present?
-      existing = current_user.products.find_by(id: product_id)
+      users = current_user.family_scope_users
+      existing = Product.where(user: users).find_by(id: product_id)
 
       unless existing
         @price_record.errors.add(:base, "選択した商品が存在しません")
@@ -52,12 +58,7 @@ class PriceRecordsController < ApplicationController
 
     # ----------- 保存 ----------- #
     if @price_record.save
-      message = { notice: "価格を登録しました" }
-
-      respond_to do |format|
-        format.html { redirect_to home_path, message }
-        format.turbo_stream { redirect_to home_path, message }
-      end
+      redirect_to home_path, notice: "価格を登録しました", status: :see_other
     else
       Rails.logger.debug "❌ SAVE FAILED - #{@price_record.errors.full_messages}"
       render_error
@@ -98,7 +99,8 @@ class PriceRecordsController < ApplicationController
 
 
   def edit
-    @shops = current_user.shops
+    users = current_user.family_scope_users
+    @shops = Shop.where(user: users)
   end
 
   def update
@@ -120,18 +122,20 @@ class PriceRecordsController < ApplicationController
   private
 
   def set_price_record
-    @price_record = current_user.price_records.find_by(public_id: params[:id])
-    @price_record ||= current_user.price_records.find_by(id: params[:id])
+    users = current_user.family_scope_users
+    @price_record = PriceRecord.where(user: users).find_by(public_id: params[:id])
+    @price_record ||= PriceRecord.where(user: users).find_by(id: params[:id])
 
     raise ActiveRecord::RecordNotFound if @price_record unless @price_record
   end
 
   def set_product
+    users = current_user.family_scope_users
     if params[:product_id].present?
       # public_idで検索
-      @product = current_user.products.find_by(public_id: params[:product_id])
+      @product = Product.where(user: users).find_by(public_id: params[:product_id])
       # 念の為 通常idでも検索
-      @product ||= current_user.products.find_by(id: params[:product_id])
+      @product ||= Product.where(user: users).find_by(id: params[:product_id])
     end
 
     # price_recordから取り出すパターン
@@ -150,7 +154,8 @@ class PriceRecordsController < ApplicationController
   end
 
   def set_collections
-    @categories = current_user.categories.order(:name)
-    @shops      = current_user.shops.order(:name)
+    users = current_user.family_scope_users
+    @categories = Category.where(user: users).order(:name)
+    @shops      = Shop.where(user: users).order(:name)
   end
 end

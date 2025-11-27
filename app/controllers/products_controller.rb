@@ -1,14 +1,16 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
   def index
-    @q = current_user.products.ransack(params[:q])
+    users = current_user.family_scope_users
+
+    @q = Product.where(user: users).ransack(params[:q])
     @products = @q.result.includes(:category).order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def new
     @product = current_user.products.new
     @product.category_id = params[:category_id] if params[:category_id].present?
-    @categories = current_user.categories.order(created_at: :desc)
+    @categories = Category.where(user: current_user.family_scope_users).order(created_at: :desc)
   end
 
   def create
@@ -55,32 +57,31 @@ class ProductsController < ApplicationController
     query = params[:q].to_s.strip
 
     # よく使う候補（上位3件）
+    users = current_user.family_scope_users
     frequent_items =
-      current_user.products
-                  .left_joins(:price_records)
-                  .where("price_records.created_at > ?", 30.days.ago)
-                  .group(:id)
-                  .order("COUNT(price_records.id) DESC")
-                  .limit(3)
+      Product.where(user: users)
+             .left_joins(:price_records)
+             .where("price_records.created_at > ?", 30.days.ago)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
 
     if frequent_items.empty?
       frequent_items =
-        current_user.products
-                    .left_joins(:price_records)
-                    .group(:id)
-                    .order("COUNT(price_records.id) DESC")
-                    .limit(3)
+        Product.where(user: users)
+               .left_joins(:price_records)
+               .group(:id)
+               .order("COUNT(price_records.id) DESC")
+               .limit(3)
     end
 
     @frequent_ids = frequent_items.pluck(:id)
 
     # 前方一致検索（優先的に表示）
-    starts_with = current_user.products
-                              .where("name LIKE ?", "#{query}%")
+    starts_with = Product.where(user: users).where("name LIKE ?", "#{query}%")
 
     # 部分一致検索（その他を補完）
-    contains = current_user.products
-                           .where("name LIKE ?", "%#{query}%")
+    contains = Product.where(user: users).where("name LIKE ?", "%#{query}%")
 
     # 全て結合して uniq ＋ 上限つける
     @suggestions = (frequent_items + starts_with + contains)
@@ -96,33 +97,32 @@ class ProductsController < ApplicationController
     keyword = params[:q].to_s.strip
 
     # よく使う（上位3件）
+    users = current_user.family_scope_users
     frequent_items =
-      current_user.products
-                  .left_joins(:price_records)
-                  .where("price_records.created_at > ?", 30.days.ago)
-                  .group(:id)
-                  .order("COUNT(price_records.id) DESC")
-                  .limit(3)
+      Product.where(user: users)
+             .left_joins(:price_records)
+             .where("price_records.created_at > ?", 30.days.ago)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
 
     # fallback（データが少ないユーザー用）
     if frequent_items.empty?
       frequent_items =
-        current_user.products
-                    .left_joins(:price_records)
-                    .group(:id)
-                    .order("COUNT(price_records.id) DESC")
-                    .limit(3)
+        Product.where(user: users)
+               .left_joins(:price_records)
+               .group(:id)
+               .order("COUNT(price_records.id) DESC")
+               .limit(3)
     end
 
     # 前方一致（優先表示）
     starts_with =
-      current_user.products
-                  .where("name LIKE ?", "#{keyword}%")
+      Product.where(user: users).where("name LIKE ?", "#{keyword}%")
 
     # 部分一致（補完）
     contains =
-      current_user.products
-                  .where("name LIKE ?", "%#{keyword}%")
+      Product.where(user: users).where("name LIKE ?", "%#{keyword}%")
 
     # 結合 → uniq → 8件まで
     merged = (frequent_items + starts_with + contains)
@@ -145,10 +145,12 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = current_user.products.find_by(public_id: params[:id])
+    users = current_user.family_scope_users
+
+    @product = Product.where(user: users).find_by(public_id: params[:id])
 
     # 念の為に整数idも救済で入れとく
-    @product ||= current_user.products.find_by(id: params[:id])
+    @product ||= Product.where(user: users).find_by(id: params[:id])
 
     raise ActiveRecord::RecordNotFound unless @product
   end

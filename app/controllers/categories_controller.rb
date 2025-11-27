@@ -2,7 +2,8 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @categories = current_user.categories.order(:name)
+    users = current_user.family_scope_users
+    @categories = Category.where(user: users).order(:name)
   end
 
   def new
@@ -40,8 +41,9 @@ class CategoriesController < ApplicationController
   private
 
   def set_category
-    @category = current_user.categories.find_by(public_id: params[:id])
-    @category ||= current_user.categories.find_by(id: params[:id])
+    users = current_user.family_scope_users
+    @category = Category.where(user: users).find_by(public_id: params[:id])
+    @category ||= Category.where(user: users).find_by(id: params[:id])
     raise ActiveRecord::RecordNotFound unless @category
   end
 
