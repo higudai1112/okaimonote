@@ -48,30 +48,30 @@ class ShoppingItemsController < ApplicationController
   end
 
   def autocomplete
+    owner = current_user.family_owner
     query = params[:q].to_s.strip
 
     # よく使う候補（上位3件）
-    users = current_user.family_scope_users
     frequent_items =
-      Product.where(user: users)
-             .left_joins(:price_records)
-             .where("price_records.created_at > ?", 30.days.ago)
-             .group(:id)
-             .order("COUNT(price_records.id) DESC")
-             .limit(3)
+      owner.products
+           .left_joins(:price_records)
+           .where("price_records.created_at > ?", 30.days.ago)
+           .group(:id)
+           .order("COUNT(price_records.id) DESC")
+           .limit(3)
 
     if frequent_items.empty?
       frequent_items =
-        Product.where(user: users)
-               .left_joins(:price_records)
-               .group(:id)
-               .order("COUNT(price_records.id) DESC")
-               .limit(3)
+        owner.products
+             .left_joins(:price_records)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
     end
     @frequent_ids = frequent_items.pluck(:id)
 
-    starts_with = Product.where(user: users).where("name LIKE ?", "#{query}%")
-    contains = Product.where(user: users).where("name LIKE ?", "%#{query}%")
+    starts_with = owner.products.where("name LIKE ?", "#{query}%")
+    contains = owner.products.where("name LIKE ?", "%#{query}%")
 
     @suggestions = (frequent_items + starts_with + contains).uniq.first(8)
 
@@ -84,7 +84,7 @@ class ShoppingItemsController < ApplicationController
   private
 
   def set_shopping_list
-    @shopping_list = ShoppingList.find_or_create_by(family: current_user.family)
+    @shopping_list = current_user.active_shopping_list
   end
 
   def set_shopping_item

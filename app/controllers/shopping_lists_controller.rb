@@ -17,6 +17,6 @@ class ShoppingListsController < ApplicationController
   private
 
   def set_shopping_list
-    @shopping_list = ShoppingList.find_or_create_by(family: current_user.family)
+    @shopping_list = current_user.active_shopping_list
   end
 end

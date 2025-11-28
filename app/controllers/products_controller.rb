@@ -1,24 +1,26 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
   def index
-    users = current_user.family_scope_users
+    owner = current_user.family_owner
 
-    @q = Product.where(user: users).ransack(params[:q])
+    @q = owner.products.ransack(params[:q])
     @products = @q.result.includes(:category).order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def new
-    @product = current_user.products.new
+    owner = current_user.family_owner
+    @product = owner.products.new
     @product.category_id = params[:category_id] if params[:category_id].present?
-    @categories = Category.where(user: current_user.family_scope_users).order(created_at: :desc)
+    @categories = owner.categories.order(created_at: :desc)
   end
 
   def create
-    @product = current_user.products.new(product_params)
+    owner = current_user.family_owner
+    @product = owner.products.new(product_params)
     if @product.save
       redirect_to category_path(@product.category), notice: "商品を登録しました"
     else
-      @categories = current_user.categories.order(created_at: :desc)
+      @categories = owner.categories.order(created_at: :desc)
       render :new, status: 422
     end
   end
@@ -28,7 +30,8 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @categories = current_user.categories.order(created_at: :desc)
+    owner = current_user.family_owner
+    @categories = owner.categories.order(created_at: :desc)
   end
 
   def update
@@ -38,7 +41,8 @@ class ProductsController < ApplicationController
     if @product.update(product_params)
       redirect_to category_path(@product.category), notice: "更新しました"
     else
-      @categories = current_user.categories.order(created_at: :desc)
+      owner = current_user.family_owner
+      @categories = owner.categories.order(created_at: :desc)
       render :edit, status: 422
     end
   end
@@ -54,34 +58,34 @@ class ProductsController < ApplicationController
   end
 
   def autocomplete
+    owner = current_user.family_owner
     query = params[:q].to_s.strip
 
     # よく使う候補（上位3件）
-    users = current_user.family_scope_users
     frequent_items =
-      Product.where(user: users)
-             .left_joins(:price_records)
-             .where("price_records.created_at > ?", 30.days.ago)
-             .group(:id)
-             .order("COUNT(price_records.id) DESC")
-             .limit(3)
+      owner.products
+           .left_joins(:price_records)
+           .where("price_records.created_at > ?", 30.days.ago)
+           .group(:id)
+           .order("COUNT(price_records.id) DESC")
+           .limit(3)
 
     if frequent_items.empty?
       frequent_items =
-        Product.where(user: users)
-               .left_joins(:price_records)
-               .group(:id)
-               .order("COUNT(price_records.id) DESC")
-               .limit(3)
+        owner.products
+             .left_joins(:price_records)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
     end
 
     @frequent_ids = frequent_items.pluck(:id)
 
     # 前方一致検索（優先的に表示）
-    starts_with = Product.where(user: users).where("name LIKE ?", "#{query}%")
+    starts_with = owner.products.where("name LIKE ?", "#{query}%")
 
     # 部分一致検索（その他を補完）
-    contains = Product.where(user: users).where("name LIKE ?", "%#{query}%")
+    contains = owner.products.where("name LIKE ?", "%#{query}%")
 
     # 全て結合して uniq ＋ 上限つける
     @suggestions = (frequent_items + starts_with + contains)
@@ -94,35 +98,35 @@ class ProductsController < ApplicationController
   end
 
   def search
+    owner = current_user.family_owner
     keyword = params[:q].to_s.strip
 
     # よく使う（上位3件）
-    users = current_user.family_scope_users
     frequent_items =
-      Product.where(user: users)
-             .left_joins(:price_records)
-             .where("price_records.created_at > ?", 30.days.ago)
-             .group(:id)
-             .order("COUNT(price_records.id) DESC")
-             .limit(3)
+      owner.products
+           .left_joins(:price_records)
+           .where("price_records.created_at > ?", 30.days.ago)
+           .group(:id)
+           .order("COUNT(price_records.id) DESC")
+           .limit(3)
 
     # fallback（データが少ないユーザー用）
     if frequent_items.empty?
       frequent_items =
-        Product.where(user: users)
-               .left_joins(:price_records)
-               .group(:id)
-               .order("COUNT(price_records.id) DESC")
-               .limit(3)
+        owner.products
+             .left_joins(:price_records)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
     end
 
     # 前方一致（優先表示）
     starts_with =
-      Product.where(user: users).where("name LIKE ?", "#{keyword}%")
+      owner.products.where("name LIKE ?", "#{keyword}%")
 
     # 部分一致（補完）
     contains =
-      Product.where(user: users).where("name LIKE ?", "%#{keyword}%")
+      owner.products.where("name LIKE ?", "%#{keyword}%")
 
     # 結合 → uniq → 8件まで
     merged = (frequent_items + starts_with + contains)
@@ -145,12 +149,12 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    users = current_user.family_scope_users
+    owner = current_user.family_owner
 
-    @product = Product.where(user: users).find_by(public_id: params[:id])
+    @product = owner.products.find_by(public_id: params[:id])
 
     # 念の為に整数idも救済で入れとく
-    @product ||= Product.where(user: users).find_by(id: params[:id])
+    @product ||= owner.products.find_by(id: params[:id])
 
     raise ActiveRecord::RecordNotFound unless @product
   end

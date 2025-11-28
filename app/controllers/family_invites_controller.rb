@@ -30,8 +30,10 @@ class FamilyInvitesController < ApplicationController
   def enter_code; end
 
   def apply_code
-    token = params[:invite_token]
+    raw = params[:invite_token].to_s.strip
 
+    # URL全体添付でもok 最後の部分だけ抽出
+    token = raw.split("/").last
     if token.blank?
       redirect_to enter_family_code_path, alert: "招待コードを入力してください。"
       return

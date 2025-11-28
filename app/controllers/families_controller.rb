@@ -51,9 +51,14 @@ class FamiliesController < ApplicationController
       return
     end
 
-    current_user.family.destroy!
-    current_user.update!(family: nil, family_role: :personal)
+    family = current_user.family
 
+    ActiveRecord::Base.transaction do
+      # 全員 personal に戻す
+      family.users.update_all(family_id: nil, family_role: User.family_roles[:personal])
+      # ファミリー本体を削除
+      family.destroy!
+    end
     redirect_to settings_path, notice: "ファミリーを削除しました。", status: :see_other
   end
 

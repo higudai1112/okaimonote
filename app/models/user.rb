@@ -17,7 +17,6 @@ class User < ApplicationRecord
   belongs_to :family, optional: true
 
   after_create :setup_default_categories
-  after_create :create_initial_family
 
   enum :family_role, {
     personal: 0,
@@ -70,12 +69,13 @@ class User < ApplicationRecord
   end
 
   # 家族共有用スコープ対象ユーザー
-  def family_scope_users
-    if family_id.present?
-      User.where(family_id: family_id)
-    else
-      User.where(id: id)
-    end
+  def family_owner
+    # personal 自分用
+    return self if personal?
+    # admin 自分用
+    return self if family_admin?
+    # member 管理者用
+    family&.owner || self
   end
 
   # 役割で設定画面切り替え
@@ -105,20 +105,5 @@ class User < ApplicationRecord
     %w[日用品 食料品].each do |name|
       categories.create!(name: name)
     end
-  end
-
-  def create_initial_family
-    # すでに family を持っている場合（招待経由など）は何もしない
-    return if family_id.present?
-
-    family = Family.create!(
-      owner: self,
-      name: "#{nickname}のファミリー"
-    )
-
-    update!(
-      family: family,
-      family_role: :family_admin
-    )
   end
 end

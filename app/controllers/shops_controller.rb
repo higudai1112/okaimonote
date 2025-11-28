@@ -2,16 +2,18 @@ class ShopsController < ApplicationController
   before_action :set_shops, only: [ :edit, :update, :destroy ]
 
   def index
-    users = current_user.family_scope_users
-    @shops = Shop.where(user: users).order(:name)
+    owner = current_user.family_owner
+    @shops = owner.shops.order(:name)
   end
 
   def new
-    @shop = current_user.shops.new
+    owner = current_user.family_owner
+    @shop = owner.shops.new
   end
 
   def create
-    @shop = current_user.shops.new(shop_params)
+    owner = current_user.family_owner
+    @shop = owner.shops.new(shop_params)
     if @shop.save
       redirect_to shops_path, notice: "お店を登録しました"
     else
@@ -37,8 +39,8 @@ class ShopsController < ApplicationController
   private
 
   def set_shops
-    users = current_user.family_scope_users
-    @shop = Shop.where(user: users).find(params[:id])
+    owner = current_user.family_owner
+    @shop = owner.shops.find(params[:id])
   end
 
   def shop_params
