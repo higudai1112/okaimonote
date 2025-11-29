@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   resource :family, only: [ :new, :create, :show, :destroy ] do
     delete :leave
     post   :regenerate_invite
+    patch  :transfer_owner
   end
 
   # 招待リンク(URLにtokenあり)

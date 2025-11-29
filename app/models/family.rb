@@ -2,6 +2,7 @@ class Family < ApplicationRecord
   has_many :users, dependent: :nullify
   has_many :shopping_lists, dependent: :destroy
   belongs_to :owner, class_name: "User"
+  belongs_to :base_user, class_name: "User", optional: true
 
   before_validation :set_default_name, on: :create
   before_validation :generate_invite_token, on: :create

@@ -6,6 +6,7 @@ class FamiliesController < ApplicationController
   def create
     @family = Family.new(family_params)
     @family.owner = current_user
+    @family.base_user = current_user
 
     ActiveRecord::Base.transaction do
       @family.save!
@@ -77,6 +78,52 @@ class FamiliesController < ApplicationController
       family_role: :personal
     )
     redirect_to settings_path, notice: "ファミリーから脱退しました。"
+  end
+
+  # 管理者権限の譲渡
+  def transfer_owner
+    # 1. 管理者のみ実行可能
+    unless current_user.family_admin? && current_user.family.present?
+      redirect_to settings_path, alert: "権限がありません。"
+      return
+    end
+
+    family = current_user.family
+
+    # 2. 譲渡先のメンバーを取得
+    new_owner = family.users.find_by(id: params[:member_id])
+
+    unless new_owner
+      redirect_to family_path, alert: "メンバーが見つかりません。"
+      return
+    end
+
+    # 自分自身には渡せない
+    if new_owner == current_user
+      redirect_to family_path, alert: "自分自身に権限を譲渡することはできません。"
+      return
+    end
+
+    # すでに管理者なら譲渡できない
+    if new_owner.family_admin?
+      redirect_to family_path, alert: "すでに管理者です。"
+      return
+    end
+
+    ActiveRecord::Base.transaction do
+      # 3. family.owner を入れ替える
+      family.update!(owner: new_owner)
+
+      # 4. ロールを変更
+      current_user.update!(family_role: :family_member)
+      new_owner.update!(family_role: :family_admin)
+    end
+
+    redirect_to family_path, notice: "#{new_owner.nickname}さんに権限を譲渡しました。"
+
+  rescue => e
+    Rails.logger.error("[Family transfer_owner] #{e.class}: #{e.message}")
+    redirect_to family_path, alert: "権限を譲渡できませんでした。もう一度お試しください。"
   end
 
   private

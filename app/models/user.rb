@@ -68,14 +68,12 @@ class User < ApplicationRecord
     user
   end
 
-  # 家族共有用スコープ対象ユーザー
   def family_owner
-    # personal 自分用
-    return self if personal?
-    # admin 自分用
-    return self if family_admin?
-    # member 管理者用
-    family&.owner || self
+    # 個人利用の場合は自分を返す
+    return self if personal? || family.blank?
+
+    # base_user が設定されていれば必ずそれを返す
+    family.base_user || self
   end
 
   # 役割で設定画面切り替え
