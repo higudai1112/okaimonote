@@ -34,6 +34,31 @@ class FamiliesController < ApplicationController
     @members = @family.users.order(:id)
   end
 
+  def edit
+    unless current_user.family_admin?
+      redirect_to family_path, alert: "権限がありません。"
+      return
+    end
+
+    @family = current_user.family
+  end
+
+  def update
+    unless current_user.family_admin?
+      redirect_to family_path, alert: "権限がありません。"
+      return
+    end
+
+    @family = current_user.family
+
+    if @family.update(family_params)
+      redirect_to family_path, notice: "ファミリー名を変更しました。"
+    else
+      flash.now[:alert] = "更新できませんでした。"
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def regenerate_invite
     unless current_user.family_admin?
       redirect_to settings_path, alert: "権限がありません。"

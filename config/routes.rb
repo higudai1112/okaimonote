@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   get "register_info", to: "pages#register_info", as: :register_info
 
   # 家族関連(基本)
-  resource :family, only: [ :new, :create, :show, :destroy ] do
+  resource :family, only: [ :new, :create, :show, :edit, :update, :destroy ] do
     delete :leave
     post   :regenerate_invite
     patch  :transfer_owner

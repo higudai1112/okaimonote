@@ -11,6 +11,16 @@
       <div>
         <p class="text-gray-600 text-sm mb-1">グループ名</p>
         <p class="font-bold text-gray-800"><%= @family.name %></p>
+
+        <% if current_user.family_admin? %>
+          <div class="mt-1">
+            <%= link_to edit_family_path,
+                  class: "inline-flex items-center text-xs text-orange-500 hover:underline" do %>
+              <i class="fa-solid fa-pen mr-1"></i>
+              ファミリー名を編集する
+            <% end %>
+          </div>
+        <% end %>
       </div>
 
       <!-- メンバー一覧 -->
