@@ -17,6 +17,6 @@ class ShoppingListsController < ApplicationController
   private
 
   def set_shopping_list
-    @shopping_list = current_user.shopping_list
+    @shopping_list = current_user.active_shopping_list
   end
 end

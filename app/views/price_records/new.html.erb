@@ -11,10 +11,8 @@
     <%= turbo_frame_tag "price_record_form" do %>
 
       <!-- ★ 正しいフォーム -->
-      <%= render "form_price_record",
-                 price_record: @price_record,
-                 url: price_records_path %>
-
+      <%= render partial: "price_records/form_price_record",
+                 locals: { price_record: @price_record, url: price_records_path } %>
     <% end %>
 
   </div>

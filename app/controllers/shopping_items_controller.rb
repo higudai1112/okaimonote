@@ -3,6 +3,8 @@ class ShoppingItemsController < ApplicationController
   before_action :set_shopping_item, only: [ :edit, :update, :destroy ]
 
   def create
+    @shopping_list = current_user.active_shopping_list
+
     @shopping_item = @shopping_list.shopping_items.new(shopping_item_params)
     if @shopping_item.save
       redirect_to shopping_list_path(@shopping_list)
@@ -46,31 +48,30 @@ class ShoppingItemsController < ApplicationController
   end
 
   def autocomplete
+    owner = current_user.family_owner
     query = params[:q].to_s.strip
 
     # よく使う候補（上位3件）
     frequent_items =
-      current_user.products
-                  .left_joins(:price_records)
-                  .where("price_records.created_at > ?", 30.days.ago)
-                  .group(:id)
-                  .order("COUNT(price_records.id) DESC")
-                  .limit(3)
+      owner.products
+           .left_joins(:price_records)
+           .where("price_records.created_at > ?", 30.days.ago)
+           .group(:id)
+           .order("COUNT(price_records.id) DESC")
+           .limit(3)
 
     if frequent_items.empty?
       frequent_items =
-        current_user.products
-                    .left_joins(:price_records)
-                    .group(:id)
-                    .order("COUNT(price_records.id) DESC")
-                    .limit(3)
+        owner.products
+             .left_joins(:price_records)
+             .group(:id)
+             .order("COUNT(price_records.id) DESC")
+             .limit(3)
     end
     @frequent_ids = frequent_items.pluck(:id)
 
-    starts_with = current_user.products
-                              .where("name LIKE ?", "#{query}%")
-    contains = current_user.products
-                           .where("name LIKE ?", "%#{query}%")
+    starts_with = owner.products.where("name LIKE ?", "#{query}%")
+    contains = owner.products.where("name LIKE ?", "%#{query}%")
 
     @suggestions = (frequent_items + starts_with + contains).uniq.first(8)
 
@@ -83,7 +84,7 @@ class ShoppingItemsController < ApplicationController
   private
 
   def set_shopping_list
-    @shopping_list = current_user.shopping_list
+    @shopping_list = current_user.active_shopping_list
   end
 
   def set_shopping_item

@@ -2,15 +2,18 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @categories = current_user.categories.order(:name)
+    owner = current_user.family_owner
+    @categories = owner.categories.order(:name)
   end
 
   def new
-    @category = current_user.categories.new
+    owner = current_user.family_owner
+    @category = owner.categories.new
   end
 
   def create
-    @category = current_user.categories.new(category_params)
+    owner = current_user.family_owner
+    @category = owner.categories.new(category_params)
     if @category.save
       redirect_to categories_path, notice: "カテゴリーを登録しました"
     else
@@ -40,8 +43,9 @@ class CategoriesController < ApplicationController
   private
 
   def set_category
-    @category = current_user.categories.find_by(public_id: params[:id])
-    @category ||= current_user.categories.find_by(id: params[:id])
+    owner = current_user.family_owner
+    @category = owner.categories.find_by(public_id: params[:id])
+    @category ||= owner.categories.find_by(id: params[:id])
     raise ActiveRecord::RecordNotFound unless @category
   end
 

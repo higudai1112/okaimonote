@@ -33,3 +33,6 @@ application.register("price-record-autocomplete", PriceRecordAutocompleteControl
 
 import LoadingController from "./loading_controller"
 application.register("loading", LoadingController)
+
+import CopyController from "./copy_controller"
+application.register("copy", CopyController)

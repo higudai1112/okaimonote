@@ -1,0 +1,56 @@
+<ul class="space-y-1">
+  <% members.each do |member| %>
+    <li class="flex justify-between items-center text-gray-700 py-1">
+
+      <!-- 左：名前＋ロール -->
+      <div>
+        <i class="fa-solid fa-user mr-1"></i>
+        <%= member.nickname %>
+
+        <% if member.family_admin? %>
+          <span class="ml-1 px-2 py-0.5 text-xs bg-orange-100 text-orange-600 rounded">
+            管理者
+          </span>
+        <% end %>
+      </div>
+
+      <!-- 右：権限譲渡ボタン（管理者のみ & 自分以外） -->
+      <% if current_user.family_admin? && member != current_user %>
+        <div data-controller="confirm" class="relative">
+          <%= button_to transfer_owner_family_path(member_id: member.id),
+                method: :patch,
+                data: {
+                  action: "click->confirm#confirm",
+                  confirm_message: "#{member.nickname}さんに管理者権限を譲渡しますか？"
+                },
+                class: "text-orange-600 text-sm underline hover:text-orange-700" do %>
+            権限を渡す
+          <% end %>
+
+          <!-- モーダル -->
+          <div data-confirm-target="modal"
+               class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+            <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+
+              <p data-confirm-target="message" class="text-gray-700 mb-4">
+                本当に管理者権限を譲渡しますか？
+              </p>
+
+              <div class="flex justify-center gap-4">
+                <button data-action="click->confirm#proceed"
+                        class="bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 shadow">
+                  譲渡する
+                </button>
+
+                <button data-action="click->confirm#cancel"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

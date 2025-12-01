@@ -59,6 +59,9 @@
         購入済み
       </h2>
 
+      <!-- 購入済み商品一覧 -->
+      <div id="purchased_items_list"></div>
+
       <!-- Stimulus confirmを使用した削除ボタン -->
       <div data-controller="confirm" class="flex justify-end items-center mb-3">
         <%= button_to delete_purchased_shopping_list_path,
@@ -93,9 +96,6 @@
           </div>
         </div>
       </div>
-
-      <!-- 購入済み商品一覧 -->
-      <div id="purchased_items_list"></div>
     </div>
   </div>
 
