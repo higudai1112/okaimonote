@@ -1,7 +1,10 @@
 class FamilyInvitesController < ApplicationController
   before_action :set_family_by_token, only: [ :show, :join ]
 
-  def show; end
+  def show
+    # ログイン前ならログイン後に遷移するように誘導
+    store_location_for(:user, request.fullpath)
+  end
 
   def join
     # 管理者は別ファミリーに参加できない

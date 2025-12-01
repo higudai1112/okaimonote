@@ -29,33 +29,58 @@
         <%= render "members", members: @members %>
       </div>
 
-      <!-- 招待リンク -->
-      <div data-controller="copy"
-           data-copy-url="<%= family_invite_url(@family.invite_token) %>">
-        <p class="text-gray-600 text-sm mb-1">招待リンク</p>
-
-        <!-- URL本体 -->
-        <div data-action="click->copy#copy"
-             class="p-3 bg-orange-50 rounded-lg border border-orange-200 cursor-pointer hover:bg-orange-100 transition">
-          <span class="text-sm break-all flex-1">
-            <%= family_invite_url(@family.invite_token) %>
-          </span>
-
-          <!-- コピーアイコン -->
-          <i class="fa-regular fa-copy text-gray-600 ml-3 text-lg"></i>
-        </div>
-
-        <!-- コピー完了メッセージ -->
-        <p data-copy-target="feedback"
-           class="text-green-600 text-xs mt-1 hidden">
-          コピーしました！
-        </p>
-      </div>
-
       <!-- 管理者向けボタン -->
       <% if current_user.family_admin? %>
-        <div class="space-y-3">
+        <!-- 招待リンク -->
+        <div data-controller="copy"
+             data-copy-url="<%= family_invite_url(@family.invite_token) %>">
+          <p class="text-gray-600 text-sm mb-1">招待リンク</p>
 
+          <!-- URL本体 -->
+          <div data-action="click->copy#copy"
+               class="p-3 bg-orange-50 rounded-lg border border-orange-200 cursor-pointer hover:bg-orange-100 transition">
+            <span class="text-sm break-all flex-1">
+              <%= family_invite_url(@family.invite_token) %>
+            </span>
+
+            <!-- コピーアイコン -->
+            <i class="fa-regular fa-copy text-gray-600 ml-3 text-lg"></i>
+          </div>
+
+          <!-- コピー完了メッセージ -->
+          <p data-copy-target="feedback"
+             class="text-green-600 text-xs mt-1 hidden">
+            コピーしました！
+          </p>
+        </div>
+
+        <!-- 招待用QRコード（折りたたみ） -->
+        <div data-controller="toggle">
+          <!-- トグルボタン -->
+          <button
+            data-action="click->toggle#toggle"
+            class="w-full flex justify-between items-center bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 cursor-pointer hover:bg-orange-100 transition">
+
+            <span class="text-sm text-gray-700">招待用QRコードを表示</span>
+
+            <!-- 開閉アイコン -->
+            <i class="fa-solid fa-chevron-down text-gray-600"></i>
+          </button>
+
+          <!-- 折りたたまれる部分 -->
+          <div data-toggle-target="content" class="hidden mt-3">
+
+            <div class="bg-white border border-orange-100 rounded-xl p-4 flex justify-center">
+              <%= family_invite_qr_svg(@family) %>
+            </div>
+
+            <p class="text-gray-500 text-xs mt-2">
+              招待したい人のスマホで、このQRコードを読み取ってください。
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
           <!-- 招待リンク再発行 -->
           <%= button_to regenerate_invite_family_path,
                 method: :post,
@@ -147,4 +172,3 @@
     </div>
   </div>
 </div>
-
