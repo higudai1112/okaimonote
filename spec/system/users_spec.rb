@@ -91,6 +91,23 @@ RSpec.describe 'ユーザー登録', type: :system do
         user = User.find_by(nickname: "LINEユーザーNoMail")
         expect(user).not_to be_nil
       end
+
+      it "都道府県を選択して登録できること" do
+        visit new_user_registration_path
+
+        fill_in 'user[nickname]', with: 'エリアユーザー'
+        fill_in 'user[email]', with: 'area_user@example.com'
+        fill_in 'user[password]', with: 'password123'
+        fill_in 'user[password_confirmation]', with: 'password123'
+
+        select '大阪府', from: 'user[prefecture]'
+        click_button '登録する'
+
+        expect(page).to have_content 'アカウントを登録しました'
+
+        user = User.find_by(email: 'area_user@example.com')
+        expect(user.prefecture).to eq '大阪府'
+      end
     end
 
     context '異常系' do
