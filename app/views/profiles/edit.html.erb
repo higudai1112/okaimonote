@@ -13,6 +13,15 @@
                 placeholder: "例：おかいも太郎" %>
         </div>
 
+        <!-- 都道府県エリア -->
+        <div>
+          <%= f.label :prefecture, "お住まいの都道府県(任意)", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.select :prefecture,
+                PREFECTURES,
+                { include_blank: "選択してください" },
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition bg-white" %>
+        </div>
+
         <!-- プロフィール画像 -->
         <div>
           <%= f.label :avatar, "プロフィール画像", class: "block text-gray-700 font-medium mb-3" %>
