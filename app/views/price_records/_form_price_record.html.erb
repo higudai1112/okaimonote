@@ -34,7 +34,8 @@
     <!-- オートコンプリート結果 -->
     <div data-price-record-autocomplete-target="results"
          class="absolute left-0 right-0 z-[9999] mt-1 bg-white 
-                border border-orange-200 rounded-xl shadow-xl hidden"></div>
+                border border-orange-200 rounded-xl shadow-xl hidden
+                max-h-64 overflow-auto md:max-w-full"></div>
   </div>
 
   <!-- カテゴリー（新規商品のときだけ Stimulus が表示） -->
@@ -87,7 +88,7 @@
   <div>
     <%= f.submit "登録する",
         class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold 
-                py-3 rounded-xl shadow-md transition active:scale-[0.98]" %>
+                py-2.5 rounded-full shadow-md transition-transform active:scale-[0.98]" %>
   </div>
 
 <% end %>

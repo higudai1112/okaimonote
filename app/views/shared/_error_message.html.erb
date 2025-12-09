@@ -1,25 +1,25 @@
 <% if resource && resource.errors.any? %>
   <div id="error_explanation"
-       class="mb-6 bg-orange-50 border border-orange-200 text-orange-700 rounded-2xl p-5 shadow-sm animate-fade-in"
+       class="mb-6 bg-orange-50 border border-orange-200 text-orange-700 rounded-2xl p-5 md:p-6 shadow-sm animate-fade-in"
        data-turbo-cache="false">
 
     <!-- タイトル部分 -->
     <div class="flex items-center gap-2 mb-2">
-      <i class="fa-solid fa-circle-exclamation text-orange-500 text-lg"></i>
-      <h2 class="font-semibold text-base text-orange-600">
+      <i class="fa-solid fa-circle-exclamation text-orange-500 text-lg md:text-xl"></i>
+      <h2 class="font-semibold text-sm md:text-[15px] text-orange-600">
         入力内容に誤りがあります
       </h2>
     </div>
 
     <!-- エラー内容 -->
-    <ul class="list-disc list-inside text-sm space-y-1 pl-1">
+    <ul class="list-disc list-inside text-sm md:text-[15px] space-y-1 pl-1">
       <% resource.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
     </ul>
 
     <!-- 補足メッセージ -->
-    <p class="text-xs text-orange-500 mt-3">
+    <p class="text-xs md:text-[13px] text-orange-500 mt-3">
       もう一度入力内容をご確認ください。
     </p>
   </div>

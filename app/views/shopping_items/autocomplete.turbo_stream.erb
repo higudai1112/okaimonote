@@ -4,13 +4,13 @@
       <ul class="bg-white border border-orange-200 rounded-xl shadow-lg">
         <% @suggestions.each do |item| %>
           <li
-            class="px-4 py-2 hover:bg-orange-50 cursor-pointer flex flex-col"
+            class="px-4 py-2 md:px-5 md:py-3 hover:bg-orange-50 cursor-pointer flex flex-col"
             data-action="click->shopping-autocomplete#select"
             data-value="<%= item.name %>"
           >
-            <div class="flex items-center gap-2 text-gray-800">
+            <div class="flex items-center gap-2 text-gray-800 text-sm">
               <% if @frequent_ids.include?(item.id) %>
-                <span class="text-[10px] text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                <span class="text-[10px] md:text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                   ⭐️ よく使う
                 </span>
               <% end %>
@@ -18,7 +18,7 @@
             </div>
 
             <% if item.category.present? %>
-              <span class="text-xs text-gray-500 mt-0.5">
+              <span class="text-xs md:text-sm text-gray-500 mt-0.5">
                 <%= item.category.name %>
               </span>
             <% end %>

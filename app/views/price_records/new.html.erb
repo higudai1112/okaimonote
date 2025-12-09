@@ -1,16 +1,16 @@
-<div class="min-h-screen bg-base text-gray-800 py-4 px-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+<div class="min-h-screen bg-base text-gray-800 py-6 px-4 sm:px-6 md:px-10">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-6 sm:p-8 border border-orange-100">
 
     <!-- タイトル -->
-    <h1 class="text-2xl font-bold text-center text-orange-500 mb-8 flex justify-center items-center gap-2">
-      <i class="fa-solid fa-tag text-2xl"></i>
+    <h1 class="text-xl sm:text-2xl font-bold text-center text-orange-500 mb-8 flex justify-center items-center gap-2">
+      <i class="fa-solid fa-tag text-lg sm:text-2xl"></i>
       価格登録
     </h1>
 
     <!-- 🔥 Turbo Frame（ここを置き換える） -->
     <%= turbo_frame_tag "price_record_form" do %>
 
-      <!-- ★ 正しいフォーム -->
+      <!--  正しいフォーム -->
       <%= render partial: "price_records/form_price_record",
                  locals: { price_record: @price_record, url: price_records_path } %>
     <% end %>

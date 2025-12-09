@@ -1,8 +1,8 @@
-<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 sm:px-6 md:px-10">
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
 
     <!-- タイトル -->
-    <h1 class="text-2xl font-bold text-center text-brand mb-8">
+    <h1 class="text-xl sm:text-2xl font-bold text-center text-brand mb-8">
       カテゴリーリスト
     </h1>
 
@@ -20,17 +20,17 @@
       <!-- 各カテゴリー -->
       <% @categories.each do |category| %>
         <li class="py-3 px-2 flex items-center justify-between hover:bg-orange-50 rounded-lg transition">
-          <div class="flex items-center gap-2 text-gray-700">
-            <i class="fa-solid fa-folder text-orange-400"></i>
+          <div class="flex items-center gap-2 text-gray-700 w-4/5">
+            <i class="fa-solid fa-folder text-orange-400 text-lg"></i>
             <%= link_to category.name, category_path(category),
-                  class: "text-lg font-medium hover:text-orange-600 transition w-full" %>
+                  class: "text-base sm:text-lg font-medium text-gray-800 hover:text-orange-600 transition break-words w-full" %>
             <% if category.memo.present? %>
-              <i class="fa-solid fa-sticky-note text-gray-400 ml-1" title="メモあり"></i>
+              <i class="fa-solid fa-sticky-note text-gray-400 ml-1 text-sm" title="メモあり"></i>
             <% end %>
           </div>
 
           <%= link_to edit_category_path(category),
-                class: "text-gray-400 hover:text-orange-500 transition text-lg" do %>
+                class: "text-gray-400 hover:text-orange-500 transition text-lg sm:text-xl" do %>
             <i class="fa-solid fa-ellipsis-vertical"></i>
           <% end %>
         </li>
@@ -38,17 +38,17 @@
     </ul>
 
     <!-- 追加ボタン群 -->
-    <div class="flex justify-center gap-4 mt-8">
+    <div class="flex justify-center gap-3 sm:gap-4 mt-8 flex-wrap">
       <%= link_to new_product_path,
-            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-full shadow-md transition" do %>
-        <i class="fa-solid fa-plus text-2xl mb-1"></i>
-        <span class="text-sm font-semibold">商品を追加</span>
+            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 sm:px-5 rounded-full shadow-md transition w-32 sm:w-36" do %>
+        <i class="fa-solid fa-plus text-xl sm:text-2xl mb-1"></i>
+        <span class="text-xs sm:text-sm font-semibold">商品を追加</span>
       <% end %>
 
       <%= link_to new_category_path,
-            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-full shadow-md transition" do %>
-        <i class="fa-solid fa-folder-plus text-2xl mb-1"></i>
-        <span class="text-sm font-semibold">カテゴリーを追加</span>
+            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 sm:px-5 rounded-full shadow-md transition w-32 sm:w-36" do %>
+        <i class="fa-solid fa-folder-plus text-xl sm:text-2xl mb-1"></i>
+        <span class="text-xs sm:text-sm font-semibold">カテゴリーを追加</span>
       <% end %>
     </div>
   </div>

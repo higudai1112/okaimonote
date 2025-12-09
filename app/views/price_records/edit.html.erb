@@ -1,47 +1,45 @@
-<div class="min-h-screen bg-base text-gray-800 py-10 px-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 sm:px-6 md:px-10">
+  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-6 sm:p-8 border border-orange-100">
 
-    <!-- 戻るボタン -->
+    <!-- 戻る & タイトル -->
     <%= link_to product_path(@price_record.product),
           class: "inline-flex items-center text-gray-600 hover:text-brand mb-4 transition-colors duration-200" do %>
       <i class="fa-solid fa-arrow-left mr-2"></i>
       戻る
     <% end %>
 
-    <!-- 見出し -->
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800 text-center flex-1">履歴の編集</h1>
+    <!-- タイトル -->
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 text-center flex-1">履歴の編集</h1>
 
-      <!-- Stimulus confirmを適用した削除ボタン -->
-      <div data-controller="confirm" class="relative">
-        <%= button_to product_price_record_path(@product, @price_record),
-              method: :delete,
-              data: {
-                action: "click->confirm#confirm",
-                confirm_message: "この履歴を削除しますか？"
-              },
-              class: "text-red-500 hover:text-red-600 transition text-xl" do %>
-          <i class="fa-solid fa-trash"></i>
-        <% end %>
+    <!-- Stimulus confirmを適用した削除ボタン -->
+    <div data-controller="confirm" class="relative">
+      <%= button_to product_price_record_path(@product, @price_record),
+            method: :delete,
+            data: {
+              action: "click->confirm#confirm",
+              confirm_message: "この履歴を削除しますか？"
+            },
+            class: "text-red-500 hover:text-red-600 transition text-xl p-1" do %>
+        <i class="fa-solid fa-trash"></i>
+      <% end %>
 
-        <!-- 共通確認モーダル -->
-        <div data-confirm-target="modal"
-             class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
-            <p data-confirm-target="message" class="text-gray-700 mb-4">
-              この履歴を削除しますか？
-            </p>
+      <!-- 共通確認モーダル -->
+      <div data-confirm-target="modal"
+           class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+        <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
+          <p data-confirm-target="message" class="text-gray-700 mb-4">
+            この履歴を削除しますか？
+          </p>
 
-            <div class="flex justify-center gap-4">
-              <button data-action="click->confirm#proceed"
-                      class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
-                削除
-              </button>
-              <button data-action="click->confirm#cancel"
-                      class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
-                キャンセル
-              </button>
-            </div>
+          <div class="flex justify-center gap-4">
+            <button data-action="click->confirm#proceed"
+                    class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 shadow">
+              削除
+            </button>
+            <button data-action="click->confirm#cancel"
+                    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">
+              キャンセル
+            </button>
           </div>
         </div>
       </div>
@@ -103,7 +101,7 @@
       <div class="pt-3">
         <%= f.submit "更新する",
               class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5
-                      rounded-xl shadow-md transition-transform active:scale-[0.98]" %>
+                      rounded-full shadow-md transition-transform active:scale-[0.98]" %>
       </div>
     <% end %>
   </div>

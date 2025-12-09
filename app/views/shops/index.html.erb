@@ -1,8 +1,8 @@
 <div class="min-h-screen bg-base text-gray-800 py-10 px-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+  <div class="max-w-md md:max-w-lg mx-auto bg-white rounded-2xl shadow-card p-8 md:p-10 border border-orange-100">
 
     <!-- タイトル -->
-    <h1 class="text-2xl font-bold text-center text-brand mb-8">
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-brand mb-8">
       お店リスト
     </h1>
 
@@ -10,17 +10,17 @@
     <% if @shops.any? %>
       <ul class="divide-y divide-gray-200 mb-4">
         <% @shops.each do |shop| %>
-          <li class="py-3 flex justify-between items-center hover:bg-orange-50 rounded-lg px-2 transition">
+          <li class="py-3 md:py-4 flex justify-between items-center hover:bg-orange-50 rounded-lg px-2 md:px-3 transition text-sm">
             <div class="flex items-center text-gray-700">
-              <i class="fa-solid fa-store text-orange-400 mr-2"></i>
+              <i class="fa-solid fa-store text-orange-400 mr-2 md:mr-3"></i>
               <span><%= shop.name %></span>
               <% if shop.memo.present? %>
-                <i class="fa-solid fa-sticky-note text-gray-400 ml-2" title="メモあり"></i>
+                <i class="fa-solid fa-sticky-note text-gray-400 ml-2 md:ml-3 text-sm" title="メモあり"></i>
               <% end %>
             </div>
 
             <%= link_to edit_shop_path(shop),
-                  class: "text-gray-400 hover:text-orange-500 transition text-lg" do %>
+                  class: "text-gray-400 hover:text-orange-500 transition text-lg md:text-xl" do %>
               <i class="fa-solid fa-ellipsis-vertical"></i>
             <% end %>
           </li>
@@ -37,8 +37,8 @@
     <!-- 追加ボタン -->
     <div class="flex justify-center mt-8">
       <%= link_to new_shop_path,
-            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full shadow-md transition" do %>
-        <i class="fa-solid fa-plus text-2xl mb-1"></i>
+            class: "flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-full shadow-md transition" do %>
+        <i class="fa-solid fa-plus text-2xl md:text-3xl mb-1"></i>
         <span class="text-sm font-semibold">お店を追加</span>
       <% end %>
     </div>

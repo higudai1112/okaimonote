@@ -1,14 +1,14 @@
-<ul class="space-y-1">
+<ul class="space-y-2">
   <% members.each do |member| %>
-    <li class="flex justify-between items-center text-gray-700 py-1">
+    <li class="flex justify-between items-center text-gray-700 py-2 sm:py-2.5">
 
       <!-- 左：名前＋ロール -->
-      <div>
-        <i class="fa-solid fa-user mr-1"></i>
+      <div class= "flex items-center gap-2 min-w-0">
+        <i class="fa-solid fa-user text-gray-500"></i>
         <%= member.nickname %>
 
         <% if member.family_admin? %>
-          <span class="ml-1 px-2 py-0.5 text-xs bg-orange-100 text-orange-600 rounded">
+          <span class="ml-1 px-2 py-0.5 text-xs bg-orange-100 text-orange-600 rounded whitespace-nowrap">
             管理者
           </span>
         <% end %>
@@ -16,20 +16,20 @@
 
       <!-- 右：権限譲渡ボタン（管理者のみ & 自分以外） -->
       <% if current_user.family_admin? && member != current_user %>
-        <div data-controller="confirm" class="relative">
+        <div data-controller="confirm" class="relative flex-shrink-0">
           <%= button_to transfer_owner_family_path(member_id: member.id),
                 method: :patch,
                 data: {
                   action: "click->confirm#confirm",
                   confirm_message: "#{member.nickname}さんに管理者権限を譲渡しますか？"
                 },
-                class: "text-orange-600 text-sm underline hover:text-orange-700" do %>
+                class: "text-orange-600 text-sm underline hover:text-orange-700 transition" do %>
             権限を渡す
           <% end %>
 
           <!-- モーダル -->
           <div data-confirm-target="modal"
-               class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+               class="hidden fixed inset-0 bg-black/40 flex justify-center items-center z-50 px-4">
             <div class="bg-white rounded-2xl p-6 shadow-xl w-80 text-center border border-orange-100">
 
               <p data-confirm-target="message" class="text-gray-700 mb-4">

@@ -1,53 +1,55 @@
-<div class="max-w-lg mx-auto bg-white shadow-md rounded-2xl p-6 mt-4 mb-24 border border-orange-100">
-  <!-- 戻るボタン -->
-  <%= link_to categories_path,
-              class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
-    <i class="fa-solid fa-arrow-left mr-2"></i>
-    戻る
-  <% end %>
+<div class="min-h-screen bg-base text-gray-800 flex flex-col items-center py-10 px-4 sm:px-6 md:px-10">
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl bg-white rounded-2xl shadow-card p-6 sm:p-8 md:p-10 border border-orange-100">
+    <!-- 戻るボタン -->
+    <%= link_to categories_path,
+                class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
+      <i class="fa-solid fa-arrow-left mr-2"></i>
+      戻る
+    <% end %>
 
-  <!-- 商品タイトルと画像 -->
-  <div class="flex flex-col items-center mb-4">
-    <% if @product.image.attached? %>
-      <%= image_tag @product.image,
-          class: "w-20 h-20 rounded-full object-cover border border-orange-200 shadow-sm mb-3" %>
+    <!-- 商品タイトルと画像 -->
+    <div class="flex flex-col items-center mb-6">
+      <% if @product.image.attached? %>
+        <%= image_tag @product.image,
+            class: "w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border border-orange-200 shadow-sm mb-3" %>
+      <% else %>
+        <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-100 flex items-center justify-center
+                    text-xs text-gray-400 border border-orange-100 shadow-sm mb-3">
+          画像登録可
+        </div>
+      <% end %>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 text-center tracking-tight"><%= @product.name %></h1>
+
+      <% if @product.memo.present? %>
+        <p class="text-sm text-gray-600 mb-6 text-center whitespace-pre-line">
+          <%= @product.memo %>
+        </p>
+      <% end %>
+    </div>
+
+    <!-- 価格履歴 -->
+    <h2 class="text-lg md:text-xl font-semibold mb-3 text-orange-600 flex items-center gap-2">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      価格履歴
+    </h2>
+
+    <% if @price_records.empty? %>
+      <p class="text-sm text-gray-500 text-center py-4">この商品の購入履歴はまだありません。</p>
     <% else %>
-      <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center
-                  text-xs text-gray-400 border border-orange-100 shadow-sm mb-3">
-        画像登録可
+      <div class="space-y-3">
+        <%= render partial: "price_records/card",
+                    collection: @price_records,
+                    as: :price_record %>
       </div>
     <% end %>
 
-    <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center tracking-tight"><%= @product.name %></h1>
+    <!-- モーダル挿入用コンテナ -->
+    <div id="modal_container"></div>
 
-    <% if @product.memo.present? %>
-      <p class="text-sm text-gray-600 mb-6 text-center whitespace-pre-line">
-        <%= @product.memo %>
-      </p>
-    <% end %>
-  </div>
-
-  <!-- 価格履歴 -->
-  <h2 class="text-lg font-semibold mb-3 text-orange-600 flex items-center gap-2">
-    <i class="fa-solid fa-clock-rotate-left"></i>
-    価格履歴
-  </h2>
-
-  <% if @price_records.empty? %>
-    <p class="text-sm text-gray-500 text-center py-4">この商品の購入履歴はまだありません。</p>
-  <% else %>
-    <div class="space-y-3">
-      <%= render partial: "price_records/card",
-                  collection: @price_records,
-                  as: :price_record %>
+    <!-- ページネーション -->
+    <div class="mt-6 flex justify-center">
+      <%= paginate @price_records %>
     </div>
-  <% end %>
-
-  <!-- モーダル挿入用コンテナ -->
-  <div id="modal_container"></div>
-
-  <!-- ページネーション -->
-  <div class="mt-6 flex justify-center">
-    <%= paginate @price_records %>
   </div>
 </div>

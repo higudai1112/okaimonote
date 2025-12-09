@@ -1,7 +1,7 @@
 <% flash.each do |key, message| %>
   <% next if message.blank? %>
 
-  <% base_class = "flex items-center gap-2 mb-4 border-l-4 p-3 rounded-xl shadow-sm text-sm font-medium" %>
+  <% base_class = "flex items-center gap-2 mb-4 border-l-4 p-3 md:p-4 rounded-xl shadow-sm text-sm md:text-[15px] font-medium" %>
 
   <% css_class, icon =
     case key.to_sym
@@ -15,7 +15,7 @@
   %>
 
   <div class="<%= "#{base_class} #{css_class}" %>">
-    <i class="<%= icon %> text-lg"></i>
+    <i class="<%= icon %> text-lg md:text-xl"></i>
     <p><%= message %></p>
   </div>
 <% end %>

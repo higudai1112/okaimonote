@@ -1,7 +1,7 @@
-<div class="min-h-screen bg-base text-gray-800 flex items-center justify-center px-4 py-10">
-  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-8 w-full max-w-md">
+<div class="min-h-screen bg-base text-gray-800 flex items-center justify-center px-4 sm:px-6 md:px-10 py-10">
+  <div class="bg-white rounded-2xl shadow-lg border border-orange-100 p-6 sm:p-8 w-full max-w-md sm:max-w-lg">
 
-    <h2 class="text-2xl font-bold text-center text-orange-500 mb-6">
+    <h2 class="text-xl sm:text-2xl font-bold text-center text-orange-500 mb-6">
       パスワード変更
     </h2>
 
@@ -14,7 +14,7 @@
         <%= f.label :current_password, "現在のパスワード", class: "block text-sm font-semibold text-gray-700 mb-1" %>
         <%= f.password_field :current_password,
               autocomplete: "current-password",
-              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition" %>
       </div>
 
       <!-- 新しいパスワード -->
@@ -23,7 +23,7 @@
         <%= f.password_field :password,
               autocomplete: "new-password",
               placeholder: "6文字以上",
-              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition" %>
       </div>
 
       <!-- 新しいパスワード確認 -->
@@ -31,7 +31,7 @@
         <%= f.label :password_confirmation, "新しいパスワード確認用", class: "block text-sm font-semibold text-gray-700 mb-1" %>
         <%= f.password_field :password_confirmation,
               autocomplete: "new-password",
-              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none" %>
+              class: "w-full rounded-xl border-gray-300 p-2 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition" %>
       </div>
 
       <%= f.submit "変更する",
@@ -39,7 +39,7 @@
     <% end %>
 
     <div class="mt-6 text-center">
-      <%= link_to "戻る", profile_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+      <%= link_to "戻る", profile_path, class: "text-sm text-gray-500 hover:text-gray-700 transition" %>
     </div>
 
   </div>

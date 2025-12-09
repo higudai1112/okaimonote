@@ -1,6 +1,6 @@
 <!-- 商品1件（未購入／購入済みの見た目を切り替え） -->
 <li id="shopping_item_<%= shopping_item.id %>"
-    class="flex justify-between items-center bg-white px-4 py-3 rounded-2xl shadow-sm border border-orange-100 hover:shadow-md transition duration-150 ease-in-out w-full max-w-md md:max-w-2xl mx-auto">
+    class="flex justify-between items-center bg-white px-4 py-4 rounded-2xl shadow-sm border border-orange-100 hover:shadow-md transition duration-150 ease-in-out w-full max-w-md md:max-w-2xl mx-auto">
 
   <!-- 商品情報 -->
   <div class="flex flex-col text-left">
@@ -17,12 +17,12 @@
   </div>
 
   <!-- 操作ボタン群 -->
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-4">
     <!-- 編集ボタン -->
     <%= link_to edit_shopping_list_shopping_item_path(shopping_item, format: :turbo_stream),
                 data: { turbo_stream: true },
                 class: "text-gray-400 hover:text-orange-500 transition" do %>
-      <i class="fa-solid fa-pen-to-square text-lg"></i>
+      <i class="fa-solid fa-pen-to-square text-lg md:text-xl"></i>
     <% end %>
 
     <!-- 購入トグルボタン -->
@@ -31,9 +31,9 @@
                   form: { data: { turbo_stream: true } },
                   class: "text-brand hover:text-orange-600 transition" do %>
       <% if shopping_item.purchased %>
-        <i class="fa-solid fa-rotate-left text-lg"></i>
+        <i class="fa-solid fa-rotate-left text-lg md:text-xl"></i>
       <% else %>
-        <i class="fa-solid fa-cart-arrow-down text-lg"></i>
+        <i class="fa-solid fa-cart-arrow-down text-lg md:text-xl"></i>
       <% end %>
     <% end %>
   </div>
