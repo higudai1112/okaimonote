@@ -1,7 +1,8 @@
 <div class="min-h-screen bg-base flex justify-center items-center text-gray-800 py-10 px-4">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-card p-8 md:p-10 border border-orange-100">
+  <div class="w-full max-w-md md:max-w-lg bg-white rounded-2xl shadow-card p-8 md:p-10 border border-orange-100">
+
     <%= link_to "← 一覧に戻る", shops_path, class: "text-sm text-gray-500 hover:text-orange-500 mb-4 inline-block transition" %>
-    <h1 class="text-2xl font-bold text-center text-brand mb-6">お店を追加</h1>
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-brand mb-6">お店を追加</h1>
 
     <%= render "shared/error_message", resource: @shop %>
 
@@ -10,25 +11,25 @@
 
         <!-- 店名 -->
         <div>
-          <%= f.label :name, "店名", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.label :name, "店名", class: "block text-gray-700 font-medium mb-2 text-sm" %>
           <%= f.text_field :name,
                 placeholder: "例：イオン",
-                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition" %>
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition text-sm" %>
         </div>
 
         <!-- メモ -->
         <div>
-          <%= f.label :memo, "メモ", class: "block text-gray-700 font-medium mb-2" %>
+          <%= f.label :memo, "メモ", class: "block text-gray-700 font-medium mb-2 text-sm" %>
           <%= f.text_area :memo,
                 rows: 3,
                 placeholder: "補足情報など",
-                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition" %>
+                class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand transition text-sm" %>
         </div>
 
         <!-- 登録ボタン -->
         <div class="text-center pt-2">
           <%= f.submit "登録する",
-                class: "bg-brand text-white font-semibold w-full py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
+                class: "bg-brand text-white font-semibold w-full py-2 rounded-full shadow hover:bg-orange-600 transition duration-200 text-sm" %>
         </div>
       </div>
     <% end %>

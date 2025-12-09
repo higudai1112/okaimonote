@@ -4,14 +4,14 @@
       url: shopping_list_shopping_item_path(shopping_item),
       method: :patch,
       data: { turbo_stream: true },
-      class: "space-y-5"
+      class: "space-y-6"
     ) do |f| %>
 
   <!-- 商品名 -->
   <div>
     <%= f.label :name, "商品名", class: "block text-gray-700 font-medium mb-1" %>
     <%= f.text_field :name,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand placeholder-gray-400 transition",
+          class: "w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand placeholder-gray-400 transition",
           placeholder: "例：にんじん" %>
   </div>
 
@@ -20,14 +20,14 @@
     <%= f.label :memo, "メモ", class: "block text-gray-700 font-medium mb-1" %>
     <%= f.text_area :memo,
           rows: 3,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand placeholder-gray-400 transition",
+          class: "w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand placeholder-gray-400 transition",
           placeholder: "補足情報など" %>
   </div>
 
   <!-- ボタンエリア -->
-  <div class="flex justify-between items-center pt-2">
+  <div class="flex justify-between items-center pt-3">
     <%= f.submit "更新する",
-          class: "bg-brand text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-orange-600 transition duration-200 active:scale-[0.98]" %>
+          class: "bg-brand text-white font-semibold px-6 py-2.5 rounded-full shadow hover:bg-orange-600 transition duration-200 active:scale-[0.98]" %>
 
     <!-- confirm コントローラで囲む -->
     <div data-controller="confirm" class="relative">

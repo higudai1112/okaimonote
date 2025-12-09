@@ -1,77 +1,79 @@
-<div class="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-6 mt-6 mb-24 border border-orange-100 sm:max-w-lg">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center tracking-tight">プロフィール設定</h2>
+<div class="min-h-screen bg-base text-gray-800 flex flex-col items-center py-10 px-4 sm:px-6 md:px-10">
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl bg-white rounded-2xl shadow-card p-6 sm:p-8 md:p-10 border border-orange-100">
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center tracking-tight">プロフィール設定</h2>
 
-  <div class="space-y-5">
-    <!-- ニックネーム -->
-    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-      <div>
-        <p class="text-sm text-gray-500"><i class="fa-solid fa-user mr-2 text-orange-500"></i>ニックネーム</p>
-        <p class="text-lg font-semibold text-gray-800"><%= current_user.nickname %></p>
-      </div>
-      <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
-        <i class="fa-solid fa-pen"></i>
-      <% end %>
-    </div>
-
-    <!-- メールアドレス -->
-    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-      <div>
-        <p class="text-sm text-gray-500"><i class="fa-solid fa-envelope mr-2 text-orange-500"></i>メールアドレス</p>
-        <p class="text-lg font-semibold text-gray-800"><%= current_user.email %></p>
-      </div>
-      <%= link_to edit_email_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
-        <i class="fa-solid fa-pen"></i>
-      <% end %>
-    </div>
-
-    <!-- パスワード -->
-    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-      <div>
-        <p class="text-sm text-gray-500"><i class="fa-solid fa-lock mr-2 text-orange-500"></i>パスワード</p>
-        <p class="text-lg font-semibold text-gray-800">••••••••</p>
-      </div>
-      <%= link_to edit_user_registration_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
-        <i class="fa-solid fa-pen"></i>
-      <% end %>
-    </div>
-
-    <!-- 都道府県エリア -->
-    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-      <div>
-        <p class="text-sm text-gray-500">
-          <i class="fa-solid fa-location-dot mr-2 text-orange-500"></i>お住まいのエリア
-        </p>
-
-        <% if current_user.prefecture.present? %>
-          <p class="text-lg font-semibold text-gray-800"><%= current_user.prefecture %></p>
-        <% else %>
-          <p class="text-lg text-gray-500 italic mt-1">未設定</p>
-        <% end %>
-      </div>
-
-      <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
-        <i class="fa-solid fa-pen"></i>
-      <% end %>
-    </div>
-
-    <!-- プロフィール画像 -->
-    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-      <div class="flex items-center gap-4">
-        <% if current_user.avatar.attached? %>
-          <%= image_tag current_user.avatar.variant(resize_to_limit: [64, 64]), class: "rounded-full w-16 h-16 object-cover border border-orange-200 shadow-sm" %>
-        <% else %>
-          <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
-            <i class="fa-solid fa-user fa-lg"></i>
-          </div>
-        <% end %>
+    <div class="space-y-6">
+      <!-- ニックネーム -->
+      <div class="flex items-center justify-between border-b border-gray-200 pb-4">
         <div>
-          <p class="text-sm text-gray-500"><i class="fa-solid fa-image mr-2 text-orange-500"></i>プロフィール画像</p>
-          <p class="text-xs text-gray-400">画像を変更できます</p>
+          <p class="text-sm text-gray-500 flex items-center"><i class="fa-solid fa-user mr-2 text-orange-500"></i>ニックネーム</p>
+          <p class="text-lg font-semibold text-gray-800"><%= current_user.nickname %></p>
         </div>
+        <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition text-lg md:text-xl" do %>
+          <i class="fa-solid fa-pen"></i>
+        <% end %>
       </div>
-      <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
-        <i class="fa-solid fa-pen"></i>
-      <% end %>
+
+      <!-- メールアドレス -->
+      <div class="flex items-center justify-between border-b border-gray-200 pb-4">
+        <div>
+          <p class="text-sm text-gray-500 flex items-center"><i class="fa-solid fa-envelope mr-2 text-orange-500"></i>メールアドレス</p>
+          <p class="text-lg font-semibold text-gray-800"><%= current_user.email %></p>
+        </div>
+        <%= link_to edit_email_profile_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+          <i class="fa-solid fa-pen"></i>
+        <% end %>
+      </div>
+
+      <!-- パスワード -->
+      <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+        <div>
+          <p class="text-sm text-gray-500 flex items-center"><i class="fa-solid fa-lock mr-2 text-orange-500"></i>パスワード</p>
+          <p class="text-lg font-semibold text-gray-800">••••••••</p>
+        </div>
+        <%= link_to edit_user_registration_path, class: "text-orange-500 hover:text-orange-600 transition" do %>
+          <i class="fa-solid fa-pen"></i>
+        <% end %>
+      </div>
+
+      <!-- 都道府県エリア -->
+      <div class="flex items-center justify-between border-b border-gray-200 pb-4">
+        <div>
+          <p class="text-sm text-gray-500 flex items-center">
+            <i class="fa-solid fa-location-dot mr-2 text-orange-500"></i>お住まいのエリア
+          </p>
+
+          <% if current_user.prefecture.present? %>
+            <p class="text-lg font-semibold text-gray-800"><%= current_user.prefecture %></p>
+          <% else %>
+            <p class="text-lg text-gray-500 italic mt-1">未設定</p>
+          <% end %>
+        </div>
+
+        <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition text-lg md:text-xl" do %>
+          <i class="fa-solid fa-pen"></i>
+        <% end %>
+      </div>
+
+      <!-- プロフィール画像 -->
+      <div class="flex items-center justify-between border-b border-gray-200 pb-4">
+        <div class="flex items-center gap- sm:gap-5">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar.variant(resize_to_limit: [72, 72]), class: "rounded-full w-16 h-16 sm:w-20 sm:h-20 object-cover border border-orange-200 shadow-sm" %>
+          <% else %>
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+              <i class="fa-solid fa-user fa-lg"></i>
+            </div>
+          <% end %>
+          <div>
+            <p class="text-sm text-gray-500 flex items-center"><i class="fa-solid fa-image mr-2 text-orange-500"></i>プロフィール画像</p>
+            <p class="text-xs text-gray-400 mt-1">画像を変更できます</p>
+          </div>
+        </div>
+        <%= link_to edit_profile_path, class: "text-orange-500 hover:text-orange-600 transition text-lg md:text-xl" do %>
+          <i class="fa-solid fa-pen"></i>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

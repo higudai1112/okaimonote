@@ -1,86 +1,89 @@
-<div class="max-w-lg mx-auto bg-white shadow-md rounded-2xl p-6 mt-4 mb-24 border border-orange-100">
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 md:px-6">
+  <div class="max-w-2xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-card p-6 md:p-8 border border-orange-100">
 
-  <!-- 戻るボタン -->
-  <%= link_to categories_path,
-        class: "inline-flex items-center text-gray-600 hover:text-orange-500 mb-4 transition-colors duration-200" do %>
-    <i class="fa-solid fa-arrow-left mr-2"></i>
-    リストに戻る
-  <% end %>
+    <!-- 戻るボタン -->
+    <%= link_to categories_path,
+          class: "inline-flex items-center text-gray-600 hover:text-brand mb-4 transition-colors duration-200" do %>
+      <i class="fa-solid fa-arrow-left mr-2"></i>
+      リストに戻る
+    <% end %>
 
-  <!-- タイトル -->
-  <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center tracking-tight">
-    すべての商品
-  </h1>
+    <!-- タイトル -->
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center tracking-tight">
+      すべての商品
+    </h1>
 
-  <!-- 検索フォーム -->
-  <%= search_form_for @q, url: products_path, method: :get, html: { class: "mb-6", data: { controller: "autocomplete" } } do |f| %>
-    <div class="relative">
-      <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-      <%= f.search_field :name_cont,
-            placeholder: "商品名で検索（例：牛乳）",
-            class: "w-full border border-gray-300 rounded-xl py-2 pl-10 pr-3 focus:ring-2 focus:ring-orange-400 focus:outline-none transition",
-            data: {
-              "autocomplete-target": "input",
-              action: "input->autocomplete#search"
-            } %>
-      <!-- 候補表示欄 -->
-      <div id="autocomplete_results"
-           data-autocomplete-target="results"
-           class="absolute left-0 right-0 top-full z-[9999] mt-1 pointer-events-auto"></div>
-    </div>
-  <% end %>
+    <!-- 検索フォーム -->
+    <%= search_form_for @q, url: products_path, method: :get, html: { class: "mb-6", data: { controller: "autocomplete" } } do |f| %>
+      <div class="relative">
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        <%= f.search_field :name_cont,
+              placeholder: "商品名で検索（例：牛乳）",
+              class: "w-full border border-gray-300 rounded-xl py-2 pl-10 pr-3 focus:ring-2 focus:ring-orange-400 focus:outline-none transition",
+              data: {
+                "autocomplete-target": "input",
+                action: "input->autocomplete#search"
+              } %>
+        <!-- 候補表示欄 -->
+        <div id="autocomplete_results"
+             data-autocomplete-target="results"
+             class="absolute left-0 right-0 top-full z-[9999] mt-1 pointer-events-auto"></div>
+      </div>
+    <% end %>
 
-  <% if @products.empty? %>
-    <p class="text-gray-500 text-center py-4">商品がまだ登録されていません。</p>
-  <% else %>
-    <ul class="divide-y divide-gray-100 rounded-xl bg-orange-50/30 shadow-sm">
-      <% @products.each do |product| %>
-        <li class="flex justify-between items-center px-4 py-3 hover:bg-orange-50 rounded-xl transition">
-          <!-- 商品名とカテゴリー -->
-          <div class="flex items-center gap-3">
-            <div class="flex flex-col">
-              <span class="text-gray-700 font-medium">
-                <%= link_to product.name, product_path(product),
-                      class: "hover:text-orange-500 transition" %>
-              </span>
-              <% if product.category.present? %>
-                <span class="text-sm text-gray-500 mt-0.5">
-                  カテゴリー：<%= product.category.name %>
+    <% if @products.empty? %>
+      <p class="text-gray-500 text-center py-4 text-sm md:text-base">商品がまだ登録されていません。</p>
+    <% else %>
+      <ul class="divide-y divide-gray-100 rounded-xl bg-orange-50/30 shadow-sm rounded-xl md:rounded-2xl overflow-hidden">
+        <% @products.each do |product| %>
+          <li class="flex justify-between items-center px-4 py-3 md:px-5 md:py-4 hover:bg-orange-50 transition">
+            <!-- 商品名とカテゴリー -->
+            <div class="flex items-center gap-3 md:gap-4">
+              <div class="flex flex-col">
+                <span class="text-gray-700 font-medium text-sm md:text-base">
+                  <%= link_to product.name, product_path(product),
+                        class: "text-gray-900 hover:text-orange-500 transition" %>
                 </span>
+                <% if product.category.present? %>
+                  <span class="text-xs md:text-sm text-gray-500 mt-0.5">
+                    カテゴリー：<%= product.category.name %>
+                  </span>
+                <% end %>
+              </div>
+
+              <!-- 丸画像 -->
+              <% if product.image.attached? %>
+                <%= image_tag product.image,
+                      class:"w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-orange-200 shadow-sm" %>
               <% end %>
             </div>
 
-            <!-- 丸画像 -->
-            <% if product.image.attached? %>
-              <%= image_tag product.image,
-                    class:"w-10 h-10 rounded-full object-cover border border-orange-200 shadow-sm" %>
+            <!-- メニュー -->
+            <%= link_to edit_product_path(product),
+                  class: "text-gray-400 hover:text-orange-500 transition" do %>
+              <i class="fa-solid fa-ellipsis-vertical text-lg md:text-xl"></i>
             <% end %>
-          </div>
+          </li>
+        <% end %>
+      </ul>
 
-          <!-- メニュー -->
-          <%= link_to edit_product_path(product),
-                class: "text-gray-400 hover:text-orange-500 transition" do %>
-            <i class="fa-solid fa-ellipsis-vertical text-lg"></i>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+      <!-- ページネーション -->
+      <div class="flex justify-center mt-6">
+        <%= paginate @products %>
+      </div>
+    <% end %>
 
-    <!-- ページネーション -->
-    <div class="flex justify-center mt-6">
-      <%= paginate @products %>
-    </div>
-  <% end %>
-
-  <!-- モーダル挿入用コンテナ -->
-  <div id="modal_container"></div>
+    <!-- モーダル挿入用コンテナ -->
+    <div id="modal_container"></div>
+  </div>
 </div>
 
 <!-- 商品追加ボタン -->
-<div class="fixed bottom-16 right-4">
+<div class="fixed bottom-24 right-4 md:bottom-24 md:right-8 z-40">
   <%= link_to new_product_path,
-        class: "btn btn-circle bg-orange-500 text-white flex flex-col items-center shadow-md hover:bg-orange-600 transition" do %>
-    <i class="fa fa-plus text-2xl"></i>
-    <span class="text-xs mt-1">商品</span>
+        class: "bg-orange-500 text-white rounded-full shadow-md hover:bg-orange-600
+                w-14 h-14 md:w-16 md:h-16 flex items-center justify-center transition" do %>
+    <i class="fa fa-plus text-2xl md:text-3xl"></i>
+    <span class="hidden md:block text-xs mt-1">商品</span>
   <% end %>
 </div>

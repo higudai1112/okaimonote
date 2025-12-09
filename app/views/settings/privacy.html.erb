@@ -1,10 +1,10 @@
 <div class="min-h-screen bg-base text-gray-800 py-10 px-4 flex justify-center">
-  <div class="w-full max-w-3xl bg-white rounded-2xl shadow-card p-8 md:p-12 border border-orange-100">
-    <h1 class="text-3xl font-bold text-center text-brand mb-8">プライバシーポリシー</h1>
+  <div class="w-full max-w-3xl md:max-w-4xl bg-white rounded-2xl shadow-card p-8 md:p-12 border border-orange-100">
+    <h1 class="text-3xl md:text-4xl font-bold text-center text-brand mb-10">プライバシーポリシー</h1>
 
-    <div class="space-y-8 leading-relaxed text-[15px]">
+    <div class="space-y-10 leading-relaxed text-base md:text-lg text-gray-800">
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">お客様から取得する情報</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">お客様から取得する情報</h2>
         <p>当サービスでは、お客様から以下の情報を取得する場合があります。</p>
         <ul class="list-disc list-inside ml-4 space-y-1 text-gray-700">
           <li>氏名（ニックネームやペンネームを含む）</li>
@@ -19,7 +19,7 @@
       </section>
 
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">お客様の情報を利用する目的</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">お客様の情報を利用する目的</h2>
         <p>取得した情報は、以下の目的で利用いたします。</p>
         <ul class="list-disc list-inside ml-4 space-y-1 text-gray-700">
           <li>サービス利用登録および認証のため</li>
@@ -32,14 +32,14 @@
       </section>
 
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">安全管理のための措置</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">安全管理のための措置</h2>
         <p>
           当サービスでは、取得した情報の漏洩・滅失・毀損を防止するため、組織的・技術的な安全管理措置を講じています。具体的な措置内容については、法令に基づき個別に回答いたします。
         </p>
       </section>
 
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">第三者提供</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">第三者提供</h2>
         <p>
           当サービスでは、法令に基づく場合を除き、お客様の同意なく個人情報を第三者に提供することはありません。
         </p>
@@ -52,33 +52,33 @@
       </section>
 
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">プライバシーポリシーの変更</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">プライバシーポリシーの変更</h2>
         <p>
           当サービスは、必要に応じて本ポリシーの内容を変更する場合があります。変更内容は、本サイト上での告知またはメール等でお知らせいたします。
         </p>
       </section>
 
       <section>
-        <h2 class="text-xl font-semibold text-orange-500 mb-3">お問い合わせ</h2>
+        <h2 class="text-xl md:text-2xl font-semibold text-orange-500 mb-3">お問い合わせ</h2>
         <p>
           お客様の情報の開示・訂正・利用停止・削除をご希望の場合は、
           <%= link_to 'お問い合わせフォーム', contact_path, class: "text-brand underline hover:text-orange-700 transition" %>
           よりご連絡ください。ご本人確認の上、法令に従い対応いたします。
         </p>
-        <p class="mt-2 text-gray-600 text-sm">
+        <p class="mt-2 text-gray-600 text-sm md:text-base">
           ※情報開示請求に際しては、手数料（1件あたり1,000円）をいただく場合があります。
         </p>
       </section>
 
-      <section class="text-sm text-gray-500 mt-8">
+      <section class="text-sm md:text-base text-gray-500 mt-8">
         <p>2025年10月26日 制定</p>
       </section>
     </div>
 
-    <div class="text-center mt-10">
+    <div class="text-center mt-12">
       <%= link_to '戻る',
             user_signed_in? ? settings_path : root_path,
-        class: "inline-block bg-brand text-white px-6 py-2 rounded-full shadow hover:bg-orange-600 transition duration-200" %>
+        class: "inline-block bg-brand text-white px-6 md:px-8 py-2 md:py-3 rounded-full shadow hover:bg-orange-600 transition duration-200 text-base md:text-lg" %>
     </div>
   </div>
 </div>

@@ -1,11 +1,11 @@
-<div class="min-h-screen bg-base pt-8 pb-20 px-4 flex justify-center">
-  <div class="w-full max-w-md">
+<div class="min-h-screen bg-base pt-8 pb-20 px-4 sm:px-6 md:px-10 flex justify-center">
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl">
 
     <!-- タイトル -->
-    <h1 class="text-2xl font-bold text-center mb-6">ファミリー情報</h1>
+    <h1 class="text-xl sm:text-2xl font-bold text-center mb-6">ファミリー情報</h1>
     <div class="border-t border-gray-300 mb-6"></div>
 
-    <div class="bg-white rounded-lg shadow py-5 px-6 space-y-4">
+    <div class="bg-white rounded-lg shadow py-5 px-5 sm:px-6 space-y-6">
 
       <!-- グループ名 -->
       <div>
@@ -38,13 +38,13 @@
 
           <!-- URL本体 -->
           <div data-action="click->copy#copy"
-               class="p-3 bg-orange-50 rounded-lg border border-orange-200 cursor-pointer hover:bg-orange-100 transition">
+               class="p-3 bg-orange-50 rounded-lg border border-orange-200 cursor-pointer hover:bg-orange-100 transition flex items-start sm:items-center gap-2">
             <span class="text-sm break-all flex-1">
               <%= family_invite_url(@family.invite_token) %>
             </span>
 
             <!-- コピーアイコン -->
-            <i class="fa-regular fa-copy text-gray-600 ml-3 text-lg"></i>
+            <i class="fa-regular fa-copy text-gray-600 flex-shrink-0 text-lg"></i>
           </div>
 
           <!-- コピー完了メッセージ -->
@@ -168,7 +168,7 @@
     </div>
 
     <div class="mt-8 text-center">
-      <%= link_to "設定画面に戻る", settings_path, class: "text-gray-500 underline" %>
+      <%= link_to "設定画面に戻る", settings_path, class: "text-sm text-gray-500 hover:text-gray-700 underline" %>
     </div>
   </div>
 </div>

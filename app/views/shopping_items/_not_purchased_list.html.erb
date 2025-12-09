@@ -1,4 +1,4 @@
-<ul id="shopping_items" class="space-y-3 text-left">
+<ul id="shopping_items" class="space-y-3 text-left w-full max-w-lg md:max-w-2xl mx-auto">
   <% items.each do |item| %>
     <%= render partial: "shopping_items/item_row",
                locals: { shopping_item: item } %>

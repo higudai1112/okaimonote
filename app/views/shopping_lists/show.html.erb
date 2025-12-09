@@ -1,8 +1,8 @@
-<div class="min-h-screen bg-base text-gray-800 py-2 px-4">
-  <div class="max-w-md mx-auto bg-white rounded-2xl shadow-card p-8 border border-orange-100">
+<div class="min-h-screen bg-base text-gray-800 py-2 px-4 sm:px-6 md:px-8">
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-card p-6 md:p-8 border border-orange-100">
 
     <!-- タイトル -->
-    <h1 class="text-2xl font-bold text-center text-orange-500 mb-8 flex justify-center items-center gap-2">
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-orange-500 mb-8 flex justify-center items-center gap-2">
       <i class="fa-solid fa-cart-shopping text-2xl"></i>
       買い物リスト
     </h1>
@@ -18,7 +18,7 @@
         <div class="relative" data-controller="shopping-autocomplete">
           <%= f.text_field :name,
                 placeholder: "商品名を入力（例：にんじん）",
-                class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm",
+                class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition",
                 data: {
                   "shopping-autocomplete-target": "input",
                   action: "input->shopping-autocomplete#search"
@@ -32,7 +32,7 @@
         <%= f.text_area :memo,
               rows: 2,
               placeholder: "メモ（例：広告の品）",
-              class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm" %>
+              class: "w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition" %>
 
         <%= f.submit "追加",
               class: "w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl font-semibold shadow-sm transition active:scale-[0.98]" %>
@@ -40,7 +40,7 @@
     <% end %>
 
     <!-- 未購入品一覧 -->
-    <h2 class="text-lg font-semibold mt-8 mb-3 flex items-center gap-2 text-gray-700 border-b border-gray-200 pb-1">
+    <h2 class="text-lg md:text-xl font-semibold mt-10 mb-4 flex items-center gap-2 text-gray-800">
       <i class="fa-solid fa-basket-shopping text-orange-400"></i>
       買うもの
     </h2>
@@ -54,7 +54,7 @@
     <!-- 購入済み -->
     <% purchased_items = @shopping_list.shopping_items.where(purchased: true) %>
     <div class="mt-10" id="purchased_section">
-      <h2 class="text-lg font-semibold mb-3 mt-6 flex items-center gap-2 text-gray-700 border-b border-gray-200 pb-1">
+      <h2 class="text-lg md:text-xl font-semibold mb-3 mt-6 flex items-center gap-2 text-gray-800">
         <i class="fa-solid fa-circle-check text-green-500"></i>
         購入済み
       </h2>
@@ -70,7 +70,7 @@
               action: "click->confirm#confirm",
               confirm_message: "購入済みの商品をすべて削除しますか？"
             },
-            class: "flex items-center gap-2 text-red-500 hover:text-red-600 text-sm transition" do %>
+            class: "flex items-center gap-2 text-red-500 hover:text-red-600 text-sm font-medium transition" do %>
           <i class="fa-solid fa-trash-can"></i>
           <span>購入済みを削除</span>
         <% end %>

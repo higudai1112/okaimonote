@@ -1,6 +1,6 @@
-<div id="summary" class="bg-white rounded-2xl shadow-md border border-orange-100 p-6 mb-8 transition hover:shadow-lg">
+<div id="summary" class="bg-white rounded-2xl shadow-md border border-orange-100 p-6 mb-8 transition hover:shadow-lg max-w-xl mx-auto">
   <!-- 見出し -->
-  <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+  <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-5 flex items-center gap-2">
     <i class="fa-solid fa-chart-line text-orange-500"></i>
     価格サマリー
   </h2>
@@ -12,13 +12,13 @@
       <!-- 最安値 -->
       <div class="bg-orange-50 border border-orange-100 rounded-xl py-3">
         <p class="text-sm text-gray-600">最安値</p>
-        <p class="text-lg font-bold text-orange-600 mt-1"><%= display_price(@min_price) %></p>
+        <p class="text-lg font-bold text-orange-600 mt-1 whitespace-nowrap"><%= display_price(@min_price) %></p>
       </div>
 
       <!-- 最高値 -->
       <div class="bg-orange-50 border border-orange-100 rounded-xl py-3">
         <p class="text-sm text-gray-600">最高値</p>
-        <p class="text-lg font-bold text-gray-700 mt-1"><%= display_price(@max_price) %></p>
+        <p class="text-lg font-bold text-gray-700 mt-1 whitespace-nowrap"><%= display_price(@max_price) %></p>
       </div>
     </div>
 
@@ -28,7 +28,7 @@
         <i class="fa-solid fa-scale-balanced text-orange-400"></i>
         平均価格
       </p>
-      <p class="text-lg font-semibold text-gray-700"><%= display_price(@average_price) %></p>
+      <p class="text-lg font-semibold text-gray-700 whitespace-nowrap"><%= display_price(@average_price) %></p>
     </div>
 
     <!-- 前回購入 -->
