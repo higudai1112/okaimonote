@@ -21,7 +21,12 @@ Rails.application.routes.draw do
         patch :unban
       end
     end
-    resources :families, only: [ :index, :show ]
+    resources :families, only: [ :index, :show ] do
+      patch :change_admin, on: :member
+      member do
+        delete "remove_member/:user_id", to: "families#remove_member", as: :remove_member
+      end
+    end
     resources :contacts, only: [ :index, :show ]
     resources :stats, only: [ :index ]
     resource  :service, only: [ :show ]
