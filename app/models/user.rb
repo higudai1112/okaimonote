@@ -3,6 +3,7 @@ require "open-uri"
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
        :recoverable, :rememberable, :validatable,
+       :trackable,
        :omniauthable, omniauth_providers: %i[google_oauth2 line]
 
   validates :nickname, presence: true, length: { maximum: 20 }

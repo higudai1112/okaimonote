@@ -15,11 +15,83 @@
       <%= link_to admin_root_path,
           class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50 #{current_page?(admin_root_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
         <i class="fa-solid fa-gauge-high text-base text-gray-700"></i>
-        <span class="<%= current_page?(admin_root_path) ? 'text-orange-600' : 'text-gray-700' %>">ダッシュボード</span>
+        <span class="<%= current_page?(admin_root_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          ダッシュボード
+        </span>
       <% end %>
     </li>
 
-    <%# 将来追加予定: ユーザー管理メニュー %>
+    <!-- ユーザー管理 -->
+    <li>
+      <%= link_to admin_users_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+          #{current_page?(admin_users_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-users text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_users_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          ユーザー管理
+        </span>
+      <% end %>
+    </li>
+
+    <!-- 家族共有管理 -->
+    <li>
+      <%= link_to admin_families_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+                  #{current_page?(admin_families_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-people-group text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_families_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          家族共有管理
+        </span>
+      <% end %>
+    </li>
+
+    <!-- お問い合わせ管理 -->
+    <li>
+      <%= link_to admin_contacts_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+                  #{current_page?(admin_contacts_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-envelope text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_contacts_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          お問い合わせ管理
+        </span>
+      <% end %>
+    </li>
+
+    <!-- 統計パネル -->
+    <li>
+      <%= link_to admin_stats_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+                  #{current_page?(admin_stats_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-chart-line text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_stats_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          統計パネル
+        </span>
+      <% end %>
+    </li>
+
+    <!-- サービス管理 -->
+    <li>
+      <%= link_to admin_service_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+                  #{current_page?(admin_service_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-wrench text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_service_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          サービス管理
+        </span>
+      <% end %>
+    </li>
+
+    <!-- 設定 -->
+    <li>
+      <%= link_to admin_settings_path,
+          class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
+                  #{current_page?(admin_settings_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+        <i class="fa-solid fa-gear text-base text-gray-700"></i>
+        <span class="<%= current_page?(admin_settings_path) ? 'text-orange-600' : 'text-gray-700' %>">
+          設定
+        </span>
+      <% end %>
+    </li>
   </ul>
 
   <!-- 下部メニュー（通常画面へ / ログアウト） -->
