@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   get "home/summary/:id", to: "home#show_summary", as: :home_summary
   get "home/autocomplete", to: "home#autocomplete"
 
+  namespace :admin do
+    root "dashboards#index"   # /admin
+    # 今後ここに admin/users などを足していく
+  end
+
   resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     collection do
       get :autocomplete

@@ -36,3 +36,6 @@ application.register("loading", LoadingController)
 
 import CopyController from "./copy_controller"
 application.register("copy", CopyController)
+
+import SidebarController from "./sidebar_controller"
+application.register("sidebar", SidebarController)

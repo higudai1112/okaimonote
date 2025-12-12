@@ -1,0 +1,24 @@
+<% content_for :title, "ダッシュボード" %>
+
+<section class="space-y-6">
+  <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+    <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-orange-100 text-orange-500">
+      📊
+    </span>
+    管理ダッシュボード
+  </h1>
+
+  <p class="text-sm text-gray-600">
+    okaimonote のデータ状況を確認できます。まずは最低限の画面だけ用意しておき、あとから
+    「ユーザー管理」「家族共有管理」「問い合わせ管理」などを順番に追加していきます。
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white rounded-2xl shadow-sm border border-orange-100 p-4">
+      <p class="text-xs font-semibold text-gray-400 uppercase">ユーザー数</p>
+      <p class="mt-2 text-2xl font-bold text-gray-800"><%= User.count %></p>
+    </div>
+
+    <%# 今後、商品数・価格記録数・ファミリー数などもここに追加していける %>
+  </div>
+</section>

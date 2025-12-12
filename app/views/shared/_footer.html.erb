@@ -7,6 +7,14 @@
     { path: settings_path, icon: 'fa-solid fa-gear', label: '設定' }
   ] %>
 
+  <%# 管理者だけリンクを表示%>
+  <% if current_user&.admin? %>
+    <% footer_links << { path: admin_root_path, icon: 'fa-solid fa-gauge-high', label: '管理' } %>
+  <% end %>
+
+  <%# ボタン数に応じて width を自動調整 %>
+  <% button_width = "w-#{100 / footer_links.size}/100" rescue "w-1/6" %>
+
   <% footer_links.each do |link| %>
     <% active = current_page?(link[:path]) %>
     <% is_settings = link[:label] == '設定' %>

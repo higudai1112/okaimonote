@@ -18,6 +18,8 @@ class User < ApplicationRecord
 
   after_create :setup_default_categories
 
+  enum :role, { general: 0, admin: 1 }
+
   enum :family_role, {
     personal: 0,
     family_admin: 1,
