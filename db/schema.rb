@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_12_033812) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_12_083701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -147,6 +147,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_033812) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.integer "products_count", default: 0, null: false
+    t.integer "price_records_count", default: 0, null: false
+    t.boolean "banned", default: false, null: false
+    t.text "banned_reason"
+    t.text "admin_memo"
+    t.string "status", default: "active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true

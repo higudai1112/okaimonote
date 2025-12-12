@@ -1,1 +1,107 @@
-<h1 class="text-xl font-bold">ユーザー管理（一覧）</h1>
+<% content_for :title, "ユーザー管理" %>
+
+<section class="space-y-6">
+
+  <!-- タイトル -->
+  <div class="flex items-center justify-between bg-white rounded-2xl shadow-md border border-orange-100 p-5">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-orange-100 text-orange-500 text-xl">
+        <i class="fa-solid fa-users"></i>
+      </span>
+      ユーザー管理
+    </h1>
+
+    <span class="px-4 py-1 rounded-full bg-orange-50 text-orange-600 font-semibold border border-orange-200 text-sm">
+      <%= @users.count %> 件
+    </span>
+  </div>
+
+  <!-- 検索フォーム -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-4">
+    <%= search_form_for @q, url: admin_users_path, method: :get, class: "space-y-3" do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- 名前 -->
+        <div>
+          <label class="text-sm text-gray-600">名前</label>
+          <%= f.search_field :nickname_cont, class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+        <!-- メール -->
+        <div>
+          <label class="text-sm text-gray-600">メール</label>
+          <%= f.search_field :email_cont, class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+        <!-- BAN状態 -->
+        <div>
+          <label class="text-sm text-gray-600">状態</label>
+          <%= f.select :status_eq,
+                [["すべて", ""], ["有効", "active"], ["BAN", "banned"]],
+                {}, class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <%= f.submit "検索", class: "px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-sm" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 一覧テーブル -->
+  <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-orange-100 p-4">
+    <table class="w-full text-sm text-left">
+      <thead class="bg-orange-50 text-gray-700 text-xs uppercase tracking-wide">
+        <tr>
+          <th class="px-4 py-3 border-b">ユーザー名</th>
+          <th class="px-4 py-3 border-b">メール</th>
+          <th class="px-4 py-3 border-b">最終ログイン</th>
+          <th class="px-4 py-3 border-b">登録日</th>
+          <th class="px-4 py-3 border-b">商品数</th>
+          <th class="px-4 py-3 border-b">価格記録数</th>
+          <th class="px-4 py-3 border-b">ロール</th>
+          <th class="px-4 py-3 border-b"></th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-orange-50">
+        <% @users.each do |user| %>
+          <tr class="hover:bg-orange-50 transition <%= 'bg-red-50' if user.status_banned? %>">
+            <td class="px-4 py-3 font-medium flex items-center gap-2">
+              <%= user.nickname %>
+              <% if user.status_banned? %>
+                <span class="px-2 py-0.5 rounded-md bg-red-100 text-red-600 text-xs font-semibold">
+                  BAN
+                </span>
+              <% end %>
+            </td>
+            <td class="px-4 py-3 text-gray-700"><%= user.email %></td>
+            <td class="px-4 py-3 text-gray-700">
+              <%= user.last_sign_in_at&.strftime("%Y-%m-%d") || "未ログイン" %>
+            </td>
+            <td class="px-4 py-3 text-gray-700">
+              <%= user.created_at.strftime("%Y-%m-%d") %>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <%= user.products_count %>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <%= user.price_records_count %>
+            </td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-1 rounded-lg text-xs
+                <%= user.admin? ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600' %>">
+                <%= user.admin? ? "管理者" : "一般" %>
+              </span>
+            </td>
+            <td class="px-4 py-3 text-right">
+              <%= link_to "詳細", admin_user_path(user),
+                    class: "text-orange-600 font-semibold text-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <!-- ページネーション -->
+    <div class="mt-4">
+      <%= paginate @users %>
+    </div>
+  </div>
+</section>

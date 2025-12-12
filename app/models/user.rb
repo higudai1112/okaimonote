@@ -10,9 +10,9 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   has_many :categories, dependent: :destroy
-  has_many :price_records, dependent: :destroy
+  has_many :price_records, dependent: :destroy, counter_cache: true
   has_many :shops, dependent: :destroy
-  has_many :products, dependent: :destroy
+  has_many :products, dependent: :destroy, counter_cache: true
   has_one :shopping_list, dependent: :destroy
   has_many :shopping_items, through: :shopping_list
   belongs_to :family, optional: true
@@ -98,6 +98,46 @@ class User < ApplicationRecord
       # 個人なら自分の分
       shopping_list || create_shopping_list!(name: "マイリスト")
     end
+  end
+
+  STATUSES = %w[active banned].freeze
+
+  # ステータス判定用ヘルパー
+  def status_active?
+    status == "active"
+  end
+
+  def status_banned?
+    status == "banned"
+  end
+
+  # ステータスごとのスコープ
+  scope :with_status, ->(value) { where(status: value) }
+  scope :active_status, -> { where(status: "active") }
+  scope :banned_status, -> { where(status: "banned") }
+
+  def active_for_authentication?
+    super && !status_banned?
+  end
+
+  def inactive_message
+    status_banned? ? :banned : super
+  end
+
+  # Ransack 検索で許可する属性
+  def self.ransackable_attributes(auth_object = nil)
+    %w[
+      nickname
+      email
+      status
+      created_at
+      last_sign_in_at
+    ]
+  end
+
+  # ソートに使うカラム
+  def self.ransackable_associations(auth_object = nil)
+    []
   end
 
   private

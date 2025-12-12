@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   before_action :authenticate_user!, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :reject_banned_user
 
   protected
 
@@ -22,6 +23,14 @@ class ApplicationController < ActionController::Base
   # タイトルページを公開ページとして許可
   def public_page?
     controller_name == "pages" && action_name == "title"
+  end
+
+  # BAN状態でログインできない
+  def reject_banned_user
+    if current_user&.banned?
+      sign_out current_user
+      redirect_to new_user_session_path, alert: "このアカウントは停止されています。"
+    end
   end
 
   def configure_permitted_parameters

@@ -106,6 +106,7 @@ ja:
       unauthenticated: "ログインしてください。"
       invalid: "メールアドレスまたはパスワードが違います"
       not_found_in_database: "メールアドレスまたはパスワードが違います"
+      banned: "このアカウントは利用停止中です。"
     registrations:
       signed_up: "アカウントを登録しました"
       updated: "アカウント情報を変更しました。"

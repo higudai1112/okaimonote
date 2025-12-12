@@ -31,8 +31,33 @@
           </div>
         </main>
       </div>
-
     </div>
 
+    <% flash.each do |key, message| %>
+      <div class="fixed top-4 right-4 z-50 flash-message">
+        <div class="px-4 py-3 rounded-xl shadow-lg text-white
+          <%= key.to_sym == :notice ? 'bg-green-500' : 'bg-red-500' %>">
+          <%= message %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- フラッシュ自動フェードアウト -->
+    <script>
+      function fadeFlashMessage() {
+        const flash = document.querySelector(".flash-message");
+        if (!flash) return;
+
+        setTimeout(() => {
+          flash.style.opacity = "0";
+
+          // 完全に消えたら削除（フッターと重なるのを防ぐ）
+          setTimeout(() => flash.remove(), 500);
+        }, 2500); // 表示後 2.5秒でフェードアウト
+      }
+
+      document.addEventListener("DOMContentLoaded", fadeFlashMessage);
+      document.addEventListener("turbo:load", fadeFlashMessage);
+    </script>
   </body>
 </html>

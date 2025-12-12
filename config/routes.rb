@@ -15,7 +15,12 @@ Rails.application.routes.draw do
   namespace :admin do
     root "dashboards#index"
 
-    resources :users, only: [ :index, :show ]
+    resources :users, only: [ :index, :show, :update ] do
+      member do
+        patch :ban
+        patch :unban
+      end
+    end
     resources :families, only: [ :index, :show ]
     resources :contacts, only: [ :index, :show ]
     resources :stats, only: [ :index ]
