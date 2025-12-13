@@ -1,0 +1,91 @@
+<% content_for :title, "価格の異常値一覧" %>
+
+<section class="space-y-6">
+
+  <!-- 見出しカード -->
+  <div class="flex items-center justify-between bg-white rounded-2xl shadow-md border border-orange-100 p-5">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 text-red-500 text-xl">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </span>
+      価格の異常値一覧
+    </h1>
+
+    <% if @abnormal_records.present? %>
+      <span class="px-4 py-1 rounded-full bg-red-50 text-red-600 font-semibold border border-red-200 text-sm">
+        <%= @abnormal_records.count %> 件検出
+      </span>
+    <% end %>
+  </div>
+
+  <% if @abnormal_records.empty? %>
+    <div class="bg-white rounded-2xl p-6 text-center border border-gray-200 shadow-sm">
+      <p class="text-gray-500 text-sm">現在、異常値は検出されていません。</p>
+    </div>
+  <% else %>
+    <!-- テーブル -->
+    <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-orange-100 p-4">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-orange-50 text-gray-700 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-3 border-b">商品 / 店舗</th>
+            <th class="px-4 py-3 border-b">価格</th>
+            <th class="px-4 py-3 border-b">平均</th>
+            <th class="px-4 py-3 border-b">乖離率</th>
+            <th class="px-4 py-3 border-b">登録者</th>
+            <th class="px-4 py-3 border-b">登録日</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-orange-50">
+          <% @abnormal_records.each do |item| %>
+            <% pr = item[:record] %>
+            <% avg = item[:avg_price] %>
+            <% deviation = item[:deviation] %>
+            <% high = deviation > 0 %>
+            <tr class="hover:bg-orange-50 transition">
+              <!-- 商品 + 店舗（1セルまとめ） -->
+              <td class="px-4 py-3">
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-2 font-medium text-gray-800">
+                    <i class="fa-solid fa-box text-orange-400"></i>
+                    <%= pr.product.name %>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-gray-500">
+                    <i class="fa-solid fa-store"></i>
+                    <%= pr.shop&.name || "不明" %>
+                  </div>
+                </div>
+              </td>
+              <!-- 価格 -->
+              <td class="px-4 py-3 font-semibold <%= high ? 'text-red-600' : 'text-blue-600' %>">
+                <%= pr.price %>円
+              </td>
+
+              <!-- 平均 -->
+              <td class="px-4 py-3 text-gray-700"><%= avg %>円</td>
+
+              <!-- 乖離率 -->
+              <td class="px-4 py-3 font-bold <%= high ? 'text-red-600' : 'text-blue-600' %>">
+                <% if high %>
+                  <i class="fa-solid fa-arrow-up"></i>
+                  +<%= deviation %>%
+                <% else %>
+                  <i class="fa-solid fa-arrow-down"></i>
+                  -<%= deviation.abs %>%
+                <% end %>
+              </td>
+
+              <!-- 登録者 -->
+              <td class="px-4 py-3"><%= pr.user&.nickname || "不明" %></td>
+
+              <!-- 登録日 -->
+              <td class="px-4 py-3 text-gray-500">
+                <%= pr.created_at.strftime("%Y-%m-%d") %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

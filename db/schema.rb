@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_02_064016) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_13_032202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_02_064016) do
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["public_id"], name: "index_categories_on_public_id", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "nickname"
+    t.string "email"
+    t.text "body"
+    t.integer "status"
+    t.text "admin_memo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "families", force: :cascade do |t|
@@ -141,6 +151,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_02_064016) do
     t.bigint "family_id"
     t.integer "family_role", default: 0, null: false
     t.string "prefecture"
+    t.integer "role", default: 0, null: false
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.integer "products_count", default: 0, null: false
+    t.integer "price_records_count", default: 0, null: false
+    t.boolean "banned", default: false, null: false
+    t.text "banned_reason"
+    t.text "admin_memo"
+    t.string "status", default: "active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["family_id"], name: "index_users_on_family_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true

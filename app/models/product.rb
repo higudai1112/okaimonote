@@ -1,6 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :category, optional: true
-  belongs_to :user
+  belongs_to :user, counter_cache: true
   has_many :price_records, dependent: :destroy
   has_one_attached :image
 

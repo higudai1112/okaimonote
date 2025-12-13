@@ -18,6 +18,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.from_omniauth(auth)
 
     if @user.persisted?
+      @user.update_tracked_fields!(request) # ログイン履歴更新
       flash[:notice] = I18n.t("devise.omniauth_callbacks.success", kind: kind)
       sign_in_and_redirect @user, event: :authentication
     else
