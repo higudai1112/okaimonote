@@ -36,6 +36,14 @@ ja:
         product: "商品"
         shop: "店舗"
         user: "ユーザー"
+      contact:
+        status: "ステータス"
+    enums:
+      contact:
+        status:
+          unread: "未読"
+          pending: "対応中"
+          resolved: "完了"
 
     errors:
       models:

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get "home/summary/:id", to: "home#show_summary", as: :home_summary
   get "home/autocomplete", to: "home#autocomplete"
 
+  # 管理者画面関係
   namespace :admin do
     root "dashboards#index"
 
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
         delete "remove_member/:user_id", to: "families#remove_member", as: :remove_member
       end
     end
-    resources :contacts, only: [ :index, :show ]
+    resources :contacts, only: [ :index, :show, :update ]
     resources :stats, only: [ :index ]
     resource  :service, only: [ :show ]
     resource  :settings, only: [ :show ]

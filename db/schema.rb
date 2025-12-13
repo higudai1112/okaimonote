@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_12_083701) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_13_032202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_083701) do
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["public_id"], name: "index_categories_on_public_id", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "nickname"
+    t.string "email"
+    t.text "body"
+    t.integer "status"
+    t.text "admin_memo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "families", force: :cascade do |t|

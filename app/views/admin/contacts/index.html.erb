@@ -1,1 +1,93 @@
-<h1 class="text-xl font-bold">お問い合わせ管理</h1>
+<% content_for :title, "お問い合わせ一覧" %>
+
+<section class="space-y-6">
+
+  <!-- タイトル  -->
+  <div class="flex items-center justify-between bg-white rounded-2xl shadow-md border border-orange-100 p-5">
+    <h1 class="text-2xl font-bold text-gray-800">お問い合わせ一覧</h1>
+    <span class="px-3 py-1 rounded-lg bg-orange-50 text-orange-600 font-semibold border border-orange-200 text-sm">
+      <%= @contacts.count %> 件
+    </span>
+  </div>
+
+  <!-- 検索フォーム -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-4">
+    <%= search_form_for @q, url: admin_contacts_path, method: :get do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="text-sm text-gray-600">名前</label>
+          <%= f.search_field :nickname_cont, class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">メール</label>
+          <%= f.search_field :email_cont, class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-600">ステータス</label>
+          <%= f.select :status_eq,
+                Contact.statuses.keys.map { |k|
+                  [I18n.t("activerecord.enums.contact.status.#{k}"), k]
+                },
+                { include_blank: "すべて" },
+                class: "w-full border rounded-lg text-sm" %>
+        </div>
+      </div>
+
+      <div class="mt-4 text-right">
+        <%= f.submit "検索", class: "px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 一覧テーブル -->
+  <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-orange-100 p-4">
+    <table class="w-full text-sm text-left">
+      <thead class="bg-orange-50 text-gray-700 text-xs uppercase tracking-wide">
+        <tr>
+          <th class="px-4 py-2 border-b">名前</th>
+          <th class="px-4 py-2 border-b">メール</th>
+          <th class="px-4 py-2 border-b">内容</th>
+          <th class="px-4 py-2 border-b">ステータス</th>
+          <th class="px-4 py-2 border-b">日付</th>
+          <th class="px-4 py-2 border-b"></th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-orange-50">
+        <% @contacts.each do |contact| %>
+          <tr class="hover:bg-orange-50 transition">
+            <td class="px-4 py-2 font-medium">
+              <%= contact.nickname %>
+              <% if contact.admin_memo.present? %>
+                <span class="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-600 text-xs font-semibold">
+                  メモあり
+                </span>
+              <% end %>
+            </td>
+            <td class="px-4 py-2"><%= contact.email %></td>
+            <td class="px-4 py-2 text-gray-600"><%= truncate(contact.body, length: 30) %></td>
+            <td class="px-4 py-2">
+              <span class="px-2 py-1 rounded-lg text-xs
+                <%= contact.unread? ? 'bg-red-100 text-red-600' :
+                    contact.pending? ? 'bg-yellow-100 text-yellow-600' :
+                                       'bg-green-100 text-green-600' %>">
+                <%= I18n.t("activerecord.enums.contact.status.#{contact.status}") %>
+              </span>
+            </td>
+            <td class="px-4 py-2"><%= contact.created_at.strftime("%Y-%m-%d") %></td>
+            <td class="px-4 py-2 text-right">
+              <%= link_to "詳細", admin_contact_path(contact),
+                    class: "text-orange-600 font-semibold text-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="mt-4">
+      <%= paginate @contacts %>
+    </div>
+  </div>
+</section>
