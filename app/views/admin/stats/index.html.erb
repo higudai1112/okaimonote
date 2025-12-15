@@ -1,1 +1,175 @@
-<h1 class="text-xl font-bold">統計</h1>
+<% content_for :title, "価格統計" %>
+
+<section class="space-y-10">
+
+  <!-- タイトル -->
+  <div class="flex items-center justify-between bg-white rounded-2xl shadow-md border border-orange-100 p-5">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-orange-100 text-orange-500 text-xl">
+        <i class="fa-solid fa-chart-line"></i>
+      </span>
+      価格統計
+    </h1>
+  </div>
+
+  <!--  検索フォーム -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">検索条件</h2>
+
+    <%= form_with url: admin_stats_path, method: :get, local: true do |f| %>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- 商品名 -->
+        <div
+          data-controller="stats-autocomplete"
+          data-statistics-autocomplete-url-value="/admin/stats/autocomplete_products"
+          class="relative">
+
+          <label class="text-sm text-gray-600">商品名</label>
+          <input
+            type="text"
+            name="keyword"
+            value="<%= params[:keyword] %>"
+            placeholder="例：玉ねぎ"
+            class="w-full border rounded-lg p-2 text-sm"
+            data-statistics-autocomplete-target="input"
+            data-action="keyup->stats-autocomplete#search">
+
+          <div
+            data-stats-autocomplete-target="results"
+            class="absolute w-full bg-white border rounded-lg shadow z-20">
+          </div>
+        </div>
+
+        <!-- 店舗名 -->
+        <div
+          data-controller="stats-autocomplete"
+          data-statistics-autocomplete-url-value="/admin/stats/autocomplete_shops"
+          class="relative">
+          <label class="text-sm text-gray-600">店舗名</label>
+
+          <input
+            type="text"
+            name="shop_name"
+            value="<%= params[:shop_name] %>"
+            placeholder="例：イオン"
+            class="w-full border rounded-lg p-2 text-sm"
+            data-statistics-autocomplete-target="input"
+            data-action="keyup->stats-autocomplete#search">
+
+          <div data-stats-autocomplete-target="results"
+               class="absolute w-full bg-white border rounded-lg shadow z-20"></div>
+        </div>
+
+        <!-- 都道府県 -->
+        <div>
+          <label class="text-sm text-gray-600">エリア（都道府県）</label>
+          <%= f.select :pref,
+                PREFECTURES.map { |p| [p, p] },
+                { include_blank: "指定なし" },
+                class: "w-full border rounded-lg p-2 text-sm" %>
+        </div>
+      </div>
+
+      <div class="mt-6 text-right">
+        <%= f.submit "検索する",
+              class: "px-5 py-2 bg-orange-500 text-white rounded-lg shadow hover:bg-orange-600 font-semibold" %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <!--  統計表示 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">検索結果</h2>
+
+    <% if @count.zero? %>
+      <p class="text-gray-500 text-sm">該当するデータがありません。</p>
+    <% else %>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">件数</p>
+          <p class="text-2xl font-bold text-gray-800"><%= @count %></p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">最安値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            <%= number_to_currency(@min_price, unit: "¥", precision: 0) %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">最高値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            <%= number_to_currency(@max_price, unit: "¥", precision: 0) %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">平均価格</p>
+          <p class="text-2xl font-bold text-gray-800">
+            <%= number_to_currency(@avg_price, unit: "¥") %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">中央値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            <%= number_to_currency(@median, unit: "¥", precision: 0) %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+
+
+  <!--  ランキング：商品名登録数 TOP5 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">商品登録数 TOP5</h2>
+
+    <table class="w-full text-sm">
+      <% @top_products_count.each_with_index do |(name, count), index| %>
+        <tr class="border-b">
+          <td class="px-4 py-2 font-semibold w-10"><%= index + 1 %>位</td>
+          <td class="px-4 py-2"><%= name %></td>
+          <td class="px-4 py-2 text-right text-gray-600"><%= count %> 件</td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+
+  <!--  ランキング：価格記録数 TOP5 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">価格記録数 TOP5</h2>
+
+    <table class="w-full text-sm">
+      <% @top_products_by_records.each_with_index do |(name, count), index| %>
+        <tr class="border-b">
+          <td class="px-4 py-2 font-semibold w-10"><%= index + 1 %>位</td>
+          <td class="px-4 py-2"><%= name %></td>
+          <td class="px-4 py-2 text-right text-gray-600"><%= count %> 件</td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+
+  <!--  ランキング：店舗 TOP5 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">登録数の多い店舗 TOP5</h2>
+
+    <table class="w-full text-sm">
+      <% @top_shops.each_with_index do |(name, count), index| %>
+        <tr class="border-b">
+          <td class="px-4 py-2 font-semibold w-10"><%= index + 1 %>位</td>
+          <td class="px-4 py-2"><%= name %></td>
+          <td class="px-4 py-2 text-right text-gray-600"><%= count %> 件</td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</section>
