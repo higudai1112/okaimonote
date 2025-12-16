@@ -81,7 +81,29 @@
 
   <!--  統計表示 -->
   <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">検索結果</h2>
+    <h2 class="text-lg font-bold text-gray-800 mb-2">
+      検索結果
+    </h2>
+    <!-- 条件バッジ -->
+    <div class="flex flex-wrap gap-2 mt-4">
+      <% if @keyword.present? %>
+        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs rounded">
+          商品名：<%= @keyword %>
+        </span>
+      <% end %>
+
+      <% if @shop_name.present? %>
+        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">
+          店舗：<%= @shop_name %>
+        </span>
+      <% end %>
+
+      <% if @pref.present? %>
+        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">
+          都道府県：<%= @pref %>
+        </span>
+      <% end %>
+    </div>
 
     <% if @count.zero? %>
       <p class="text-gray-500 text-sm">該当するデータがありません。</p>
@@ -122,9 +144,16 @@
         </div>
       </div>
     <% end %>
+
+    <!-- 商品詳細へ -->
+    <% unless @count.zero? %>
+      <div class="text-right mt-4">
+        <%= link_to "この商品の詳細を見る",
+              admin_stats_show_path(keyword: @keyword),
+              class: "text-orange-600 font-semibold underline" %>
+      </div>
+    <% end %>
   </div>
-
-
 
   <!--  ランキング：商品名登録数 TOP5 -->
   <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">

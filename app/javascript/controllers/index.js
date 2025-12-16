@@ -42,3 +42,6 @@ application.register("sidebar", SidebarController)
 
 import StatsAutocompleteController from "./stats_autocomplete_controller"
 application.register("stats-autocomplete", StatsAutocompleteController)
+
+import PriceChartController from "./price_chart_controller"
+application.register("price-chart", PriceChartController)

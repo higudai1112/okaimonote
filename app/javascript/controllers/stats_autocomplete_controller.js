@@ -37,6 +37,7 @@ export default class extends Controller {
         this.inputTarget.value = name
         this.resultsTarget.innerHTML = ""
         this.resultsTarget.classList.add("hidden")
+        this.inputTarget.closest("form")?.requestSubmit()
       })
       this.resultsTarget.appendChild(div)
     })

@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     end
     resources :contacts, only: [ :index, :show, :update ]
     resources :stats, only: [ :index ]
+    get "stats/show", to: "stats#show", as: "stats_show"
     resource  :service, only: [ :show ]
     resource  :settings, only: [ :show ]
     resources :abnormal_prices, only: [ :index ]
