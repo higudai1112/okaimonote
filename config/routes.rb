@@ -12,6 +12,30 @@ Rails.application.routes.draw do
   get "home/summary/:id", to: "home#show_summary", as: :home_summary
   get "home/autocomplete", to: "home#autocomplete"
 
+  # 管理者画面関係
+  namespace :admin do
+    root "dashboards#index"
+
+    resources :users, only: [ :index, :show, :update ] do
+      member do
+        patch :ban
+        patch :unban
+      end
+    end
+    resources :families, only: [ :index, :show ] do
+      patch :change_admin, on: :member
+      member do
+        delete "remove_member/:user_id", to: "families#remove_member", as: :remove_member
+      end
+    end
+    resources :contacts, only: [ :index, :show, :update ]
+    resources :stats, only: [ :index ]
+    get "stats/show", to: "stats#show", as: "stats_show"
+    resources :services, only: [ :index ]
+    resource  :settings, only: [ :show ]
+    resources :abnormal_prices, only: [ :index ]
+  end
+
   resources :products, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     collection do
       get :autocomplete

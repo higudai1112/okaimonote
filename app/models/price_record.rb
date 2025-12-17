@@ -1,7 +1,7 @@
 class PriceRecord < ApplicationRecord
   belongs_to :product
   belongs_to :shop, optional: true
-  belongs_to :user
+  belongs_to :user, counter_cache: true
 
   validates :price, presence: { message: "を入力してください" }, numericality: { only_integer: true, greater_than: 0 }
   validates :purchased_at, presence: true

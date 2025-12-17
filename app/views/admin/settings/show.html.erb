@@ -1,0 +1,67 @@
+<% content_for :title, "設定" %>
+
+<section class="space-y-6">
+
+  <!-- ヘッダー -->
+  <div>
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-orange-100 text-orange-500">
+        <i class="fa-solid fa-gear"></i>
+      </span>
+      設定
+    </h1>
+
+    <p class="text-sm text-gray-600 mt-2">
+      okaimonote の動作ルールを確認できます。現在は一部の設定のみ有効。
+    </p>
+  </div>
+
+  <!-- 利用制限 -->
+  <section class="bg-white rounded-2xl shadow-md border border-orange-100 p-6 space-y-4">
+    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-users text-orange-500"></i>
+      利用制限
+    </h2>
+
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm font-semibold text-gray-800">
+          家族メンバーの上限
+        </p>
+        <p class="text-xs text-gray-500 mt-1">
+          1つのファミリーに参加できる最大人数
+        </p>
+      </div>
+
+      <div class="text-right">
+        <p class="text-xl font-bold text-gray-800">
+          <%= Family::MAX_MEMBERS %> 人
+        </p>
+        <p class="text-xs text-gray-400">
+          ※ 現在変更できません
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 今後追加予定 -->
+  <section class="bg-gray-50 rounded-2xl border border-gray-200 p-6 space-y-4">
+    <h2 class="text-lg font-bold text-gray-700 flex items-center gap-2">
+      <i class="fa-solid fa-hourglass-half text-gray-500"></i>
+      今後追加予定
+    </h2>
+
+    <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
+      <li>無料プランの利用制限</li>
+      <li>統計表示期間の変更</li>
+      <li>エリア統計の表示制御</li>
+      <li>機能の一時停止（メンテナンス）</li>
+      <li>広告表示</li>
+      <li>課金設定(iOS対応後)</li>
+    </ul>
+
+    <p class="text-xs text-gray-400 mt-2">
+      ※ これらの設定は今後のアップデートで順次追加予定。
+    </p>
+  </section>
+</section>

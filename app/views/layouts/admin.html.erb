@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= content_for?(:title) ? "#{yield(:title)} | okaimonote 管理画面" : "okaimonote 管理画面" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <%= javascript_include_tag "application", type: "module" %>
+    <%= turbo_page_requires_reload %>
+  </head>
+
+  <body class="min-h-screen bg-base text-gray-800" data-controller="sidebar">
+
+    <!-- ① ヘッダー（最上部） -->
+    <%= render 'admin/shared/header' %>
+
+    <!-- ② 本体：サイドバーとメイン -->
+    <div class="flex min-h-screen">
+
+      <!-- サイドバー（左固定） -->
+      <%= render 'admin/shared/sidebar' %>
+
+      <!-- メインコンテンツ -->
+      <div class="flex-1 flex flex-col">
+        <main class="flex-1 p-4 md:p-6 lg:p-8">
+          <div class="max-w-6xl mx-auto">
+            <%= render 'shared/flash_message' if lookup_context.exists?('shared/flash_message') %>
+            <%= yield %>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <% flash.each do |key, message| %>
+      <div class="fixed top-4 right-4 z-50 flash-message">
+        <div class="px-4 py-3 rounded-xl shadow-lg text-white
+          <%= key.to_sym == :notice ? 'bg-green-500' : 'bg-red-500' %>">
+          <%= message %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- フラッシュ自動フェードアウト -->
+    <script>
+      function fadeFlashMessage() {
+        const flash = document.querySelector(".flash-message");
+        if (!flash) return;
+
+        setTimeout(() => {
+          flash.style.opacity = "0";
+
+          // 完全に消えたら削除（フッターと重なるのを防ぐ）
+          setTimeout(() => flash.remove(), 500);
+        }, 2500); // 表示後 2.5秒でフェードアウト
+      }
+
+      document.addEventListener("DOMContentLoaded", fadeFlashMessage);
+      document.addEventListener("turbo:load", fadeFlashMessage);
+    </script>
+  </body>
+</html>

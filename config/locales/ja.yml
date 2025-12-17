@@ -36,6 +36,14 @@ ja:
         product: "商品"
         shop: "店舗"
         user: "ユーザー"
+      contact:
+        status: "ステータス"
+    enums:
+      contact:
+        status:
+          unread: "未読"
+          pending: "対応中"
+          resolved: "完了"
 
     errors:
       models:
@@ -106,6 +114,7 @@ ja:
       unauthenticated: "ログインしてください。"
       invalid: "メールアドレスまたはパスワードが違います"
       not_found_in_database: "メールアドレスまたはパスワードが違います"
+      banned: "このアカウントは利用停止中です。"
     registrations:
       signed_up: "アカウントを登録しました"
       updated: "アカウント情報を変更しました。"

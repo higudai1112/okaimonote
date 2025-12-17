@@ -19,11 +19,22 @@ class FamilyInvitesController < ApplicationController
       return
     end
 
-    # personalはok
-    current_user.update!(
-      family: @family,
-      family_role: :family_member
-    )
+    # 2人同時に押してもok
+    Family.transaction do
+      @family.lock!
+      # 家族メンバー上限チェック
+      if @family.full?
+        redirect_to settings_path,
+          alert: "このファミリーは参加できる人数の上限(#{Family :MAX_MEMBERS}人)に達しています。"
+        return
+      end
+
+      # personalはok
+      current_user.update!(
+        family: @family,
+        family_role: :family_member
+      )
+    end
 
     redirect_to family_path, notice: "ファミリーに加わりました!"
   rescue => e

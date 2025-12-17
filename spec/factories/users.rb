@@ -7,11 +7,11 @@ FactoryBot.define do
 
     # カテゴリー初期化のコールバックを無効化
     trait :without_callbacks do
-      after(:build) do |user|
+      after(:build) do |_|
         User.skip_callback(:create, :after, :setup_default_categories)
       end
 
-      after(:create) do |user|
+      after(:create) do |_|
         User.set_callback(:create, :after, :setup_default_categories)
       end
     end
@@ -24,19 +24,12 @@ FactoryBot.define do
 
     # family_member（家族に所属）
     trait :family_member do
-      after(:create) do |user|
-        family = user.family || create(:family)
-        user.update!(family: family, family_role: :family_member)
-      end
+      family_role { :family_member }
     end
 
     # family_admin（管理者）
     trait :family_admin do
-      after(:create) do |user|
-        family = user.family || create(:family)
-        family.update!(owner: user, base_user: user)
-        user.update!(family: family, family_role: :family_admin)
-      end
+      family_role { :family_admin }
     end
   end
 end

@@ -1,0 +1,267 @@
+<% content_for :title, "商品詳細統計" %>
+
+<section class="space-y-10">
+  <!-- 戻る -->
+  <div>
+    <%= link_to admin_stats_path,
+        class: "inline-flex items-center gap-2 px-3 py-1.5 bg-orange-100
+                text-orange-700 rounded-lg text-sm font-semibold
+                hover:bg-orange-200 transition" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+      一覧に戻る
+    <% end %>
+  </div>
+
+  <!-- 商品名 + 基本統計 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">
+      <%= @keyword %> の詳細統計
+    </h1>
+
+    <% if @count.zero? %>
+      <p class="text-gray-500 text-sm">データがありません。</p>
+    <% else %>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">件数</p>
+          <p class="text-2xl font-bold text-gray-800"><%= @count %></p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">最安値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            ¥<%= @min_price %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">最高値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            ¥<%= @max_price %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">平均価格</p>
+          <p class="text-2xl font-bold text-gray-800">
+            ¥<%= @avg_price %>
+          </p>
+        </div>
+
+        <div class="bg-orange-50 rounded-xl p-4 border">
+          <p class="text-xs text-gray-500">中央値</p>
+          <p class="text-2xl font-bold text-gray-800">
+            ¥<%= @median %>
+          </p>
+        </div>
+
+      </div>
+
+    <% end %>
+  </div>
+
+  <!-- 最新5件 -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">最新の記録（5件）</h2>
+
+    <% if @recent_records.empty? %>
+      <p class="text-gray-500 text-sm">記録がありません。</p>
+    <% else %>
+      <table class="w-full text-sm table-fixed">
+        <thead class="text-gray-600 border-b">
+          <tr>
+            <th class="px-2 py-2 w-32">日付</th>
+            <th class="px-2 py-2 w-24 text-right">価格</th>
+            <th class="px-2 py-2 w-48">店舗</th>
+            <th class="px-2 py-2 w-32">エリア</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+          <% @recent_records.each do |r| %>
+            <tr>
+              <td class="px-2 py-2 text-gray-700">
+                <%= r.purchased_at.strftime("%Y-%m-%d") %>
+              </td>
+              <td class="px-2 py-2 text-right font-semibold text-gray-800">
+                <%= number_to_currency(r.price, unit: "¥", precision: 0) %>
+              </td>
+              <td class="px-2 py-2 truncate text-center">
+                <% if r.shop&.name.present? %>
+                  <span class="text-gray-800"><%= r.shop.name %></span>
+                <% else %>
+                  <span class="text-xs text-gray-400 italic">未登録</span>
+                <% end %>
+              </td>
+              <td class="px-2 py-2 text-sm text-center">
+                <% if r.product&.user&.prefecture.present? %>
+                  <span class="text-gray-500"><%= r.product.user.prefecture %></span>
+                <% else %>
+                  <span class="text-xs text-gray-400 italic">未登録</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+
+  <!-- 店舗別 / 都道府県別 中央値 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 店舗別中央値ランキング -->
+    <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">店舗別中央値</h2>
+
+      <% if @median_by_shop.blank? %>
+        <p class="text-gray-500 text-sm">データがありません。</p>
+      <% else %>
+        <table class="w-full text-sm">
+          <% @median_by_shop
+              .sort_by { |(_, median, _)| median }
+              .each_with_index do |(shop, median, count), index| %>
+
+            <tr class="border-b <%= index < 3 ? 'bg-orange-50' : '' %>">
+              <!-- 順位 -->
+              <td class="px-3 py-2 font-bold w-12 text-center">
+                <% case index %>
+                <% when 0 %>
+                  <i class="fa-solid fa-trophy text-yellow-500 text-lg"></i>
+                <% when 1 %>
+                  <i class="fa-solid fa-medal text-gray-400 text-lg"></i>
+                <% when 2 %>
+                  <i class="fa-solid fa-medal text-orange-400 text-lg"></i>
+                <% else %>
+                  <%= index + 1 %>
+                <% end %>
+              </td>
+
+              <!-- 店舗名 -->
+              <td class="px-3 py-2">
+                <%= shop %>
+                <span class="text-xs text-gray-400 ml-1">
+                  (<%= count %>件)
+                </span>
+              </td>
+
+              <!-- 中央値 -->
+              <td class="px-3 py-2 text-right font-semibold">
+                <%= number_to_currency(median, unit: "¥", precision: 0) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+
+    <!-- 都道府県別中央値ランキング -->
+    <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">都道府県別中央値</h2>
+
+      <% if @median_by_pref.blank? %>
+        <p class="text-gray-500 text-sm">データがありません。</p>
+      <% else %>
+        <table class="w-full text-sm">
+          <% @median_by_pref
+              .sort_by { |(_, median, _)| median }
+              .each_with_index do |(pref, median, count), index| %>
+
+            <tr class="border-b <%= index < 3 ? 'bg-green-50' : '' %>">
+              <!-- 順位 -->
+              <td class="px-3 py-2 font-bold w-12 text-center">
+                <% case index %>
+                <% when 0 %>
+                  <i class="fa-solid fa-crown text-yellow-500 text-lg"></i>
+                <% when 1 %>
+                  <i class="fa-solid fa-crown text-gray-400 text-lg"></i>
+                <% when 2 %>
+                  <i class="fa-solid fa-crown text-orange-400 text-lg"></i>
+                <% else %>
+                  <%= index + 1 %>
+                <% end %>
+              </td>
+
+              <!-- 都道府県 -->
+              <td class="px-3 py-2">
+                <%= pref %>
+                <span class="text-xs text-gray-400 ml-1">
+                  (<%= count %>件)
+                </span>
+              </td>
+
+              <!-- 中央値 -->
+              <td class="px-3 py-2 text-right font-semibold">
+                <%= number_to_currency(median, unit: "¥", precision: 0) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 価格推移（過去180日・中央値） -->
+  <div class="bg-white rounded-2xl shadow-md border border-orange-100 p-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-chart-line text-orange-500"></i>
+      価格推移（過去180日・中央値）
+    </h2>
+
+    <%= form_with url: admin_stats_show_path, method: :get, local: true do %>
+
+      <%= hidden_field_tag :keyword, @keyword %>
+      <%= hidden_field_tag :range, @range %>
+
+      <!-- 店舗フィルター（オートコンプリート） -->
+      <div
+        data-controller="stats-autocomplete"
+        data-stats-autocomplete-url-value="/admin/stats/autocomplete_shops"
+        class="relative w-64 mb-4">
+
+        <input
+          type="text"
+          name="shop_name"
+          value="<%= @shop_name %>"
+          placeholder="店舗で絞り込み（未入力＝全体）"
+          class="w-full border rounded-lg p-2 text-sm"
+          data-stats-autocomplete-target="input"
+          data-action="keyup->stats-autocomplete#search">
+
+        <div
+          data-stats-autocomplete-target="results"
+          class="absolute w-full bg-white border rounded-lg shadow z-20 hidden">
+        </div>
+      </div>
+      <div class="text-right">
+        <%= submit_tag "この条件で表示", class: "px-3 py-1 bg-orange-500 text-white rounded-lg text-sm" %>
+      </div>
+    <% end %>
+
+    <!-- 期間切替 -->
+    <div class="flex gap-2 mb-4">
+      <% [["30日", "30"], ["90日", "90"], ["180日", "180"], ["1年", "365"]].each do |label, value| %>
+        <%= link_to label,
+              admin_stats_show_path(keyword: @keyword, range: value),
+              class: "px-3 py-1 rounded-lg text-sm font-semibold
+                      #{ @range == value ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }" %>
+      <% end %>
+    </div>
+
+    <% if @chart_labels.blank? %>
+      <p class="text-gray-500 text-sm">表示できるデータがありません。</p>
+    <% else %>
+      <div
+        data-controller="price-chart"
+        data-price-chart-label-value="<%= @keyword %>"
+        data-price-chart-dates-value="<%= @chart_labels.to_json %>"
+        data-price-chart-prices-value="<%= @chart_values.to_json %>"
+        class="relative"
+      >
+        <canvas data-price-chart-target="canvas" class="w-full h-64"></canvas>
+      </div>
+    <% end %>
+  </div>
+</section>
+

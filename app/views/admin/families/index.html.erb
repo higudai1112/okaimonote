@@ -1,0 +1,68 @@
+<% content_for :title, "ファミリー管理" %>
+
+<section class="space-y-6">
+
+  <!-- タイトル -->
+  <div class="flex items-center justify-between bg-white rounded-2xl shadow-md
+              border border-orange-100 p-5">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                   bg-orange-100 text-orange-500 text-xl">
+        <i class="fa-solid fa-people-group"></i>
+      </span>
+      ファミリー管理
+    </h1>
+
+    <span class="px-4 py-1 rounded-full bg-orange-50 text-orange-600
+                 font-semibold border border-orange-200 text-sm">
+      <%= @families.count %> 件
+    </span>
+  </div>
+
+  <!-- 一覧テーブル -->
+  <div class="overflow-x-auto bg-white rounded-2xl shadow-md
+              border border-orange-100 p-4">
+    <table class="w-full text-sm text-left">
+      <thead class="bg-orange-50 text-gray-700 text-xs uppercase tracking-wide">
+        <tr>
+          <th class="px-4 py-3 border-b">ファミリー名</th>
+          <th class="px-4 py-3 border-b">管理者</th>
+          <th class="px-4 py-3 border-b">メンバー数</th>
+          <th class="px-4 py-3 border-b">作成日</th>
+          <th class="px-4 py-3 border-b"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-orange-50">
+        <% @families.each do |family| %>
+          <tr class="hover:bg-orange-50 transition">
+            <td class="px-4 py-3 font-medium">
+              <%= family.name %>
+            </td>
+
+            <td class="px-4 py-3">
+              <% owner = family.users.find_by(family_role: :family_admin) %>
+              <%= owner&.nickname || "—" %>
+            </td>
+
+            <td class="px-4 py-3 text-center">
+              <%= family.users.count %>
+            </td>
+
+            <td class="px-4 py-3 text-gray-700">
+              <%= family.created_at.strftime("%Y-%m-%d") %>
+            </td>
+
+            <td class="px-4 py-3 text-right">
+              <%= link_to "詳細", admin_family_path(family),
+                    class: "text-orange-600 font-semibold text-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- ページネーション -->
+  <div class="mt-6 flex justify-center">
+    <%= paginate @families %>
+  </div>
+</section>

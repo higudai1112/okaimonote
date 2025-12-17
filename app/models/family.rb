@@ -1,4 +1,5 @@
 class Family < ApplicationRecord
+  MAX_MEMBERS = 3
   has_many :users, dependent: :nullify
   has_many :shopping_lists, dependent: :destroy
   belongs_to :owner, class_name: "User"
@@ -11,6 +12,14 @@ class Family < ApplicationRecord
 
   def regenerate_invite_token!
     update!(invite_token: SecureRandom.urlsafe_base64(32))
+  end
+
+  def full?
+    users.count >= MAX_MEMBERS
+  end
+
+  def remaining_slots
+    [ MAX_MEMBERS - users.count, 0 ].max
   end
 
   private
