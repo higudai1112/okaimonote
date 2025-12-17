@@ -1,9 +1,32 @@
 class Admin::DashboardsController < Admin::BaseController
   include AbnormalPriceDetector # concernsでprivateメソッドを共有
   def index
-    @total_users    = User.count
+    # 当日比
+    today_start     = Time.zone.today.beginning_of_day
+    yesterday_start = Time.zone.yesterday.beginning_of_day
+
+    @new_users_today =
+      User.where("created_at >= ?", today_start).count
+
+    @new_users_yesterday =
+      User.where(created_at: yesterday_start...today_start).count
+
+    @new_users_diff =
+      @new_users_today - @new_users_yesterday
     @active_users   = User.where("last_sign_in_at > ?", 30.days.ago).count
-    @new_users_30d  = User.where("created_at > ?", 30.days.ago).count
+
+    # 30日比
+    current_30d_start = 30.days.ago.beginning_of_day
+    previous_30d_start = 60.days.ago.beginning_of_day
+
+    @new_users_30d =
+      User.where("created_at >= ?", current_30d_start).count
+
+    @new_users_prev_30d =
+      User.where(created_at: previous_30d_start...current_30d_start).count
+
+    @new_users_30d_diff =
+      @new_users_30d - @new_users_prev_30d
     @total_families = Family.count
 
     # アラート用

@@ -1,4 +1,3 @@
 class Admin::SettingsController < Admin::BaseController
-  def show
-  end
+  def show; end
 end

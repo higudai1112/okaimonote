@@ -71,11 +71,11 @@
 
     <!-- サービス管理 -->
     <li>
-      <%= link_to admin_service_path,
+      <%= link_to admin_services_path,
           class: "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50
-                  #{current_page?(admin_service_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
+                  #{current_page?(admin_services_path) ? 'bg-orange-100 font-semibold' : ''}" do %>
         <i class="fa-solid fa-wrench text-base text-gray-700"></i>
-        <span class="<%= current_page?(admin_service_path) ? 'text-orange-600' : 'text-gray-700' %>">
+        <span class="<%= current_page?(admin_services_path) ? 'text-orange-600' : 'text-gray-700' %>">
           サービス管理
         </span>
       <% end %>

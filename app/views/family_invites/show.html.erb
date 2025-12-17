@@ -9,10 +9,26 @@
      「<%= @family.name %>」に参加しようとしています。
     </p>
 
-    <%= form_with url: family_invite_path(@family.invite_token), method: :post, local: true do %>
-      <button class="w-full bg-orange-500 text-white font-semibold py-2.5 rounded-full shadow hover:bg-orange-600 transition-transform active:scale[0.98]">
+    <% if @family.full? %>
+      <!-- 満員メッセージ -->
+      <div class="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl p-4 mb-6 text-center">
+        このファミリーは参加できる人数の上限（<%= Family::MAX_MEMBERS %>人）に達しています。
+      </div>
+
+      <!-- 無効ボタン -->
+      <button
+        class="w-full bg-gray-300 text-gray-500 font-semibold py-2.5 rounded-full cursor-not-allowed"
+        disabled
+      >
         メンバーになる
       </button>
+    <% else %>
+      <!-- 通常参加 -->
+      <%= form_with url: family_invite_path(@family.invite_token), method: :post, local: true do %>
+        <button class="w-full bg-orange-500 text-white font-semibold py-2.5 rounded-full shadow hover:bg-orange-600 transition-transform active:scale[0.98]">
+          メンバーになる
+        </button>
+      <% end %>
     <% end %>
 
     <div class="text-center mt-6">
