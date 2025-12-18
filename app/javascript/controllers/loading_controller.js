@@ -8,6 +8,9 @@ export default class extends Controller {
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
 
+    this.delayTimer = null
+    this.DELAY = 600
+
     document.addEventListener("turbo:before-visit", this.show) // ページ移動前
     document.addEventListener("turbo:submit-start", this.show) // フォーム送信時
     document.addEventListener("turbo:load", this.hide) // ページ読み込み完了
@@ -22,14 +25,23 @@ export default class extends Controller {
   }
 
   show() {
-    if (this.hasOverlayTarget) {
+    if (!this.hasOverlayTarget) return
+
+    // 一定時間後に表示
+    this.delayTimer = setTimeout(() => {
       this.overlayTarget.classList.remove("hidden")
-    }
+    }, this.DELAY)
   }
 
   hide() {
-    if (this.hasOverlayTarget) {
-      this.overlayTarget.classList.add("hidden")
+    if (!this.hasOverlayTarget) return
+
+    // 表示前ならキャンセル
+    if (this.delayTimer) {
+      clearTimeout(this.delayTimer)
+      this.delayTimer = null
     }
+
+    this.overlayTarget.classList.add("hidden")
   }
 }
