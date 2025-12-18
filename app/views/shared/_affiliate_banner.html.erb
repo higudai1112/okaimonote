@@ -1,0 +1,14 @@
+<div class="mb-8 text-center">
+  <a href="<%= link_url %>"
+     target="_blank"
+     rel="nofollow noopener"
+     class="inline-block">
+    <img src="<%= image_url %>"
+         alt="<%= alt %>"
+         class="w-full max-w-[300px] h-auto mx-auto rounded-xl shadow-sm hover:opacity-90 transition">
+  </a>
+
+  <% if tracking_pixel_url.present? %>
+    <img src="<%= tracking_pixel_url %>" width="1" height="1" alt="">
+  <% end %>
+</div>
