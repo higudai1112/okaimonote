@@ -10,9 +10,9 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   has_many :categories, dependent: :destroy
-  has_many :price_records, dependent: :destroy, counter_cache: true
+  has_many :price_records, dependent: :destroy
   has_many :shops, dependent: :destroy
-  has_many :products, dependent: :destroy, counter_cache: true
+  has_many :products, dependent: :destroy
   has_one :shopping_list, dependent: :destroy
   has_many :shopping_items, through: :shopping_list
   belongs_to :family, optional: true
