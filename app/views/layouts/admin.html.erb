@@ -24,7 +24,7 @@
       <%= render 'admin/shared/sidebar' %>
 
       <!-- メインコンテンツ -->
-      <div class="flex-1 flex flex-col">
+      <div class="flex-1 flex flex-col md:ml-56">
         <main class="flex-1 p-4 md:p-6 lg:p-8">
           <div class="max-w-6xl mx-auto">
             <%= render 'shared/flash_message' if lookup_context.exists?('shared/flash_message') %>
