@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-base text-gray-800 py-10 px-4 sm:px-6 md:px-10">
+  <div class="max-w-md mx-auto">
+
+    <!-- タイトル -->
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-center text-red-500 mb-8 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      アカウント削除
+    </h1>
+
+    <!-- カード -->
+    <div class="bg-white rounded-2xl shadow-md border border-red-100 p-6 sm:p-8 space-y-6">
+
+      <!-- 注意文 -->
+      <p class="text-sm text-gray-700 leading-relaxed">
+        アカウントを削除すると、<br>登録した
+        <span class="font-semibold text-gray-900">商品・価格履歴・家族情報</span>
+        などのデータは <br>すべて削除され、元に戻すことはできません。
+      </p>
+
+      <p class="text-sm text-gray-700 leading-relaxed">
+        <span class="font-semibold text-red-600">おかいもノートのアカウントを削除</span>
+        してもよろしいですか？
+      </p>
+
+      <!-- ボタン -->
+      <div class="space-y-4 pt-2">
+
+        <%= button_to '削除する',
+            account_path,
+            method: :delete,
+            data: { turbo_confirm: '本当にアカウントを削除しますか？この操作は取り消せません。' },
+            class: "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-full shadow-md transition active:scale-[0.98]" %>
+
+        <%= link_to 'キャンセルして設定に戻る',
+            settings_path,
+            class: "block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-full transition" %>
+      </div>
+    </div>
+  </div>
+</div>
+
