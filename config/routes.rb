@@ -32,7 +32,6 @@ Rails.application.routes.draw do
     resources :stats, only: [ :index ]
     get "stats/show", to: "stats#show", as: "stats_show"
     resources :services, only: [ :index ]
-    resource  :settings, only: [ :show ]
     resources :abnormal_prices, only: [ :index ]
   end
 
@@ -60,6 +59,11 @@ Rails.application.routes.draw do
   get "shopping_items/autocomplete", to: "shopping_items#autocomplete"
 
   resource :settings, only: [ :show ]
+
+  resource :account, only: [] do
+    get :delete
+    delete :destroy
+  end
   get "register_info", to: "pages#register_info", as: :register_info
 
   # 家族関連(基本)

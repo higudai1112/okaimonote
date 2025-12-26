@@ -6,6 +6,9 @@
     <div class="space-y-4">
       <%= link_to 'プロフィール', profile_path, class: "block w-full text-center bg-white py-3 md:py-3.5 rounded-lg shadow hover:bg-orange-50 transition text-sm" %>
       <%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: "block w-full text-center bg-white py-3 md:py-3.5 rounded-lg shadow hover:bg-orange-50 transition text-sm" %>
+      <%= link_to 'アカウント削除',
+          delete_account_path,
+          class: "block w-full text-center bg-red-50 text-red-600 py-3 md:py-3.5 rounded-lg shadow hover:bg-red-100 transition text-sm font-semibold" %>
 
       <!-- ファミリー共有 -->
       <div class="bg-white rounded-lg shadow p-4 md:p-6">
