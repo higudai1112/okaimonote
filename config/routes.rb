@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         delete "remove_member/:user_id", to: "families#remove_member", as: :remove_member
       end
     end
-    resource :settings, only: [:show]
+    resource :settings, only: [ :show ]
     resources :contacts, only: [ :index, :show, :update ]
     resources :stats, only: [ :index ]
     get "stats/show", to: "stats#show", as: "stats_show"
