@@ -1,6 +1,6 @@
 # 🛒おかいもノート (okaimonote)
 
-![OGP画像](assets/images/ogp.png)
+![OGP画像](app/assets/images/ogp.png)
 
 ## 📖サービス概要
 「おかいもノート」は、日用品や食材の購入価格を記録し、
@@ -12,35 +12,35 @@
 ## 📱 サービスイメージ
 ### 🏠 HOME｜価格サマリーで即判断
 
-![HOME画面](assets/images/home.png)
+![HOME画面](app/assets/images/home.png)
 
 登録した商品の価格履歴から、
 最安値・平均価格・直近価格を自動で表示します。
 
 ### 🛒 商品詳細｜価格履歴が資産になる
 
-![商品詳細画面](assets/images/product_detail.png)
+![商品詳細画面](app/assets/images/product_detail.png)
 
 過去に購入した価格・日付・お店を履歴として一覧表示します。
 「なんとなく安い」ではなく、**自分の実績データ**から価格差を判断できます。
 
 ### ✏️ 価格登録｜シンプルだから続けられる
 
-![価格登録画面](assets/images/price_register.png)
+![価格登録画面](app/assets/images/price_register.png)
 
 商品名・価格・日付・メモを入力するだけのシンプルな価格登録画面です。
 よく使う商品は候補に表示されるため、入力の手間を最小限に抑えています。
 
 ### 🛍 買い物リスト｜迷わず買える
 
-![買い物リスト画面](assets/images/shopping_list.png)
+![買い物リスト画面](app/assets/images/shopping_list.png)
 
 買うもの・購入済みを分けて管理できる買い物リスト機能です。
 買い忘れを防ぎつつ、購入後はワンタップで整理できます。
 
 ### 👨‍👩‍👧‍👦 家族共有｜価格感覚を家族で揃える
 
-![家族共有画面](assets/images/family_share.png)
+![家族共有画面](app/assets/images/family_share.png)
 
 家族グループを作成し、商品・価格・買い物リストを共有できます。
 「平均価格以下なら買ってきてほしい」など、
@@ -48,7 +48,7 @@
 
 ### 👨‍💼 管理者画面｜運用を見据えた設計
 
-![管理者ダッシュボード](assets/images/admin_dashboard.png)
+![管理者ダッシュボード](app/assets/images/admin_dashboard.png)
 
 管理者向けに、ユーザー・ファミリー・登録データの状況を
 ひと目で把握できるダッシュボードを用意しています。
@@ -143,7 +143,7 @@ https://www.figma.com/design/JjdRUEWuNYMQrnJhOCZyXz/%E3%81%8A%E3%81%8B%E3%81%84%
 | DB             |PostgreSQL (Neon)        |
 | 非同期UI        |Turbo Stream/Stimulus    |
 | 商品検索        |ransack                  |
-| インフラ        |Render + Neon　　　　　　　|
+| インフラ        |Render + Neon + AWS(S3)　|
 | コンテナ        |Docker                   |
 
 ### 🚀 デモ環境
