@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  get "/ios/session", to: "ios_auth#create"
+
   get "guide", to: "pages#guide", as: :guide
   get "home", to: "home#index", as: :home
   get "home/summary/:id", to: "home#show_summary", as: :home_summary
