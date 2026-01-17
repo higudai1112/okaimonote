@@ -14,6 +14,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def handle_auth(kind)
+    Rails.logger.error "=== OMNIAUTH CALLBACK DEBUG ==="
+    Rails.logger.error "omniauth.params: #{request.env['omniauth.params'].inspect}"
+    Rails.logger.error "omniauth.auth: #{request.env['omniauth.auth'].present?}"
+    Rails.logger.error "request.fullpath: #{request.fullpath}"
+
     auth = request.env["omniauth.auth"]
     @user = User.from_omniauth(auth)
 
@@ -26,7 +31,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user.update_tracked_fields!(request)
 
     if ios_oauth?
-      redirect_to ios_callback_url(@user)
+      redirect_to ios_callback_url(@user), allow_other_host: true
     else
       flash[:notice] = I18n.t("devise.omniauth_callbacks.success", kind: kind)
       redirect_to home_path
@@ -34,7 +39,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def ios_oauth?
-    request.env.dig("omniauth.params", "ios") == "true"
+    params[:state] == "ios"
   end
 
   def ios_callback_url(user)
