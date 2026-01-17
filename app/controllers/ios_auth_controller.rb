@@ -4,7 +4,7 @@ class IosAuthController < ApplicationController
   skip_before_action :authenticate_user!, only: :create
   skip_before_action :reject_banned_user, only: :create
   # allow_browser でリダイレクトされるのを防ぐ (Rails 8 default)
-  skip_before_action :allow_browser, only: :create
+  skip_allow_browser only: :create
 
   def create
     user = User.find_signed!(
