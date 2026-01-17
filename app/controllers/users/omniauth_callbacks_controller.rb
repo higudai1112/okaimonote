@@ -33,11 +33,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
-  # ===== helpers =====
-
-  # 「iOSからOAuthを開始したかどうか」だけを見る
   def ios_oauth?
-    params[:ios] == "true"
+    request.env["omniauth.params"]["ios"] == "true"
   end
 
   def ios_callback_url(user)
