@@ -34,7 +34,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def ios_oauth?
-    request.env["omniauth.params"]["ios"] == "true"
+    request.env.dig("omniauth.params", "ios") == "true"
   end
 
   def ios_callback_url(user)
