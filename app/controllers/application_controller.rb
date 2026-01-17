@@ -37,4 +37,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :nickname, :avatar, :prefecture ])
     devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname, :avatar, :prefecture ])
   end
+
+  def api_request?
+    request.path.start_with?("/ios/")
+  end
 end
