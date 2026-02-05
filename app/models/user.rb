@@ -36,27 +36,45 @@ class User < ApplicationRecord
     return user if user
 
     # ② email がある場合は既存ユーザーを紐付ける
-    if auth.info.email.present?
-      existing_user = find_by(email: auth.info.email)
+    # Appleの場合、2回目以降は auth.info.email が取れない場合があるが
+    # id_token には含まれていることが多い。
+    # ここでは auth.info.email を信じる。
+    email = auth.info.email
+    if email.present?
+      existing_user = find_by(email: email)
       if existing_user
         existing_user.update(provider: auth.provider, uid: auth.uid)
         return existing_user
       end
     end
 
-    # ③ email がない場合（LINEで多い）はダミー email を作成
-    email = auth.info.email.presence || "#{auth.provider}_#{auth.uid}@example.com"
+    # ③ email がない場合のフォールバック
+    if email.blank?
+      email = "#{auth.provider}_#{auth.uid}@example.com"
+    end
 
-    # ④ 新規作成
+    # ④ 名前決定ロジック（Apple特化）
+    # Appleは初回のみ user ハッシュ（name含む）を送ってくる仕様
+    name = auth.info.name
+    if auth.provider == "apple" && name.blank?
+      # nameが取れない場合はデフォルト名
+      name = "Apple User"
+    end
+
+    # 共通フォールバック & 文字数制限対応 (20文字以内)
+    nickname = name.presence || "ユーザー#{SecureRandom.hex(2)}"
+    nickname = nickname[0, 20] # 20文字でカット
+
+    # ⑤ 新規作成
     user = create!(
       provider: auth.provider,
       uid: auth.uid,
       email: email,
       password: Devise.friendly_token[0, 20],
-      nickname: auth.info.name.presence || "ユーザー#{SecureRandom.hex(2)}"
+      nickname: nickname
     )
 
-    # ⑤ プロフィール画像を provider 不問で保存
+    # ⑥ プロフィール画像を provider 不問で保存
     if auth.info.image.present?
       begin
         user.avatar.attach(
