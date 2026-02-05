@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
        :recoverable, :rememberable, :validatable,
        :trackable,
-       :omniauthable, omniauth_providers: %i[google_oauth2 line]
+       :omniauthable, omniauth_providers: %i[google_oauth2 line apple]
 
   validates :nickname, presence: true, length: { maximum: 20 }
   has_one_attached :avatar
@@ -53,7 +53,7 @@ class User < ApplicationRecord
       uid: auth.uid,
       email: email,
       password: Devise.friendly_token[0, 20],
-      nickname: auth.info.name.presence || "ユーザー"
+      nickname: auth.info.name.presence || "ユーザー#{SecureRandom.hex(2)}"
     )
 
     # ⑤ プロフィール画像を provider 不問で保存

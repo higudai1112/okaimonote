@@ -129,6 +129,25 @@
       <% end %>
     </div>
 
+    <!-- Apple登録ボタン -->
+    <div class="mt-3">
+      <%= button_to user_apple_omniauth_authorize_path,
+            method: :post,
+            data: { turbo: false },
+            class: "w-full flex items-center justify-center gap-3
+                    bg-black hover:bg-gray-900 text-white
+                    font-semibold py-2.5 rounded-full
+                    shadow-sm transition-all active:scale-[0.98]" do %>
+
+        <!-- Apple 公式ロゴ -->
+        <%= image_tag "apple_logo.png",
+              alt: "Apple",
+              class: "w-5 h-5" %>
+
+        <span>Appleで登録</span>
+      <% end %>
+    </div>
+
     <!-- リンク -->
     <div class="mt-6 text-center">
       <%= render "devise/shared/links" %>
