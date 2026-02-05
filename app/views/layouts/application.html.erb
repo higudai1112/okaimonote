@@ -55,7 +55,7 @@
     <meta name="twitter:site" content="@okaimonoto_team"> <!-- 任意 -->
   </head>
 
-  <body class="min-h-screen bg-base text-gray-800 flex flex-col">
+  <body class="min-h-screen bg-base text-gray-800 flex flex-col <%= 'ios-app' if ios_app? %>">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe

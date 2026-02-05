@@ -86,4 +86,8 @@
   .delay-300 {
     animation-delay: 0.3s;
   }
+
+  body.ios-app footer {
+    display: none !important;
+  }
 }
