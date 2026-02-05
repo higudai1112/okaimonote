@@ -63,6 +63,8 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "okaimonote.com", protocol: "https" }
 
+  config.action_dispatch.cookies_same_site_protection = :none
+
   config.action_mailer.default_options = {
   from: "おかいもノート <noreply@mail.okaimonote.com>"
   }
