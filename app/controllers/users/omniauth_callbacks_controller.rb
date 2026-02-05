@@ -1,5 +1,7 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token, only: [ :apple ]
+  # Invoke skip_before_action for all providers that might use POST
+  skip_before_action :verify_authenticity_token, only: [ :google_oauth2, :line, :apple ]
+
   def google_oauth2
     handle_auth("Google")
   end
@@ -19,57 +21,48 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def handle_auth(kind)
-    Rails.logger.error "=== OMNIAUTH CALLBACK DEBUG ==="
-    Rails.logger.error "omniauth.params: #{request.env['omniauth.params'].inspect}"
-    Rails.logger.error "omniauth.auth: #{request.env['omniauth.auth'].present?}"
-    Rails.logger.error "request.fullpath: #{request.fullpath}"
-
     auth = request.env["omniauth.auth"]
 
-    # DEBUG: Appleのauth情報を詳細に出力
-    if kind == "Apple"
-      Rails.logger.error "=== APPLE AUTH INFO DEBUG ==="
-      Rails.logger.error "auth.uid: #{auth.uid}"
-      Rails.logger.error "auth.info.email: #{auth.info.email}"
-      Rails.logger.error "auth.info.name: #{auth.info.name}"
-      Rails.logger.error "auth.extra.raw_info: #{auth.extra&.raw_info.inspect}"
-    end
-
+    # 認証情報からユーザーを検索・作成
     begin
       @user = User.from_omniauth(auth)
     rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "=== OMNIAUTH SAVE ERROR ==="
-      Rails.logger.error "Error: #{e.message}"
-      Rails.logger.error "Validation Errors: #{e.record.errors.full_messages}"
+      Rails.logger.error "=== OMNIAUTH USER ERROR ==="
+      Rails.logger.error e.message
       redirect_to new_user_session_path, alert: "ログインエラー: #{e.record.errors.full_messages.join(', ')}"
       return
     end
 
     unless @user.persisted?
-      flash[:alert] = "#{kind}ログインに失敗しました。"
-      return redirect_to new_user_session_path
+      redirect_to new_user_session_path, alert: "#{kind}ログインに失敗しました。"
+      return
     end
 
     sign_in @user
     @user.update_tracked_fields!(request)
 
     if ios_oauth?
+      # iOS App Flow: Redirect to custom scheme (cookies handle the session)
       redirect_to ios_callback_url(@user), allow_other_host: true
     else
+      # Web Flow: Standard redirect
       flash[:notice] = I18n.t("devise.omniauth_callbacks.success", kind: kind)
-      redirect_to home_path
+      redirect_to after_sign_in_path_for(@user)
     end
   end
 
   def ios_oauth?
-    params[:state] == "ios"
+    # Detect if 'state=ios' was passed in the initial request (stored in omniauth.params)
+    # OR if the provider returned it in params[:state] explicitly.
+    # Note: OmniAuth usually generates a random state, so checking omniauth.params is more reliable
+    # if the client appended ?state=ios to the authorization URL.
+    (request.env["omniauth.params"].present? && request.env["omniauth.params"]["state"] == "ios") ||
+      params[:state] == "ios"
   end
 
   def ios_callback_url(user)
-    token = user.signed_id(
-      purpose: :ios_login,
-      expires_in: 10.minutes
-    )
-    "okaimonote://auth/callback?token=#{token}"
+    # The session is already set by sign_in @user.
+    # We simply redirect back to the app, which shares cookies with ASWebAuthenticationSession.
+    "okaimonote://auth/callback"
   end
 end

@@ -41,4 +41,9 @@ class ApplicationController < ActionController::Base
   def api_request?
     request.path.start_with?("/ios/")
   end
+
+  def ios_app?
+    request.user_agent.to_s.include?("okaimonote-ios")
+  end
+  helper_method :ios_app?
 end
