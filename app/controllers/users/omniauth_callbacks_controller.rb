@@ -7,6 +7,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     handle_auth("LINE")
   end
 
+  def apple
+    handle_auth("Apple")
+  end
+
   def failure
     redirect_to new_user_session_path, alert: "ログインがキャンセルされました。"
   end

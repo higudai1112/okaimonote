@@ -43,6 +43,15 @@ Devise.setup do |config|
     scope: "profile openid email", # emailが不要なら 'openid profile'
     callback_url: "https://www.okaimonote.com/users/auth/line/callback"
 
+  # Apple認証用（追加）
+  config.omniauth :apple,
+    Rails.application.credentials.dig(:apple, :client_id),
+    {
+      team_id: Rails.application.credentials.dig(:apple, :team_id),
+      key_id: Rails.application.credentials.dig(:apple, :key_id),
+      pem: Rails.application.credentials.dig(:apple, :private_key),
+      scope: "name email"
+    }
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
 
