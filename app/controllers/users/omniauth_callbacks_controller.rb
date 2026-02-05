@@ -25,7 +25,25 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     Rails.logger.error "request.fullpath: #{request.fullpath}"
 
     auth = request.env["omniauth.auth"]
-    @user = User.from_omniauth(auth)
+
+    # DEBUG: Appleのauth情報を詳細に出力
+    if kind == "Apple"
+      Rails.logger.error "=== APPLE AUTH INFO DEBUG ==="
+      Rails.logger.error "auth.uid: #{auth.uid}"
+      Rails.logger.error "auth.info.email: #{auth.info.email}"
+      Rails.logger.error "auth.info.name: #{auth.info.name}"
+      Rails.logger.error "auth.extra.raw_info: #{auth.extra&.raw_info.inspect}"
+    end
+
+    begin
+      @user = User.from_omniauth(auth)
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error "=== OMNIAUTH SAVE ERROR ==="
+      Rails.logger.error "Error: #{e.message}"
+      Rails.logger.error "Validation Errors: #{e.record.errors.full_messages}"
+      redirect_to new_user_session_path, alert: "ログインエラー: #{e.record.errors.full_messages.join(', ')}"
+      return
+    end
 
     unless @user.persisted?
       flash[:alert] = "#{kind}ログインに失敗しました。"
