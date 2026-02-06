@@ -3,7 +3,29 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [ :google_oauth2, :line, :apple ]
 
   def google_oauth2
-    handle_auth("Google")
+    @user = User.from_omniauth(request.env["omniauth.auth"])
+
+    if @user.persisted?
+      # iOS 判定（params と omniauth.params の両対応）
+      state_param = params[:state] || request.env.dig("omniauth.params", "state")
+
+      if state_param == "ios"
+        # --- iOS Flow ---
+        sign_in @user, event: :authentication
+
+        # ASWebAuthenticationSession を閉じるための Deep Link
+        redirect_to "okaimonote://auth/callback", allow_other_host: true
+      else
+        # --- Web Flow (従来通り) ---
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: "Google") if is_navigational_format?
+      end
+    else
+      session["devise.google_data"] =
+        request.env["omniauth.auth"].except(:extra)
+
+      redirect_to new_user_registration_url
+    end
   end
 
   def line
