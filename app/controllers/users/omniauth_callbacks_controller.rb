@@ -32,8 +32,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         # --- iOS Flow ---
         sign_in @user, event: :authentication
 
-        # ASWebAuthenticationSession を閉じるための Deep Link
-        redirect_to "okaimonote://auth/callback", allow_other_host: true
+        # トークン生成（5分間有効）
+        token = @user.signed_id(purpose: :ios_login, expires_in: 5.minutes)
+
+        # ASWebAuthenticationSession を閉じるための Deep Link にトークンを付与
+        redirect_to "okaimonote://auth/callback?token=#{token}", allow_other_host: true
       else
         # --- Web Flow (従来通り) ---
         sign_in_and_redirect @user, event: :authentication
