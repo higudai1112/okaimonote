@@ -27,8 +27,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if @user.persisted?
       # iOS 判定（params と omniauth.params の両対応）
       state_param = params[:state] || request.env.dig("omniauth.params", "state")
+      ios_param   = params[:ios]   || request.env.dig("omniauth.params", "ios")
 
-      if state_param == "ios"
+      if state_param == "ios" || ios_param == "true"
         # --- iOS Flow ---
         sign_in @user, event: :authentication
 
