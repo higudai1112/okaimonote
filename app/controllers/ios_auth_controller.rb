@@ -14,7 +14,7 @@ class IosAuthController < ApplicationController
     sign_in(user)
 
     # Cookie はレスポンスヘッダに自動で含まれる
-    render json: { status: "ok" }, status: :ok
+    redirect_to root_path
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     render json: { error: "invalid or expired token" }, status: :unauthorized
   end
