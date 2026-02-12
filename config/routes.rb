@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root to: "pages#index"
+
+  get "app_entry", to: "pages#app_entry", as: :app_entry
   # ユーザー認証用
   devise_for :users, controllers: {
     registrations: "users/registrations",
