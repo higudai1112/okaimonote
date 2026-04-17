@@ -1,0 +1,25 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "e5b2dea690d154d34f787005fa9cd41a63462381a2c3046ab89ce4c67617f5e1",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/users/omniauth_callbacks_controller.rb",
+      "line": 40,
+      "code": "redirect_to(\"okaimonote://auth/callback?token=#{...}\", :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Users::OmniauthCallbacksController",
+        "method": "handle_auth"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "note": "iOS Deep Link へのリダイレクト。URLスキームは固定（okaimonote://）、トークンはサーバー生成の signed_id のため安全。allow_other_host: true は iOS ASWebAuthenticationSession のコールバックに必要。"
+    }
+  ],
+  "updated": "2026-04-18 01:11:00 +0900",
+  "brakeman_version": "8.0.2"
+}
