@@ -112,6 +112,13 @@ Rails.application.routes.draw do
       get "home", to: "home#index"
       get "home/summary/:product_id", to: "home#summary", as: :home_summary
 
+      # 価格記録
+      resources :price_records, only: [ :create, :update, :destroy ] do
+        collection do
+          get :form_data
+        end
+      end
+
       # 商品
       resources :products, only: [ :index ]
     end

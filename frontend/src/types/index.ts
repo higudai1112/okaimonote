@@ -48,6 +48,13 @@ export type PriceSummary = {
   last_purchased_at: string | null;
 };
 
+/** 価格記録フォームデータ */
+export type PriceRecordFormData = {
+  shops: { id: number; name: string }[];
+  categories: { id: number; name: string }[];
+  products: { id: number; public_id: string; name: string; category_id: number | null }[];
+};
+
 /** 商品 */
 export type Product = {
   id: number;
