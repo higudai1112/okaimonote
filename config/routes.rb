@@ -108,6 +108,10 @@ Rails.application.routes.draw do
       delete "shopping_list/items/purchased",  to: "shopping_list#delete_purchased"
       delete "shopping_list/items/:id",        to: "shopping_list#destroy_item"
 
+      # ホーム（価格登録履歴・価格サマリー）
+      get "home", to: "home#index"
+      get "home/summary/:product_id", to: "home#summary", as: :home_summary
+
       # 商品
       resources :products, only: [ :index ]
     end
