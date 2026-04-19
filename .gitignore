@@ -40,3 +40,7 @@
 
 .DS_Store
 /vendor/bundle
+
+# Next.js フロントエンド
+frontend/.next/
+frontend/node_modules/
