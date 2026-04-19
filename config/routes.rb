@@ -126,6 +126,20 @@ Rails.application.routes.draw do
 
       # 商品
       resources :products, only: [ :index ]
+
+      # ファミリー
+      get    "family",                      to: "family#show"
+      post   "family",                      to: "family#create"
+      patch  "family",                      to: "family#update"
+      delete "family",                      to: "family#destroy"
+      delete "family/leave",                to: "family#leave"
+      patch  "family/transfer_owner",       to: "family#transfer_owner"
+      post   "family/regenerate_invite",    to: "family#regenerate_invite"
+
+      # 招待
+      post "family_invites/apply_code",     to: "family_invites#apply_code"
+      get  "family_invites/:token",         to: "family_invites#show"
+      post "family_invites/:token/join",    to: "family_invites#join"
     end
   end
 

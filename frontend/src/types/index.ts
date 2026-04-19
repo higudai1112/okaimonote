@@ -55,6 +55,29 @@ export type PriceRecordFormData = {
   products: { id: number; public_id: string; name: string; category_id: number | null }[];
 };
 
+/** ファミリーメンバー */
+export type FamilyMember = {
+  id: number;
+  nickname: string | null;
+  family_role: "family_admin" | "family_member";
+};
+
+/** ファミリー情報 */
+export type Family = {
+  id: number;
+  name: string;
+  invite_token: string;
+  members_count: number;
+  members: FamilyMember[];
+};
+
+/** 招待情報（未ログインでも取得可能） */
+export type FamilyInviteInfo = {
+  name: string;
+  members_count: number;
+  remaining_slots: number;
+};
+
 /** 商品 */
 export type Product = {
   id: number;
