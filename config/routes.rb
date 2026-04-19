@@ -119,6 +119,10 @@ Rails.application.routes.draw do
         end
       end
 
+      # カテゴリー・店舗
+      resources :categories, only: [ :index, :create, :update, :destroy ]
+      resources :shops, only: [ :index, :create, :update, :destroy ]
+
       # 商品
       resources :products, only: [ :index ]
     end
