@@ -31,6 +31,7 @@ gem "ransack", "4.3.0" # 検索
 gem "kaminari", "1.2.2" # ページネーション用
 gem "bootstrap5-kaminari-views"
 gem "rack-attack" # 不正アクセス対策
+gem "rack-cors"   # Next.jsフロントエンドからのCORSリクエストを許可
 gem "addressable" # URL生成を安定化（OGPで絶対URLを扱うため）
 gem "omniauth-google-oauth2" # google認証用
 gem "omniauth-rails_csrf_protection" # 認証系用

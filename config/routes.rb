@@ -95,6 +95,24 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Next.jsフロントエンド向けJSON API
+  namespace :api do
+    namespace :v1 do
+      get "me", to: "auth#me"
+
+      # ショッピングリスト
+      # ショッピングリスト (singular resource: /api/v1/shopping_list)
+      get    "shopping_list",                  to: "shopping_list#show"
+      post   "shopping_list/items",            to: "shopping_list#create_item"
+      patch  "shopping_list/items/:id",        to: "shopping_list#update_item"
+      delete "shopping_list/items/purchased",  to: "shopping_list#delete_purchased"
+      delete "shopping_list/items/:id",        to: "shopping_list#destroy_item"
+
+      # 商品
+      resources :products, only: [ :index ]
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
