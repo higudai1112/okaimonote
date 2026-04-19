@@ -31,5 +31,10 @@ FactoryBot.define do
     trait :family_admin do
       family_role { :family_admin }
     end
+
+    # サービス管理者（role: admin）
+    trait :admin do
+      role { :admin }
+    end
   end
 end

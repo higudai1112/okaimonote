@@ -86,3 +86,82 @@ export type Product = {
   memo: string | null;
   category: { id: number; name: string } | null;
 };
+
+/** 管理画面: ユーザー */
+export type AdminUser = {
+  id: number;
+  email: string;
+  nickname: string | null;
+  role: string;
+  status: string;
+  banned_reason: string | null;
+  family_role: string;
+  prefecture: string | null;
+  admin_memo: string | null;
+  last_sign_in_at: string | null;
+  created_at: string;
+  recent_price_records?: {
+    id: number;
+    price: number;
+    product_name: string | null;
+    shop_name: string | null;
+    purchased_at: string;
+  }[];
+  recent_products?: { id: number; name: string }[];
+};
+
+/** 管理画面: お問い合わせ */
+export type AdminContact = {
+  id: number;
+  nickname: string;
+  email: string;
+  body: string;
+  status: "unread" | "pending" | "resolved";
+  admin_memo: string | null;
+  created_at: string;
+};
+
+/** 管理画面: ファミリー */
+export type AdminFamily = {
+  id: number;
+  name: string;
+  invite_token?: string;
+  members_count: number;
+  created_at: string;
+  members?: {
+    id: number;
+    nickname: string | null;
+    email: string;
+    family_role: string;
+    created_at: string;
+  }[];
+};
+
+/** 管理画面: ダッシュボード */
+export type AdminDashboard = {
+  new_users_today: number;
+  new_users_yesterday: number;
+  new_users_diff: number;
+  active_users: number;
+  new_users_30d: number;
+  new_users_30d_diff: number;
+  total_families: number;
+  unresolved_contacts: number;
+  top_products: { name: string; records_count: number }[];
+  top_shops: { name: string; records_count: number }[];
+};
+
+/** 管理画面: サービス概要 */
+export type AdminServices = {
+  users_count: number;
+  products_count: number;
+  price_records_count: number;
+  shops_count: number;
+  families_count: number;
+  active_users_count: number;
+  avg_records_per_user: number;
+  rails_version: string;
+  ruby_version: string;
+  env: string;
+  db_connected: boolean;
+};

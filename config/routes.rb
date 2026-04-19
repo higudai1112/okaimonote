@@ -140,6 +140,28 @@ Rails.application.routes.draw do
       post "family_invites/apply_code",     to: "family_invites#apply_code"
       get  "family_invites/:token",         to: "family_invites#show"
       post "family_invites/:token/join",    to: "family_invites#join"
+
+      # 管理画面API（管理者のみ）
+      namespace :admin do
+        get "dashboard", to: "dashboards#index"
+        get  "users",       to: "users#index"
+        get  "users/:id",   to: "users#show",   as: :user
+        patch "users/:id",  to: "users#update"
+        patch "users/:id/ban",   to: "users#ban",   as: :ban_user
+        patch "users/:id/unban", to: "users#unban", as: :unban_user
+        get   "contacts",       to: "contacts#index"
+        get   "contacts/:id",   to: "contacts#show",   as: :contact
+        patch "contacts/:id",   to: "contacts#update"
+        get   "families",       to: "families#index"
+        get   "families/:id",   to: "families#show",   as: :family
+        patch "families/:id/change_admin",              to: "families#change_admin",  as: :change_admin_family
+        delete "families/:id/members/:user_id",         to: "families#remove_member", as: :remove_family_member
+        get  "stats",                        to: "stats#index"
+        get  "stats/autocomplete_products",  to: "stats#autocomplete_products"
+        get  "stats/autocomplete_shops",     to: "stats#autocomplete_shops"
+        get  "services",         to: "services#index"
+        get  "abnormal_prices",  to: "abnormal_prices#index"
+      end
     end
   end
 
