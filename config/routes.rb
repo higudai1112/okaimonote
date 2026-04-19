@@ -98,7 +98,7 @@ Rails.application.routes.draw do
   # Next.jsフロントエンド向けJSON API
   namespace :api do
     namespace :v1 do
-      get  "me",      to: "auth#me"
+      get "me", to: "auth#me"
       patch "profile", to: "profile#update"
 
       # ショッピングリスト
