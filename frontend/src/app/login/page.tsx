@@ -52,6 +52,12 @@ export default function LoginPage() {
           >
             <span>LINE でログイン</span>
           </a>
+          <a
+            href={`${API_BASE}/users/auth/apple`}
+            className="flex items-center justify-center gap-3 w-full bg-black hover:bg-gray-900 rounded-xl py-3 px-4 text-white font-semibold transition shadow-sm"
+          >
+            <span>Apple でログイン</span>
+          </a>
         </div>
 
         {/* メール/パスワードログイン（fetch で JSON API に送信） */}
