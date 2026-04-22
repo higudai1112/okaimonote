@@ -81,6 +81,7 @@ Rails.application.configure do
 
   config.hosts << "okaimonote.com"
   config.hosts << "www.okaimonote.com"
+  config.hosts << "api.okaimonote.com"
   config.hosts << "okaimonote.onrender.com"
 
   config.active_storage.service = :amazon

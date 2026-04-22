@@ -7,12 +7,14 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def after_sign_in_path_for(resource)
-    stored_location_for(resource) || home_path
+  def after_sign_in_path_for(_resource)
+    # カスタムドメイン対応: ログイン後はフロントエンドのホーム画面へ
+    "#{ENV.fetch('FRONTEND_URL', 'https://www.okaimonote.com')}/home"
   end
 
-  def after_sign_out_path_for(resource)
-    root_path
+  def after_sign_out_path_for(_resource)
+    # カスタムドメイン対応: ログアウト後はフロントエンドのログイン画面へ
+    "#{ENV.fetch('FRONTEND_URL', 'https://www.okaimonote.com')}/login"
   end
 
   # ログイン不要の公開ページを許可する

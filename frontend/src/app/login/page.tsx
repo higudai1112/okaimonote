@@ -1,9 +1,36 @@
 "use client";
 
-/** ログインページ。認証処理はすべて Rails（Devise）が担当する */
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  /** メール/パスワードでログイン */
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+    try {
+      await apiFetch("/api/v1/sessions", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      router.push("/home");
+    } catch {
+      setError("メールアドレスまたはパスワードが正しくありません");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow border border-orange-100 p-8">
@@ -27,19 +54,21 @@ export default function LoginPage() {
           </a>
         </div>
 
-        {/* メール/パスワード ログインは Rails の form に直接送信 */}
-        <form
-          action={`${API_BASE}/users/sign_in`}
-          method="post"
-          className="space-y-4"
-        >
+        {/* メール/パスワードログイン（fetch で JSON API に送信） */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <p className="text-sm text-red-500 text-center bg-red-50 rounded-lg py-2">
+              {error}
+            </p>
+          )}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               メールアドレス
             </label>
             <input
               type="email"
-              name="user[email]"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
               placeholder="example@mail.com"
@@ -51,16 +80,18 @@ export default function LoginPage() {
             </label>
             <input
               type="password"
-              name="user[password]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-full shadow-md transition"
+            disabled={isSubmitting}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-2.5 rounded-full shadow-md transition"
           >
-            ログイン
+            {isSubmitting ? "ログイン中..." : "ログイン"}
           </button>
         </form>
 
