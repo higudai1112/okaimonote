@@ -15,7 +15,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 py-6 px-4 sm:px-6 md:px-10">
+    <div className="min-h-screen bg-orange-50 py-6 pb-24 px-4 sm:px-6 md:px-10">
       <div className="max-w-xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-orange-500">🛒 商品管理</h1>

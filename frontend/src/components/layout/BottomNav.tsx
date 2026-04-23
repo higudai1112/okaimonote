@@ -13,7 +13,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/home", label: "ホーム", icon: "🏠" },
-  { href: "/lists", label: "登録", icon: "📋" },
+  { href: "/products", label: "商品", icon: "📋" },
   { href: "/price_records/new", label: "追加", icon: "➕" },
   { href: "/shopping_list", label: "カート", icon: "🛒" },
   { href: "/settings", label: "設定", icon: "⚙️" },

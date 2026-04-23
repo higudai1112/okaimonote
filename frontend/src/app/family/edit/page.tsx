@@ -39,7 +39,7 @@ export default function FamilyEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 py-10 px-4">
+    <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow border border-orange-100 p-8">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
           グループ名を編集
