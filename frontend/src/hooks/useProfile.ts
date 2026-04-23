@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiFetchFormData } from "@/lib/api";
 import type { User } from "@/types";
 
 /** プロフィール情報の取得・更新フック（/api/v1/me + PATCH /api/v1/profile） */
@@ -21,10 +21,19 @@ export function useProfile() {
     mutate(updated, false);
   }
 
+  async function uploadAvatar(file: File) {
+    const formData = new FormData();
+    formData.append("user[avatar]", file);
+    const updated = await apiFetchFormData<User>("/api/v1/profile", formData);
+    mutate(updated, false);
+  }
+
   return {
     user: data,
     isLoading,
     error,
     updateProfile,
+    uploadAvatar,
+    mutate,
   };
 }

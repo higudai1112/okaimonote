@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Image from "next/image";
 import { useProfile } from "@/hooks/useProfile";
+import { useFlash } from "@/contexts/FlashContext";
 
 const PREFECTURES = [
   "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
@@ -14,32 +16,50 @@ const PREFECTURES = [
 ];
 
 export default function ProfilePage() {
-  const { user, isLoading, updateProfile } = useProfile();
+  const { user, isLoading, updateProfile, uploadAvatar } = useProfile();
+  const { flash } = useFlash();
   const [editing, setEditing] = useState(false);
   const [nickname, setNickname] = useState("");
   const [prefecture, setPrefecture] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function startEdit() {
     setNickname(user?.nickname ?? "");
     setPrefecture(user?.prefecture ?? "");
+    setAvatarPreview(null);
     setEditing(true);
-    setSaved(false);
   }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await updateProfile({
-        nickname: nickname.trim(),
-        prefecture: prefecture || null,
-      });
+      await updateProfile({ nickname: nickname.trim(), prefecture: prefecture || null });
       setEditing(false);
-      setSaved(true);
+      flash("notice", "プロフィールを更新しました");
+    } catch {
+      flash("alert", "更新に失敗しました");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // リアルタイムプレビュー
+    const reader = new FileReader();
+    reader.onload = (ev) => setAvatarPreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+    // アップロード
+    try {
+      await uploadAvatar(file);
+      flash("notice", "アバター画像を更新しました");
+    } catch {
+      flash("alert", "画像のアップロードに失敗しました");
+      setAvatarPreview(null);
     }
   }
 
@@ -51,18 +71,46 @@ export default function ProfilePage() {
     );
   }
 
+  const avatarSrc = avatarPreview ?? user?.avatar_url;
+
   return (
-    <div className="min-h-screen bg-orange-50 py-10 px-4">
+    <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow border border-orange-100 p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
           👤 プロフィール設定
         </h1>
 
-        {saved && (
-          <p className="mb-4 text-center text-green-600 text-sm font-semibold">
-            プロフィールを更新しました
-          </p>
-        )}
+        {/* アバター画像 */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden bg-orange-100 border-2 border-orange-200 mb-3">
+            {avatarSrc ? (
+              <Image
+                src={avatarSrc}
+                alt="アバター"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-4xl">
+                👤
+              </div>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="text-sm text-orange-500 hover:text-orange-600 font-semibold transition"
+          >
+            画像を変更
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
+        </div>
 
         {editing ? (
           <form onSubmit={handleSave} className="space-y-5">

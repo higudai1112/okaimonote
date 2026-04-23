@@ -21,7 +21,7 @@ module Api
       private
 
       def profile_params
-        params.require(:user).permit(:nickname, :prefecture)
+        params.require(:user).permit(:nickname, :prefecture, :avatar)
       end
     end
   end
