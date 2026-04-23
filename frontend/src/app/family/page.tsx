@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useFamily } from "@/hooks/useFamily";
+import { useFlash } from "@/contexts/FlashContext";
+
+// QRコードは大きいので dynamic import で遅延読み込み
+const QRCodeSVG = dynamic(
+  () => import("qrcode.react").then((m) => m.QRCodeSVG),
+  { ssr: false }
+);
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -13,11 +21,12 @@ export default function FamilyPage() {
   const { user, isLoading: authLoading } = useAuth();
   const { family, isLoading, destroyFamily, leaveFamily, transferOwner, regenerateInvite } =
     useFamily();
+  const { flash } = useFlash();
 
   const [transferTargetId, setTransferTargetId] = useState<number | null>(null);
   const [showInviteUrl, setShowInviteUrl] = useState(false);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showQr, setShowQr] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   if (authLoading || isLoading) {
     return (
@@ -29,7 +38,7 @@ export default function FamilyPage() {
 
   if (!family) {
     return (
-      <div className="min-h-screen bg-orange-50 py-10 px-4">
+      <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
         <div className="max-w-md mx-auto text-center">
           <p className="text-gray-500 mb-6">ファミリーに所属していません</p>
           <Link
@@ -46,13 +55,24 @@ export default function FamilyPage() {
   const isAdmin = user?.family_role === "family_admin";
   const inviteUrl = `${API_BASE}/family_invites/${family.invite_token}`;
 
+  async function handleCopyUrl() {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      setCopied(true);
+      flash("notice", "招待リンクをコピーしました");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      flash("alert", "コピーに失敗しました");
+    }
+  }
+
   async function handleRegenerate() {
     try {
       await regenerateInvite();
-      setActionMessage("招待リンクを再発行しました");
+      flash("notice", "招待リンクを再発行しました");
       setShowInviteUrl(true);
     } catch {
-      setErrorMessage("再発行できませんでした");
+      flash("alert", "再発行できませんでした");
     }
   }
 
@@ -61,10 +81,10 @@ export default function FamilyPage() {
     if (!confirm("管理者権限を譲渡しますか？")) return;
     try {
       await transferOwner(transferTargetId);
-      setActionMessage("管理者権限を譲渡しました");
+      flash("notice", "管理者権限を譲渡しました");
       setTransferTargetId(null);
     } catch {
-      setErrorMessage("権限を譲渡できませんでした");
+      flash("alert", "権限を譲渡できませんでした");
     }
   }
 
@@ -72,9 +92,10 @@ export default function FamilyPage() {
     if (!confirm("ファミリーから脱退しますか？")) return;
     try {
       await leaveFamily();
+      flash("notice", "ファミリーから脱退しました");
       router.push("/settings");
     } catch {
-      setErrorMessage("脱退できませんでした");
+      flash("alert", "脱退できませんでした");
     }
   }
 
@@ -82,25 +103,19 @@ export default function FamilyPage() {
     if (!confirm("ファミリーを解散しますか？この操作は取り消せません。")) return;
     try {
       await destroyFamily();
+      flash("notice", "ファミリーを解散しました");
       router.push("/settings");
     } catch {
-      setErrorMessage("解散できませんでした");
+      flash("alert", "解散できませんでした");
     }
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 py-10 px-4">
+    <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
       <div className="max-w-md mx-auto space-y-4">
         <h1 className="text-2xl font-bold text-center text-orange-500 mb-2">
           👨‍👩‍👧 ファミリー設定
         </h1>
-
-        {actionMessage && (
-          <p className="text-center text-green-600 text-sm font-semibold">{actionMessage}</p>
-        )}
-        {errorMessage && (
-          <p className="text-center text-red-500 text-sm font-semibold">{errorMessage}</p>
-        )}
 
         {/* ファミリー情報 */}
         <div className="bg-white rounded-2xl shadow border border-orange-100 p-5">
@@ -172,26 +187,55 @@ export default function FamilyPage() {
           </div>
         )}
 
-        {/* 招待リンク */}
+        {/* 招待リンク（管理者のみ） */}
         {isAdmin && (
-          <div className="bg-white rounded-2xl shadow border border-orange-100 p-5">
-            <p className="text-sm font-semibold text-gray-600 mb-3">招待リンク</p>
-            <button
-              type="button"
-              onClick={() => setShowInviteUrl(!showInviteUrl)}
-              className="text-sm text-orange-500 hover:underline mb-2 block"
-            >
-              {showInviteUrl ? "非表示" : "招待リンクを表示"}
-            </button>
-            {showInviteUrl && (
-              <div className="bg-gray-50 rounded-xl p-3 break-all text-xs text-gray-600 mb-3">
-                {inviteUrl}
-              </div>
-            )}
+          <div className="bg-white rounded-2xl shadow border border-orange-100 p-5 space-y-3">
+            <p className="text-sm font-semibold text-gray-600">招待リンク</p>
+
+            {/* リンク表示・コピーボタン */}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowInviteUrl((v) => !v)}
+                className="flex-1 text-sm text-orange-500 border border-orange-200 rounded-xl px-3 py-2 hover:bg-orange-50 transition text-left truncate"
+              >
+                {showInviteUrl ? inviteUrl : "招待リンクを表示"}
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyUrl}
+                className={`px-3 py-2 rounded-xl text-sm font-semibold transition border ${
+                  copied
+                    ? "bg-green-50 border-green-300 text-green-600"
+                    : "bg-orange-500 border-orange-500 text-white hover:bg-orange-600"
+                }`}
+              >
+                {copied ? "✓ コピー済" : "コピー"}
+              </button>
+            </div>
+
+            {/* QRコード（折りたたみ式） */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowQr((v) => !v)}
+                className="text-sm text-orange-500 hover:underline"
+              >
+                {showQr ? "▲ QRコードを閉じる" : "▼ QRコードを表示"}
+              </button>
+              {showQr && (
+                <div className="mt-3 flex justify-center">
+                  <div className="bg-white p-3 border border-orange-100 rounded-2xl shadow-sm inline-block">
+                    <QRCodeSVG value={inviteUrl} size={180} />
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button
               type="button"
               onClick={handleRegenerate}
-              className="text-xs text-gray-500 hover:underline"
+              className="text-xs text-gray-400 hover:text-gray-600 transition"
             >
               招待リンクを再発行する
             </button>
