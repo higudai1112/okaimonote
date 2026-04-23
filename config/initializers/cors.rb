@@ -8,6 +8,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins(
       "http://localhost:3001",
       "http://127.0.0.1:3001",
+      "http://localhost:3003",
+      "http://127.0.0.1:3003",
       "https://okaimonote.vercel.app",
       ENV.fetch("FRONTEND_URL", "https://www.okaimonote.com")
     )
