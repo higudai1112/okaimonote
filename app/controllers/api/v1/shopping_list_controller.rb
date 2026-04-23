@@ -4,6 +4,24 @@ module Api
       before_action :set_shopping_list
       before_action :set_item, only: [ :update_item, :destroy_item ]
 
+      # GET /api/v1/shopping_list/autocomplete?q=xxx
+      # 商品名・過去のショッピングアイテム名から候補を返す
+      def autocomplete
+        q = params[:q].to_s.strip
+        return render json: [] if q.blank?
+
+        owner = current_user.family_owner
+
+        # 商品名から候補を取得（部分一致・最大10件）
+        product_names = owner.products
+                             .where("name ILIKE ?", "%#{q}%")
+                             .order(:name)
+                             .limit(10)
+                             .pluck(:name)
+
+        render json: product_names.uniq
+      end
+
       # GET /api/v1/shopping_list
       def show
         render json: shopping_list_json(@shopping_list)
