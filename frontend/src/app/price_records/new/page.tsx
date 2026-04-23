@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePriceRecordForm } from "@/hooks/usePriceRecordForm";
+import { useFlash } from "@/contexts/FlashContext";
 
 export default function NewPriceRecordPage() {
   const router = useRouter();
   const { formData, isLoading, createPriceRecord } = usePriceRecordForm();
+  const { flash } = useFlash();
 
   const [productId, setProductId] = useState<number | null>(null);
   const [productName, setProductName] = useState("");
@@ -57,8 +59,10 @@ export default function NewPriceRecordPage() {
         purchased_at: purchasedAt,
         memo: memo.trim() || null,
       });
+      flash("notice", "価格を登録しました");
       router.push("/home");
     } catch {
+      flash("alert", "登録に失敗しました");
       setErrors(["登録に失敗しました"]);
     } finally {
       setSubmitting(false);
