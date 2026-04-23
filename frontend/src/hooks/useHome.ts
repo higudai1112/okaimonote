@@ -6,10 +6,26 @@ type HomeData = {
   price_records: PriceRecord[];
 };
 
+export type HomeSearchParams = {
+  product_name_cont?: string;
+  product_category_id_eq?: string;
+  shop_id_eq?: string;
+};
+
 /** ホーム画面の価格登録履歴を取得するフック */
-export function useHome() {
+export function useHome(searchParams?: HomeSearchParams) {
+  // 検索パラメータをクエリ文字列に変換
+  const query = searchParams
+    ? Object.entries(searchParams)
+        .filter(([, v]) => v !== "" && v != null)
+        .map(([k, v]) => `q[${k}]=${encodeURIComponent(v!)}`)
+        .join("&")
+    : "";
+
+  const url = query ? `/api/v1/home?${query}` : "/api/v1/home";
+
   const { data, error, isLoading } = useSWR<HomeData>(
-    "/api/v1/home",
+    url,
     (path: string) => apiFetch<HomeData>(path),
     { shouldRetryOnError: false }
   );

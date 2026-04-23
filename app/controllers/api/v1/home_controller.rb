@@ -2,14 +2,18 @@ module Api
   module V1
     class HomeController < BaseController
       # GET /api/v1/home
-      # 最新5件の価格登録履歴と直近商品のサマリーを返す
+      # 価格登録履歴を返す。q パラメータで Ransack 検索・フィルター対応
       def index
         owner = current_user.family_owner
 
-        price_records = owner.price_records
-                             .includes(:product, :shop)
-                             .order(created_at: :desc)
-                             .limit(5)
+        # Ransack で商品名・カテゴリ・店舗によるフィルタリング
+        q = owner.price_records
+                 .includes(:product, :shop)
+                 .ransack(ransack_params)
+
+        price_records = q.result(distinct: true)
+                         .order(created_at: :desc)
+                         .limit(50)
 
         render json: {
           price_records: price_records.map { |r| price_record_json(r) }
@@ -41,6 +45,17 @@ module Api
       end
 
       private
+
+      # 許可する Ransack パラメータのみ通す
+      def ransack_params
+        return {} unless params[:q].is_a?(ActionController::Parameters)
+
+        params[:q].permit(
+          :product_name_cont,
+          :product_category_id_eq,
+          :shop_id_eq
+        )
+      end
 
       def price_record_json(record)
         {

@@ -22,7 +22,7 @@ services:
     build:
       context: .  # 現在のディレクトリをビルド対象にする
       dockerfile: Dockerfile.dev  # 開発用Dockerfileを指定
-    command: bash -c "bundle install && ./bin/dev"
+    command: bash -c "bundle install && yarn install && bundle exec rails db:create db:migrate && ./bin/dev"
     # アプリ起動時に実行するコマンド
     # - Gemをインストール
     # - `./bin/dev` を実行（Rails + JS/CSSビルドをまとめて起動）
@@ -43,7 +43,7 @@ services:
       - .env
 
     ports:
-      - "3000:3000"  # Railsのポートをホストにバインド（ブラウザでアクセスできる）
+      - "3002:3000"  # Railsのポートをホストにバインド（3000が競合する場合は3002を使用）
 
     depends_on:
       db:
