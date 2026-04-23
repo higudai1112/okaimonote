@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePriceRecordForm } from "@/hooks/usePriceRecordForm";
+import { useFlash } from "@/contexts/FlashContext";
 
 export default function NewPriceRecordPage() {
   const router = useRouter();
   const { formData, isLoading, createPriceRecord } = usePriceRecordForm();
+  const { flash } = useFlash();
 
   const [productId, setProductId] = useState<number | null>(null);
   const [productName, setProductName] = useState("");
@@ -57,8 +59,10 @@ export default function NewPriceRecordPage() {
         purchased_at: purchasedAt,
         memo: memo.trim() || null,
       });
+      flash("notice", "価格を登録しました");
       router.push("/home");
     } catch {
+      flash("alert", "登録に失敗しました");
       setErrors(["登録に失敗しました"]);
     } finally {
       setSubmitting(false);
@@ -74,7 +78,7 @@ export default function NewPriceRecordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 py-6 px-4 sm:px-6 md:px-10">
+    <div className="min-h-screen bg-orange-50 py-6 pb-24 px-4 sm:px-6 md:px-10">
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow p-6 sm:p-8 border border-orange-100">
         <h1 className="text-xl sm:text-2xl font-bold text-center text-orange-500 mb-8">
           🏷 価格登録
