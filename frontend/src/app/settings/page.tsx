@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useFlash } from "@/contexts/FlashContext";
+import { apiFetch } from "@/lib/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
 type NavItem = {
   href: string;
   label: string;
-  external?: boolean;
 };
 
 const NAV_ITEMS: NavItem[] = [
@@ -18,14 +22,29 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/family", label: "👨‍👩‍👧 ファミリー設定" },
 ];
 
-const EXTERNAL_ITEMS: NavItem[] = [
-  { href: `${API_BASE}/terms`, label: "利用規約", external: true },
-  { href: `${API_BASE}/privacy`, label: "プライバシーポリシー", external: true },
-  { href: `${API_BASE}/contact`, label: "お問い合わせ", external: true },
+const EXTERNAL_ITEMS = [
+  { href: `${API_BASE}/terms`, label: "利用規約" },
+  { href: `${API_BASE}/privacy`, label: "プライバシーポリシー" },
+  { href: `${API_BASE}/contact`, label: "お問い合わせ" },
 ];
 
 export default function SettingsPage() {
   const { user, isLoading } = useAuth();
+  const { flash } = useFlash();
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await apiFetch("/api/v1/sessions", { method: "DELETE" });
+      flash("notice", "ログアウトしました");
+      router.replace("/login");
+    } catch {
+      flash("alert", "ログアウトに失敗しました");
+      setLoggingOut(false);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -36,7 +55,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50 py-10 px-4">
+    <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center text-orange-500 mb-8">
           ⚙ 設定
@@ -44,11 +63,26 @@ export default function SettingsPage() {
 
         {/* ユーザー情報 */}
         {user && (
-          <div className="bg-white rounded-2xl shadow border border-orange-100 p-5 mb-6 text-center">
-            <p className="text-lg font-bold text-gray-800">
-              {user.nickname ?? "ゲスト"}
-            </p>
-            <p className="text-sm text-gray-500 mt-1">{user.email}</p>
+          <div className="bg-white rounded-2xl shadow border border-orange-100 p-5 mb-6 flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-orange-100 border-2 border-orange-200 shrink-0 flex items-center justify-center">
+              {user.avatar_url ? (
+                <Image
+                  src={user.avatar_url}
+                  alt="アバター"
+                  width={56}
+                  height={56}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl">👤</span>
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-lg font-bold text-gray-800 truncate">
+                {user.nickname ?? "ゲスト"}
+              </p>
+              <p className="text-sm text-gray-500 truncate">{user.email}</p>
+            </div>
           </div>
         )}
 
@@ -83,13 +117,14 @@ export default function SettingsPage() {
         </div>
 
         {/* ログアウト */}
-        <a
-          href={`${API_BASE}/users/sign_out`}
-          data-method="delete"
-          className="block w-full text-center text-red-500 hover:text-red-600 font-semibold py-3 rounded-2xl border border-red-200 hover:bg-red-50 transition"
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="block w-full text-center text-red-500 hover:text-red-600 disabled:opacity-50 font-semibold py-3 rounded-2xl border border-red-200 hover:bg-red-50 transition"
         >
-          ログアウト
-        </a>
+          {loggingOut ? "ログアウト中..." : "ログアウト"}
+        </button>
       </div>
     </div>
   );
