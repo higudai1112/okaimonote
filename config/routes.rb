@@ -106,6 +106,7 @@ Rails.application.routes.draw do
       # ショッピングリスト
       # ショッピングリスト (singular resource: /api/v1/shopping_list)
       get    "shopping_list",                  to: "shopping_list#show"
+      get    "shopping_list/autocomplete",     to: "shopping_list#autocomplete"
       post   "shopping_list/items",            to: "shopping_list#create_item"
       patch  "shopping_list/items/:id",        to: "shopping_list#update_item"
       delete "shopping_list/items/purchased",  to: "shopping_list#delete_purchased"

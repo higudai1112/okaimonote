@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useShoppingList } from "@/hooks/useShoppingList";
 import { ShoppingItemRow } from "@/components/shopping/ShoppingItemRow";
+import { AutocompleteInput } from "@/components/shopping/AutocompleteInput";
 
 export default function ShoppingListPage() {
   const { list, isLoading, addItem, togglePurchased, deleteItem, deletePurchased } =
@@ -36,7 +37,7 @@ export default function ShoppingListPage() {
   const purchased = list?.items.filter((i) => i.purchased) ?? [];
 
   return (
-    <div className="min-h-screen bg-orange-50 py-2 px-4 sm:px-6 md:px-8">
+    <div className="min-h-screen bg-orange-50 py-2 pb-24 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto bg-white rounded-2xl shadow p-6 md:p-8 border border-orange-100">
         {/* タイトル */}
         <h1 className="text-2xl md:text-3xl font-bold text-center text-orange-500 mb-8">
@@ -45,10 +46,9 @@ export default function ShoppingListPage() {
 
         {/* 追加フォーム */}
         <form onSubmit={handleSubmit} className="space-y-3 mb-8">
-          <input
-            type="text"
+          <AutocompleteInput
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={setName}
             placeholder="商品名を入力（例：にんじん）"
             className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition"
           />
