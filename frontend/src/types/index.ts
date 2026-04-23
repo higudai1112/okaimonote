@@ -85,6 +85,7 @@ export type Product = {
   name: string;
   memo: string | null;
   category: { id: number; name: string } | null;
+  image_url: string | null;
 };
 
 /** 管理画面: ユーザー */
