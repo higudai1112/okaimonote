@@ -9,15 +9,18 @@ const PUBLIC_PATHS = ["/", "/login", "/guide", "/signup", "/forgot-password", "/
 
 /** 認証状態を監視し、未認証時はログイン画面へリダイレクトする共通プロバイダー */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-  const router = useRouter();
   const pathname = usePathname();
+  const router = useRouter();
+  const isPublic = PUBLIC_PATHS.includes(pathname);
+
+  // パブリックページでは /api/v1/me を呼ばない（401 エラーを防ぐ）
+  const { isAuthenticated, isLoading } = useAuth(!isPublic);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !PUBLIC_PATHS.includes(pathname)) {
+    if (!isPublic && !isLoading && !isAuthenticated) {
       router.replace("/login");
     }
-  }, [isAuthenticated, isLoading, pathname, router]);
+  }, [isAuthenticated, isLoading, isPublic, pathname, router]);
 
   if (isLoading) {
     return (

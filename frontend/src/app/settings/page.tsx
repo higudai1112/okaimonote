@@ -37,7 +37,7 @@ export default function SettingsPage() {
     try {
       await apiFetch("/api/v1/sessions", { method: "DELETE" });
       flash("notice", "ログアウトしました");
-      router.replace("/login");
+      router.replace("/");
     } catch {
       flash("alert", "ログアウトに失敗しました");
       setLoggingOut(false);
