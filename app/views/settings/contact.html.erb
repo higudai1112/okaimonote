@@ -43,8 +43,9 @@
     <% end %>
 
     <div class="text-center mt-8">
+      <% frontend_url = ENV.fetch("FRONTEND_URL", "https://www.okaimonote.com") %>
       <%= link_to '戻る',
-            user_signed_in? ? settings_path : root_path,
+            user_signed_in? ? "#{frontend_url}/settings" : frontend_url,
             class: "inline-block bg-gray-200 text-gray-700 px-6 py-2 md:px-8 md:py-3 rounded-full shadow hover:bg-gray-300 transition duration-200 text-base md:text-lg" %>
     </div>
   </div>

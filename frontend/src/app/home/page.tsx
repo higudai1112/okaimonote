@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { useHome, type HomeSearchParams } from "@/hooks/useHome";
 import { usePriceSummary } from "@/hooks/useHome";
@@ -238,6 +238,13 @@ export default function HomePage() {
     null
   );
   const { summary } = usePriceSummary(selectedProductId);
+
+  // 初回データ取得後、先頭レコードの商品を自動選択してサマリーを表示する
+  useEffect(() => {
+    if (selectedProductId === null && priceRecords.length > 0) {
+      setSelectedProductId(priceRecords[0].product_id);
+    }
+  }, [priceRecords, selectedProductId]);
 
   if (isLoading) {
     return (
