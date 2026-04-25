@@ -13,6 +13,8 @@ module Api
         user = User.find_by(email: params[:email])
         if user&.valid_password?(params[:password])
           sign_in(user)
+          # remember_me パラメータが "1" の場合は Devise の記憶機能を有効化
+          user.remember_me! if params[:remember_me] == "1"
           render json: {
             id: user.id,
             email: user.email,
