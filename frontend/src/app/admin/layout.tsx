@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/admin/stats", label: "価格統計" },
   { href: "/admin/abnormal_prices", label: "異常価格" },
   { href: "/admin/services", label: "サービス概要" },
+  { href: "/admin/settings", label: "設定" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

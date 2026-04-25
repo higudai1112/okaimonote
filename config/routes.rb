@@ -104,7 +104,11 @@ Rails.application.routes.draw do
       post   "registrations", to: "registrations#create"
       post   "passwords",   to: "passwords#create"
       patch  "passwords",   to: "passwords#update"
-      patch "profile", to: "profile#update"
+      patch "profile",          to: "profile#update"
+      patch "profile/email",    to: "profile#update_email"
+      patch "profile/password", to: "profile#update_password"
+      delete "account",         to: "account#destroy"
+      post   "contacts",        to: "contacts#create"
 
       # ショッピングリスト
       # ショッピングリスト (singular resource: /api/v1/shopping_list)
@@ -167,6 +171,7 @@ Rails.application.routes.draw do
         get  "stats/autocomplete_shops",     to: "stats#autocomplete_shops"
         get  "services",         to: "services#index"
         get  "abnormal_prices",  to: "abnormal_prices#index"
+        get  "settings",         to: "settings#show"
       end
     end
   end
