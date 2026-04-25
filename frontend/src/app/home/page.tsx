@@ -269,7 +269,7 @@ export default function HomePage() {
 
         {/* 価格登録履歴 */}
         <h2 className="text-xl font-bold text-gray-700 mt-10 mb-5">
-          🕐 価格登録履歴（新着順）
+          🕐 価格登録履歴（新着5件）
         </h2>
         <div className="space-y-4">
           {priceRecords.length === 0 ? (

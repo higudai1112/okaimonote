@@ -16,9 +16,39 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://www.okaimonote.com";
+
 export const metadata: Metadata = {
-  title: "おかいもノート",
-  description: "家族で共有できる価格記録・買い物リスト管理アプリ",
+  title: {
+    default: "おかいもノート | okaimonote",
+    template: "%s | おかいもノート",
+  },
+  description:
+    "日用品や食材の価格を記録して、最安値・平均・高値をかんたんにチェック。節約をもっと身近に。",
+  openGraph: {
+    siteName: "おかいもノート | okaimonote",
+    title: "おかいもノート | okaimonote",
+    description:
+      "日用品や食材の価格を記録して、最安値・平均・高値をかんたんにチェック。節約をもっと身近に。",
+    url: SITE_URL,
+    type: "website",
+    locale: "ja_JP",
+    images: [
+      {
+        url: `${SITE_URL}/images/ogp.png`,
+        width: 1200,
+        height: 630,
+        alt: "おかいもノート",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "おかいもノート | okaimonote",
+    description:
+      "日用品や食材の価格を記録して、最安値・平均・高値をかんたんにチェック。節約をもっと身近に。",
+    images: [`${SITE_URL}/images/ogp.png`],
+  },
 };
 
 export default function RootLayout({
