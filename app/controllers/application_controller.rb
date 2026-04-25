@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(_resource)
-    # カスタムドメイン対応: ログアウト後はフロントエンドのログイン画面へ
-    "#{ENV.fetch('FRONTEND_URL', 'https://www.okaimonote.com')}/login"
+    # カスタムドメイン対応: ログアウト後はフロントエンドのタイトル画面へ
+    ENV.fetch("FRONTEND_URL", "https://www.okaimonote.com")
   end
 
   # ログイン不要の公開ページを許可する
