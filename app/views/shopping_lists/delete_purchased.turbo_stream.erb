@@ -1,7 +1,0 @@
-<turbo-stream action="replace" target="purchased_items_list">
-  <template>
-    <%= render partial: "shopping_items/purchased_items",
-               formats: :html,
-               locals: { items: @shopping_list.shopping_items.where(purchased: true) } %>
-  </template>
-</turbo-stream>
