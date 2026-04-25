@@ -141,7 +141,6 @@ export default function ProductsPage() {
                 key={product.id}
                 className="bg-white rounded-2xl shadow-sm border border-orange-100 px-4 py-3 flex items-center gap-4"
               >
-                {/* 商品画像 */}
                 <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 border border-orange-100 shrink-0 flex items-center justify-center">
                   {product.image_url ? (
                     <Image
