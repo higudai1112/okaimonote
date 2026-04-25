@@ -8,8 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useFlash } from "@/contexts/FlashContext";
 import { apiFetch } from "@/lib/api";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-
 type NavItem = {
   href: string;
   label: string;
@@ -22,10 +20,10 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/family", label: "👨‍👩‍👧 ファミリー設定" },
 ];
 
-const EXTERNAL_ITEMS = [
-  { href: `${API_BASE}/terms`, label: "利用規約" },
-  { href: `${API_BASE}/privacy`, label: "プライバシーポリシー" },
-  { href: `${API_BASE}/contact`, label: "お問い合わせ" },
+const INFO_ITEMS: NavItem[] = [
+  { href: "/terms", label: "利用規約" },
+  { href: "/privacy", label: "プライバシーポリシー" },
+  { href: "/contact", label: "お問い合わせ" },
 ];
 
 export default function SettingsPage() {
@@ -100,19 +98,17 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        {/* 外部リンク */}
-        <div className="bg-white rounded-2xl shadow border border-orange-100 overflow-hidden mb-6">
-          {EXTERNAL_ITEMS.map((item) => (
-            <a
+        {/* 利用規約・プライバシー・お問い合わせ */}
+        <div className="bg-white rounded-2xl shadow border border-orange-100 overflow-hidden mb-4">
+          {INFO_ITEMS.map((item) => (
+            <Link
               key={item.href}
               href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex justify-between items-center px-5 py-4 border-b border-gray-100 last:border-none hover:bg-orange-50 transition"
             >
               <span className="text-gray-800">{item.label}</span>
-              <span className="text-gray-400">↗</span>
-            </a>
+              <span className="text-gray-400">›</span>
+            </Link>
           ))}
         </div>
 
@@ -121,10 +117,18 @@ export default function SettingsPage() {
           type="button"
           onClick={handleLogout}
           disabled={loggingOut}
-          className="block w-full text-center text-red-500 hover:text-red-600 disabled:opacity-50 font-semibold py-3 rounded-2xl border border-red-200 hover:bg-red-50 transition"
+          className="block w-full text-center text-red-500 hover:text-red-600 disabled:opacity-50 font-semibold py-3 rounded-2xl border border-red-200 hover:bg-red-50 transition mb-3"
         >
           {loggingOut ? "ログアウト中..." : "ログアウト"}
         </button>
+
+        {/* アカウント削除 */}
+        <Link
+          href="/account/delete"
+          className="block w-full text-center text-gray-400 hover:text-gray-500 text-sm py-2 transition"
+        >
+          アカウントを削除する
+        </Link>
       </div>
     </div>
   );

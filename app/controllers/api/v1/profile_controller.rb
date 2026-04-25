@@ -18,6 +18,35 @@ module Api
         end
       end
 
+      # PATCH /api/v1/profile/email
+      # メールアドレスを変更する（現在のパスワードで本人確認）
+      def update_email
+        if current_user.update_with_password(
+          email: params[:email],
+          current_password: params[:current_password]
+        )
+          render json: { message: "メールアドレスを更新しました" }
+        else
+          render json: { errors: current_user.errors.full_messages },
+                 status: :unprocessable_entity
+        end
+      end
+
+      # PATCH /api/v1/profile/password
+      # パスワードを変更する（現在のパスワードで本人確認）
+      def update_password
+        if current_user.update_with_password(
+          password: params[:password],
+          password_confirmation: params[:password_confirmation],
+          current_password: params[:current_password]
+        )
+          render json: { message: "パスワードを変更しました" }
+        else
+          render json: { errors: current_user.errors.full_messages },
+                 status: :unprocessable_entity
+        end
+      end
+
       private
 
       def profile_params

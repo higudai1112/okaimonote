@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
 /** 認証不要のパス一覧 */
-const PUBLIC_PATHS = ["/", "/login", "/guide", "/signup", "/forgot-password", "/reset-password"];
+const PUBLIC_PATHS = ["/", "/login", "/guide", "/signup", "/forgot-password", "/reset-password", "/contact", "/terms", "/privacy"];
 
 /** 認証状態を監視し、未認証時はログイン画面へリダイレクトする共通プロバイダー */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
