@@ -10,6 +10,8 @@ class AccountsController < ApplicationController
     sign_out user
     user.destroy!
 
-    redirect_to root_path, notice: "アカウントを削除しました。ご利用ありがとうございました。"
+    # アカウント削除後は Next.js ログインページへリダイレクト
+    redirect_to "#{ENV.fetch('FRONTEND_URL', 'https://www.okaimonote.com')}/login",
+                notice: "アカウントを削除しました。ご利用ありがとうございました。"
   end
 end

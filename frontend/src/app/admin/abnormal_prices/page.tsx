@@ -6,11 +6,12 @@ import { apiFetch } from "@/lib/api";
 type AbnormalRecord = {
   id: number;
   price: number;
-  product_name: string;
+  avg_price: number | null;
+  deviation: number | null;
+  product_name: string | null;
   shop_name: string | null;
   user_nickname: string | null;
   purchased_at: string;
-  z_score?: number;
 };
 
 export default function AdminAbnormalPricesPage() {

@@ -108,7 +108,8 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # デフォルトURLオプションを設定（OGP・メールURL生成などに使用）
-  Rails.application.routes.default_url_options[:host] = ENV.fetch("APP_HOST", "https://okaimonote.com")
+  # :host にはプロトコルを含めない（含めると url_for で二重プロトコルURLになる）
+  Rails.application.routes.default_url_options[:host] = ENV.fetch("APP_HOST", "okaimonote.com")
 
 
   # Enable DNS rebinding protection and other `Host` header attacks.
