@@ -9,12 +9,11 @@ class Users::SessionsController < Devise::SessionsController
 
   private
 
-  # Turbo Stream リクエスト時は MissingTemplate が発生し、
-  # フォールバックのクロスホストリダイレクトが UnsafeRedirectError を引き起こすため、
-  # 認証済みの場合は allow_other_host: true で明示的にリダイレクトする
+  # Turbo Stream リクエスト時は MissingTemplate が発生するため、
+  # 認証済みの場合は ApplicationController#redirect_to 経由でリダイレクトする
   def respond_with(resource, opts = {})
     if warden.authenticated?(resource_name)
-      redirect_to opts[:location] || after_sign_in_path_for(resource), allow_other_host: true
+      redirect_to opts[:location] || after_sign_in_path_for(resource)
     else
       super
     end
