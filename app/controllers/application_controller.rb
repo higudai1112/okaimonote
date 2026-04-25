@@ -40,6 +40,16 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [ :nickname, :avatar, :prefecture ])
   end
 
+  # フロントエンドURLへのクロスホストリダイレクトを一括で許可する
+  # Devise の require_no_authentication など内部リダイレクトも対象になる
+  def redirect_to(options = {}, response_options = {})
+    frontend_url = ENV.fetch("FRONTEND_URL", "https://www.okaimonote.com")
+    if options.is_a?(String) && options.start_with?(frontend_url)
+      response_options[:allow_other_host] = true
+    end
+    super(options, response_options)
+  end
+
   def api_request?
     request.path.start_with?("/ios/")
   end
