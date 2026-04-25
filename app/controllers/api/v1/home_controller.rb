@@ -13,7 +13,7 @@ module Api
 
         price_records = q.result(distinct: true)
                          .order(created_at: :desc)
-                         .limit(50)
+                         .limit(5)
 
         render json: {
           price_records: price_records.map { |r| price_record_json(r) }
