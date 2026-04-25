@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
 
   # BAN状態でログインできない
   def reject_banned_user
-    if current_user&.banned?
+    if current_user&.status_banned?
       sign_out current_user
       redirect_to new_user_session_path, alert: "このアカウントは停止されています。"
     end
