@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
@@ -87,12 +88,12 @@ export default function LoginPage() {
               />
               <span>ログインを維持する</span>
             </label>
-            <a
-              href={`${API_BASE}/users/password/new`}
+            <Link
+              href="/forgot-password"
               className="text-orange-500 hover:underline"
             >
               パスワードをお忘れですか？
-            </a>
+            </Link>
           </div>
 
           <button
@@ -141,12 +142,12 @@ export default function LoginPage() {
         {/* 新規登録リンク */}
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600 mb-2">まだアカウントをお持ちでない方</p>
-          <a
-            href={`${API_BASE}/users/sign_up`}
+          <Link
+            href="/signup"
             className="inline-block text-orange-500 font-semibold hover:underline"
           >
             新規登録はこちら
-          </a>
+          </Link>
         </div>
       </div>
     </div>

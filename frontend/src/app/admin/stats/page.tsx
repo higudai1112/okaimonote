@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import useSWR from "swr";
 import { apiFetch } from "@/lib/api";
 
@@ -12,6 +12,87 @@ type StatsData = {
   top_products_by_records: { name: string; count: number }[];
   top_shops: { name: string; count: number }[];
 };
+
+/** テキスト入力 + オートコンプリートドロップダウン */
+function AutocompleteInput({
+  value,
+  onChange,
+  placeholder,
+  autocompleteUrl,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  autocompleteUrl: (q: string) => string;
+}) {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // 入力変化時にデバウンスして API を呼ぶ
+  const handleChange = useCallback(
+    (v: string) => {
+      onChange(v);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (!v.trim()) {
+        setSuggestions([]);
+        setOpen(false);
+        return;
+      }
+      timerRef.current = setTimeout(async () => {
+        try {
+          const res = await apiFetch<string[]>(autocompleteUrl(v));
+          setSuggestions(res);
+          setOpen(res.length > 0);
+        } catch {
+          setSuggestions([]);
+          setOpen(false);
+        }
+      }, 300);
+    },
+    [onChange, autocompleteUrl]
+  );
+
+  // ラッパー外クリックでドロップダウンを閉じる
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder={placeholder}
+        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none w-full"
+      />
+      {open && (
+        <ul className="absolute z-10 top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-48 overflow-y-auto">
+          {suggestions.map((s) => (
+            <li
+              key={s}
+              onMouseDown={() => {
+                onChange(s);
+                setOpen(false);
+              }}
+              className="px-3 py-2 text-sm cursor-pointer hover:bg-orange-50"
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export default function AdminStatsPage() {
   const [keyword, setKeyword] = useState("");
@@ -39,13 +120,29 @@ export default function AdminStatsPage() {
       <h1 className="text-2xl font-bold text-gray-800">価格統計</h1>
 
       <form onSubmit={handleSearch} className="bg-white rounded-xl shadow border border-gray-100 p-5 flex flex-wrap gap-3">
-        <input type="text" value={keyword} onChange={(e) => setKeyword(e.target.value)}
-          placeholder="商品名" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none" />
-        <input type="text" value={shopName} onChange={(e) => setShopName(e.target.value)}
-          placeholder="店舗名" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none" />
-        <input type="text" value={pref} onChange={(e) => setPref(e.target.value)}
-          placeholder="都道府県" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none" />
-        <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
+        <AutocompleteInput
+          value={keyword}
+          onChange={setKeyword}
+          placeholder="商品名"
+          autocompleteUrl={(q) => `/api/v1/admin/stats/autocomplete_products?q=${encodeURIComponent(q)}`}
+        />
+        <AutocompleteInput
+          value={shopName}
+          onChange={setShopName}
+          placeholder="店舗名"
+          autocompleteUrl={(q) => `/api/v1/admin/stats/autocomplete_shops?q=${encodeURIComponent(q)}`}
+        />
+        <input
+          type="text"
+          value={pref}
+          onChange={(e) => setPref(e.target.value)}
+          placeholder="都道府県"
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none"
+        />
+        <button
+          type="submit"
+          className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+        >
           検索
         </button>
       </form>

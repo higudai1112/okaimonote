@@ -44,24 +44,24 @@ export default function TitlePage() {
 
         {/* ボタン */}
         <div className="flex flex-col gap-4 mt-8 animate-slide-up">
-          <a
-            href={`${API_BASE}/users/sign_up`}
+          <Link
+            href="/signup"
             className="w-56 sm:w-60 mx-auto text-white bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-full shadow transition text-center block"
           >
             新規登録
-          </a>
+          </Link>
           <Link
             href="/login"
             className="w-56 sm:w-60 mx-auto text-orange-500 bg-white border border-orange-400 hover:bg-orange-50 font-bold py-2.5 rounded-full shadow transition text-center block"
           >
             ログイン
           </Link>
-          <a
-            href={`${API_BASE}/guide`}
+          <Link
+            href="/guide"
             className="text-sm text-orange-500 hover:text-orange-600 underline underline-offset-2 transition mt-2"
           >
             使い方ガイドを見る
-          </a>
+          </Link>
         </div>
 
         {/* フッターリンク */}

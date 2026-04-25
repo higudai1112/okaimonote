@@ -40,6 +40,7 @@ export async function apiFetch<T>(
     const error = await res.json().catch(() => ({ error: res.statusText }));
     throw Object.assign(new Error(error.error ?? res.statusText), {
       status: res.status,
+      errors: error.errors ?? [],
     });
   }
 
