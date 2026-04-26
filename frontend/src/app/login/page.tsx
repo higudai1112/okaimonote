@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetSuccess = searchParams.get("reset") === "success";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -43,6 +46,13 @@ export default function LoginPage() {
 
         {/* メール/パスワードフォーム */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* パスワード変更成功メッセージ */}
+          {resetSuccess && (
+            <p className="text-sm text-green-700 bg-green-50 border-l-4 border-green-400 rounded-xl px-3 py-2">
+              パスワードを変更しました。新しいパスワードでログインしてください。
+            </p>
+          )}
+          {/* ログインエラーメッセージ */}
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border-l-4 border-red-400 rounded-xl px-3 py-2">
               {error}
@@ -151,5 +161,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
