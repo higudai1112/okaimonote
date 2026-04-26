@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useFlash } from "@/contexts/FlashContext";
 import { apiFetch } from "@/lib/api";
@@ -29,15 +28,14 @@ const INFO_ITEMS: NavItem[] = [
 export default function SettingsPage() {
   const { user, isLoading } = useAuth();
   const { flash } = useFlash();
-  const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
 
   async function handleLogout() {
     setLoggingOut(true);
     try {
       await apiFetch("/api/v1/sessions", { method: "DELETE" });
-      flash("notice", "ログアウトしました");
-      router.replace("/");
+      // フルリロードで SWR キャッシュをクリアし AuthProvider の誤リダイレクトを防ぐ
+      window.location.href = "/";
     } catch {
       flash("alert", "ログアウトに失敗しました");
       setLoggingOut(false);
