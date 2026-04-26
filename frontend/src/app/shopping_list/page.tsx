@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useShoppingList } from "@/hooks/useShoppingList";
+import { useFlash } from "@/contexts/FlashContext";
 import { ShoppingItemRow } from "@/components/shopping/ShoppingItemRow";
 import { AutocompleteInput } from "@/components/shopping/AutocompleteInput";
 
 export default function ShoppingListPage() {
   const { list, isLoading, addItem, togglePurchased, deleteItem, deletePurchased } =
     useShoppingList();
+  const { flash } = useFlash();
   const [name, setName] = useState("");
   const [memo, setMemo] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -20,8 +22,34 @@ export default function ShoppingListPage() {
       await addItem({ name: name.trim(), memo: memo.trim() || null });
       setName("");
       setMemo("");
+    } catch {
+      flash("alert", "追加に失敗しました");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleToggle(id: number, purchased: boolean) {
+    try {
+      await togglePurchased(id, purchased);
+    } catch {
+      flash("alert", "更新に失敗しました");
+    }
+  }
+
+  async function handleDelete(id: number) {
+    try {
+      await deleteItem(id);
+    } catch {
+      flash("alert", "削除に失敗しました");
+    }
+  }
+
+  async function handleDeletePurchased() {
+    try {
+      await deletePurchased();
+    } catch {
+      flash("alert", "削除に失敗しました");
     }
   }
 
@@ -82,8 +110,8 @@ export default function ShoppingListPage() {
             <ShoppingItemRow
               key={item.id}
               item={item}
-              onToggle={togglePurchased}
-              onDelete={deleteItem}
+              onToggle={handleToggle}
+              onDelete={handleDelete}
             />
           ))}
         </ul>
@@ -97,7 +125,7 @@ export default function ShoppingListPage() {
             {purchased.length > 0 && (
               <button
                 type="button"
-                onClick={deletePurchased}
+                onClick={handleDeletePurchased}
                 className="text-red-500 hover:text-red-600 text-sm font-medium transition"
               >
                 🗑 購入済みを削除
@@ -109,8 +137,8 @@ export default function ShoppingListPage() {
               <ShoppingItemRow
                 key={item.id}
                 item={item}
-                onToggle={togglePurchased}
-                onDelete={deleteItem}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
               />
             ))}
           </ul>
