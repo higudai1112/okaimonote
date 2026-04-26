@@ -25,10 +25,12 @@ const HIDDEN_PATHS = ["/", "/login"];
 /** 画面下部固定のナビゲーションバー。Rails 版 shared/_footer.html.erb を再現 */
 export function BottomNav() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const isHidden = HIDDEN_PATHS.includes(pathname) || pathname.startsWith("/admin");
+  // 非表示パスでは /api/v1/me を呼ばない
+  const { user } = useAuth(!isHidden);
 
   // ランディング・ログイン・admin 配下では非表示
-  if (HIDDEN_PATHS.includes(pathname) || pathname.startsWith("/admin")) {
+  if (isHidden) {
     return null;
   }
 

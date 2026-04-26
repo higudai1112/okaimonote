@@ -9,8 +9,9 @@ export function useAuth(enabled = true) {
     enabled ? "/api/v1/me" : null,
     (path: string) => apiFetch<User>(path),
     {
-      // 未認証エラーはリトライしない
+      // 未認証エラーはリトライしない・フォーカス時の再検証もしない
       shouldRetryOnError: false,
+      revalidateOnFocus: false,
     }
   );
 
