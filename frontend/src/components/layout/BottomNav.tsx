@@ -26,11 +26,14 @@ const HIDDEN_PATHS = ["/", "/login"];
 export function BottomNav() {
   const pathname = usePathname();
   const isHidden = HIDDEN_PATHS.includes(pathname) || pathname.startsWith("/admin");
-  // 非表示パスでは /api/v1/me を呼ばない
-  const { user } = useAuth(!isHidden);
+  // iOS WebView ではネイティブタブバーが代替するため表示しない
+  const isIOSWebView =
+    typeof navigator !== "undefined" && navigator.userAgent.includes("okaimonote-ios");
+  // 非表示パス・iOS WebView では /api/v1/me を呼ばない
+  const { user } = useAuth(!isHidden && !isIOSWebView);
 
-  // ランディング・ログイン・admin 配下では非表示
-  if (isHidden) {
+  // ランディング・ログイン・admin 配下・iOS WebView では非表示
+  if (isHidden || isIOSWebView) {
     return null;
   }
 
