@@ -127,7 +127,7 @@ function LoginForm() {
           href={`${API_BASE}/users/auth/google_oauth2`}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2.5 rounded-full shadow-sm transition active:scale-[0.98]"
         >
-          <Image src="/images/google_icon4.png" alt="Google" width={28} height={28} />
+          <Image src="/images/google_icon4.png" alt="Google" width={28} height={28} unoptimized />
           <span>Googleでログイン</span>
         </a>
 
@@ -136,7 +136,7 @@ function LoginForm() {
           href={`${API_BASE}/users/auth/line`}
           className="mt-3 w-full flex items-center justify-center gap-3 bg-[#06C755] hover:bg-[#05b34c] text-white font-semibold py-2.5 rounded-full shadow-sm transition active:scale-[0.98]"
         >
-          <Image src="/images/line_logo.png" alt="LINE" width={32} height={32} />
+          <Image src="/images/line_logo.png" alt="LINE" width={32} height={32} unoptimized />
           <span>LINEでログイン</span>
         </a>
 
@@ -145,7 +145,7 @@ function LoginForm() {
           href={`${API_BASE}/users/auth/apple`}
           className="mt-3 w-full flex items-center justify-center gap-3 bg-black hover:bg-gray-900 text-white font-semibold py-2.5 rounded-full shadow-sm transition active:scale-[0.98]"
         >
-          <Image src="/images/apple_logo.png" alt="Apple" width={20} height={20} />
+          <Image src="/images/apple_logo.png" alt="Apple" width={20} height={20} unoptimized />
           <span>Appleでログイン</span>
         </a>
 
