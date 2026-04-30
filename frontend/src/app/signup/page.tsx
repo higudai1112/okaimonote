@@ -15,15 +15,23 @@ export default function SignupPage() {
   const [done, setDone] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors([]);
     setIsSubmitting(true);
 
+    // iOS Safariのオートフィルは onChange を発火しないため、
+    // FormData でフォーム要素から直接値を読み取る
+    const formData = new FormData(e.currentTarget);
+    const nicknameValue = (formData.get("nickname") as string) || nickname;
+    const emailValue = (formData.get("email") as string) || email;
+    const passwordValue = (formData.get("password") as string) || password;
+    const passwordConfirmationValue = (formData.get("password_confirmation") as string) || passwordConfirmation;
+
     try {
       await apiFetch("/api/v1/registrations", {
         method: "POST",
-        body: JSON.stringify({ nickname, email, password, password_confirmation: passwordConfirmation }),
+        body: JSON.stringify({ nickname: nicknameValue, email: emailValue, password: passwordValue, password_confirmation: passwordConfirmationValue }),
       });
       setDone(true);
     } catch (err: unknown) {
@@ -89,6 +97,7 @@ export default function SignupPage() {
             </label>
             <input
               type="text"
+              name="nickname"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               required
@@ -104,6 +113,7 @@ export default function SignupPage() {
             </label>
             <input
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -119,6 +129,7 @@ export default function SignupPage() {
             </label>
             <input
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -134,6 +145,7 @@ export default function SignupPage() {
             </label>
             <input
               type="password"
+              name="password_confirmation"
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               required

@@ -10,13 +10,17 @@ export default function ForgotPasswordPage() {
   const [done, setDone] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
+    // iOS Safariのオートフィルは onChange を発火しないため、
+    // FormData でフォーム要素から直接値を読み取る
+    const formData = new FormData(e.currentTarget);
+    const emailValue = (formData.get("email") as string) || email;
     try {
       await apiFetch("/api/v1/passwords", {
         method: "POST",
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: emailValue }),
       });
     } finally {
       // メールが存在しない場合も同じ画面を表示してメール存在確認を防ぐ
@@ -64,6 +68,7 @@ export default function ForgotPasswordPage() {
             </label>
             <input
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
