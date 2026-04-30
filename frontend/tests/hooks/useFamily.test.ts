@@ -26,6 +26,7 @@ describe("useFamily", () => {
       data: mockFamily,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -41,6 +42,7 @@ describe("useFamily", () => {
       data: undefined,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: mutateMock,
     } as ReturnType<typeof useSWR>);
 
@@ -66,6 +68,7 @@ describe("useFamily", () => {
       data: { id: 1, name: "旧名前" },
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: mutateMock,
     } as ReturnType<typeof useSWR>);
 
@@ -91,6 +94,7 @@ describe("useFamily", () => {
       data: { id: 1, invite_token: "old_token" },
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: mutateMock,
     } as ReturnType<typeof useSWR>);
 

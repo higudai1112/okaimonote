@@ -22,6 +22,7 @@ describe("usePriceRecordForm", () => {
       data: mockFormData,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -40,6 +41,7 @@ describe("usePriceRecordForm", () => {
       data: mockFormData,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 

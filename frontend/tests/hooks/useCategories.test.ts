@@ -20,6 +20,7 @@ describe("useCategories", () => {
       data: mockCategories,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -37,6 +38,7 @@ describe("useCategories", () => {
       data: mockCategories,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate,
     } as ReturnType<typeof useSWR>);
 
