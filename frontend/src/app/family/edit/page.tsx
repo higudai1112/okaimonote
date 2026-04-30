@@ -13,6 +13,8 @@ export default function FamilyEditPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // SWRで取得したデータで入力初期値を設定するための意図的なsetState
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (family) setName(family.name);
   }, [family]);
 
@@ -24,7 +26,7 @@ export default function FamilyEditPage() {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
