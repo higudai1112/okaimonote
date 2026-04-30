@@ -37,7 +37,8 @@ module Api
         end
 
         def remove_member
-          user = User.find(params[:user_id])
+          # @family.users.find で対象ファミリー所属を保証する
+          user = @family.users.find(params[:user_id])
           user.update!(family_id: nil, family_role: :personal)
           render json: { message: "#{user.nickname} さんをファミリーから除名しました" }
         rescue ActiveRecord::RecordNotFound

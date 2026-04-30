@@ -110,8 +110,8 @@ class User < ApplicationRecord
 
   def active_shopping_list
     if family.present?
-      # 家族に属している場合はfamilyの共有リスト
-      family.shopping_lists.first
+      # 家族に属している場合はfamilyの共有リスト（作成日時が最も古いものを使用）
+      family.shopping_lists.order(created_at: :asc).first
     else
       # 個人なら自分の分
       shopping_list || create_shopping_list!(name: "マイリスト")

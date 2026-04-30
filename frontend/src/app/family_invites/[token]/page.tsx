@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { apiFetch } from "@/lib/api";
@@ -63,9 +64,9 @@ export default function FamilyInvitePage({
       <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow border border-orange-100 p-8 text-center max-w-sm w-full">
           <p className="text-gray-700 mb-4">招待リンクが無効です。</p>
-          <a href="/" className="text-orange-500 hover:underline text-sm">
+          <Link href="/" className="text-orange-500 hover:underline text-sm">
             ホームへ戻る
-          </a>
+          </Link>
         </div>
       </div>
     );

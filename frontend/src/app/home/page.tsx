@@ -242,6 +242,8 @@ export default function HomePage() {
   // 初回データ取得後、先頭レコードの商品を自動選択してサマリーを表示する
   useEffect(() => {
     if (selectedProductId === null && priceRecords.length > 0) {
+      // 初回データ取得後に先頭商品を自動選択するための意図的なsetState
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedProductId(priceRecords[0].product_id);
     }
   }, [priceRecords, selectedProductId]);

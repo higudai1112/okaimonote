@@ -8,6 +8,8 @@ class Family < ApplicationRecord
   before_validation :set_default_name, on: :create
   before_validation :generate_invite_token, on: :create
 
+  validates :name, presence: true, length: { maximum: 50 }
+
   after_create :create_family_shopping_list
 
   def regenerate_invite_token!
