@@ -15,7 +15,12 @@ module Api
           new_users_30d      = User.where("created_at >= ?", current_30d_start).count
           new_users_prev_30d = User.where(created_at: previous_30d_start...current_30d_start).count
 
-          unresolved_contacts = Contact.where(status: "unread").count rescue 0
+          unresolved_contacts = begin
+            Contact.where(status: "unread").count
+          rescue ActiveRecord::StatementInvalid => e
+            Rails.logger.error "[DashboardsController] contacts クエリエラー: #{e.message}"
+            0
+          end
 
           top_products = Product
             .joins(:price_records)

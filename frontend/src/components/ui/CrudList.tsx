@@ -30,15 +30,19 @@ export function CrudList<T extends Item>({
   const [editName, setEditName] = useState("");
   const [editMemo, setEditMemo] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleAdd(e: React.FormEvent) {
+  async function handleAdd(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!name.trim()) return;
     setSubmitting(true);
+    setError(null);
     try {
       await onAdd(name.trim(), memo.trim());
       setName("");
       setMemo("");
+    } catch {
+      setError("追加できませんでした。もう一度お試しください。");
     } finally {
       setSubmitting(false);
     }
@@ -46,9 +50,12 @@ export function CrudList<T extends Item>({
 
   async function handleUpdate(id: number) {
     setSubmitting(true);
+    setError(null);
     try {
       await onUpdate(id, editName.trim(), editMemo.trim());
       setEditId(null);
+    } catch {
+      setError("更新できませんでした。もう一度お試しください。");
     } finally {
       setSubmitting(false);
     }
@@ -68,6 +75,13 @@ export function CrudList<T extends Item>({
         <h1 className="text-2xl font-bold text-center text-orange-500 mb-8">
           {title}
         </h1>
+
+        {/* エラーメッセージ */}
+        {error && (
+          <p className="text-sm text-red-600 bg-red-50 border-l-4 border-red-400 rounded-xl px-3 py-2 mb-4">
+            {error}
+          </p>
+        )}
 
         {/* 追加フォーム */}
         <form

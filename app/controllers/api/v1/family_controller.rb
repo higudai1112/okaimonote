@@ -27,6 +27,7 @@ module Api
 
         render json: family_json(family), status: :created
       rescue => e
+        Rails.logger.error "[FamilyController#create] #{e.class}: #{e.message}"
         render json: { error: "作成できませんでした" }, status: :unprocessable_entity
       end
 
@@ -48,6 +49,7 @@ module Api
         end
         render json: { message: "ファミリーを解散しました" }
       rescue => e
+        Rails.logger.error "[FamilyController#destroy] #{e.class}: #{e.message}"
         render json: { error: "解散できませんでした" }, status: :unprocessable_entity
       end
 
@@ -85,6 +87,7 @@ module Api
 
         render json: family_json(family.reload)
       rescue => e
+        Rails.logger.error "[FamilyController#transfer_owner] #{e.class}: #{e.message}"
         render json: { error: "権限を譲渡できませんでした" }, status: :unprocessable_entity
       end
 
