@@ -20,14 +20,19 @@ function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /** メール/パスワードでログイン */
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setIsSubmitting(true);
+    // iOS Safariのオートフィルは onChange を発火しないため、
+    // FormData でフォーム要素から直接値を読み取る
+    const formData = new FormData(e.currentTarget);
+    const emailValue = (formData.get("email") as string) || email;
+    const passwordValue = (formData.get("password") as string) || password;
     try {
       await apiFetch("/api/v1/sessions", {
         method: "POST",
-        body: JSON.stringify({ email, password, remember_me: rememberMe ? "1" : "0" }),
+        body: JSON.stringify({ email: emailValue, password: passwordValue, remember_me: rememberMe ? "1" : "0" }),
       });
       router.push("/home");
     } catch {
@@ -64,6 +69,7 @@ function LoginForm() {
             </label>
             <input
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -78,6 +84,7 @@ function LoginForm() {
             </label>
             <input
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

@@ -21,6 +21,7 @@ describe("useShops", () => {
       data: mockShops,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -37,6 +38,7 @@ describe("useShops", () => {
       data: undefined,
       error: undefined,
       isLoading: true,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -50,6 +52,7 @@ describe("useShops", () => {
       data: undefined,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -64,6 +67,7 @@ describe("useShops", () => {
       data: mockShops,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate,
     } as ReturnType<typeof useSWR>);
 
@@ -90,6 +94,7 @@ describe("useShops", () => {
       data: mockShops,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate,
     } as ReturnType<typeof useSWR>);
 
@@ -116,6 +121,7 @@ describe("useShops", () => {
       data: mockShops,
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate,
     } as ReturnType<typeof useSWR>);
 

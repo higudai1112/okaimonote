@@ -29,6 +29,7 @@ describe("useHome", () => {
       data: { price_records: mockRecords },
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
@@ -46,6 +47,7 @@ describe("useHome", () => {
       data: { price_records: [] },
       error: undefined,
       isLoading: false,
+      isValidating: false,
       mutate: vi.fn(),
     } as ReturnType<typeof useSWR>);
 
