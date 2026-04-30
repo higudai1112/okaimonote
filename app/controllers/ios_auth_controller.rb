@@ -15,7 +15,10 @@ class IosAuthController < ApplicationController
       return redirect_to new_user_session_path, alert: "このアカウントは停止されています。"
     end
 
-    # Devise セッションを作成（Cookie を発行）
+    # remember_me を有効化してから sign_in することで、有効期限付き Cookie が発行される。
+    # WKWebView はセッション Cookie（有効期限なし）をディスクに保存しないため、
+    # フォースクイット後にログアウトしてしまう問題を防ぐ。
+    user.remember_me!
     sign_in(user)
 
     # Cookie はレスポンスヘッダに自動で含まれる

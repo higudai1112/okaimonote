@@ -12,9 +12,10 @@ module Api
       def create
         user = User.find_by(email: params[:email])
         if user&.valid_password?(params[:password])
-          sign_in(user)
-          # remember_me パラメータが "1" の場合は Devise の記憶機能を有効化
+          # sign_in より前に remember_me! を呼ぶ必要がある。
+          # sign_in 実行時に remember_token が設定済みでないと永続 Cookie がレスポンスに含まれない。
           user.remember_me! if params[:remember_me] == "1"
+          sign_in(user)
           render json: {
             id: user.id,
             email: user.email,
