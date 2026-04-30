@@ -15,10 +15,12 @@ class IosAuthController < ApplicationController
       return redirect_to new_user_session_path, alert: "このアカウントは停止されています。"
     end
 
-    # remember_me を有効化してから sign_in することで、有効期限付き Cookie が発行される。
+    # sign_in より前に remember_me attribute をセットする必要がある。
+    # Devise の after_set_user フックは record.remember_me attribute が truthy の場合に
+    # remember_me! を呼び出して永続 Cookie を発行する。
     # WKWebView はセッション Cookie（有効期限なし）をディスクに保存しないため、
-    # フォースクイット後にログアウトしてしまう問題を防ぐ。
-    user.remember_me!
+    # iOS では常に永続 Cookie を発行してフォースクイット後もログイン維持する。
+    user.remember_me = true
     sign_in(user)
 
     # Cookie はレスポンスヘッダに自動で含まれる

@@ -12,9 +12,11 @@ module Api
       def create
         user = User.find_by(email: params[:email])
         if user&.valid_password?(params[:password])
-          # sign_in より前に remember_me! を呼ぶ必要がある。
-          # sign_in 実行時に remember_token が設定済みでないと永続 Cookie がレスポンスに含まれない。
-          user.remember_me! if params[:remember_me] == "1"
+          # sign_in より前に remember_me attribute をセットする必要がある。
+          # Devise の after_set_user フックは record.remember_me attribute が truthy の場合に
+          # remember_me! を呼び出して永続 Cookie を発行する。
+          # remember_me! メソッドを直接呼んでも attribute がセットされないため Cookie は発行されない。
+          user.remember_me = "1" if params[:remember_me] == "1"
           sign_in(user)
           render json: {
             id: user.id,
