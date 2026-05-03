@@ -58,7 +58,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       {message && <p className="text-green-600 text-sm font-semibold">{message}</p>}
 
       {/* 基本情報 */}
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5 space-y-2 text-sm">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5 space-y-2 text-sm">
         <Row label="ID" value={String(user.id)} />
         <Row label="メール" value={user.email} />
         <Row label="ニックネーム" value={user.nickname ?? "—"} />
@@ -71,7 +71,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* 管理メモ */}
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
         <div className="flex justify-between items-center mb-2">
           <p className="font-semibold text-gray-700 text-sm">管理者メモ</p>
           <button onClick={() => { setMemo(user.admin_memo ?? ""); setEditingMemo(true); }}
@@ -92,7 +92,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* BAN 操作 */}
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
         <p className="font-semibold text-gray-700 text-sm mb-3">アカウント操作</p>
         {user.status === "banned" ? (
           <div className="space-y-2">
@@ -122,7 +122,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
       {/* 最近の価格記録 */}
       {user.recent_price_records && user.recent_price_records.length > 0 && (
-        <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+        <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
           <p className="font-semibold text-gray-700 text-sm mb-3">最近の価格記録</p>
           <table className="w-full text-xs">
             <thead className="text-gray-500"><tr>
@@ -149,7 +149,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
-      <span className="text-gray-500 w-32 flex-shrink-0">{label}</span>
+      <span className="text-gray-500 w-32 shrink-0">{label}</span>
       <span className="text-gray-800">{value}</span>
     </div>
   );

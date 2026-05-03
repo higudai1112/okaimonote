@@ -36,14 +36,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-orange-50">
       {/* サイドバー + コンテンツ */}
       <div className="flex">
-        <aside className="w-56 min-h-screen bg-gray-900 text-white flex-shrink-0">
-          <div className="px-4 py-5 text-lg font-bold border-b border-gray-700">
+        <aside className="w-56 min-h-screen bg-white border-r border-orange-100 shrink-0">
+          <div className="px-4 py-5 text-lg font-bold text-orange-600 border-b border-orange-100">
             管理画面
           </div>
-          <nav className="mt-2">
+
+          {/* ホーム画面へ戻るリンク */}
+          <div className="px-3 pt-3 pb-1">
+            <Link
+              href="/home"
+              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-500 px-2 py-2 rounded-lg hover:bg-orange-50 transition-colors"
+            >
+              ← ホームへ戻る
+            </Link>
+          </div>
+          <div className="mx-3 mb-1 border-b border-orange-100" />
+
+          <nav className="mt-1">
             {NAV_ITEMS.map((item) => {
               const isActive =
                 item.href === "/admin"
@@ -55,8 +67,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={item.href}
                   className={`block px-4 py-2.5 text-sm transition ${
                     isActive
-                      ? "bg-orange-600 text-white"
-                      : "text-gray-300 hover:bg-gray-800"
+                      ? "bg-orange-100 text-orange-600 font-semibold"
+                      : "text-gray-700 hover:bg-orange-50 hover:text-orange-600"
                   }`}
                 >
                   {item.label}

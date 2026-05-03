@@ -48,9 +48,9 @@ export default function AdminUsersPage() {
       ) : (
         <>
           <p className="text-sm text-gray-500">全 {data?.meta.total} 件</p>
-          <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-xl shadow border border-orange-100 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-600">
+              <thead className="bg-orange-50 text-orange-700">
                 <tr>
                   <th className="px-4 py-3 text-left">ID</th>
                   <th className="px-4 py-3 text-left">メール</th>
@@ -60,9 +60,9 @@ export default function AdminUsersPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-orange-100">
                 {data?.users.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-orange-50">
                     <td className="px-4 py-3 text-gray-500">{user.id}</td>
                     <td className="px-4 py-3">{user.email}</td>
                     <td className="px-4 py-3">{user.nickname ?? "—"}</td>
@@ -93,7 +93,7 @@ export default function AdminUsersPage() {
               <button
                 disabled={page <= 1}
                 onClick={() => setPage(page - 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50"
               >
                 ←
               </button>
@@ -101,7 +101,7 @@ export default function AdminUsersPage() {
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage(page + 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50"
               >
                 →
               </button>

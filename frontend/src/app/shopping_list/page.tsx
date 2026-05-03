@@ -46,6 +46,7 @@ export default function ShoppingListPage() {
   }
 
   async function handleDeletePurchased() {
+    if (!window.confirm("購入済みの商品をすべて削除しますか？")) return;
     try {
       await deletePurchased();
     } catch {
