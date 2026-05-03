@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* iOS WebView でのタップ反応を保証する */
+button,
+[role="button"],
+a {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+}
