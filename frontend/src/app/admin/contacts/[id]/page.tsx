@@ -51,17 +51,17 @@ export default function AdminContactDetailPage({ params }: { params: Promise<{ i
 
       {message && <p className="text-green-600 text-sm font-semibold">{message}</p>}
 
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5 space-y-3 text-sm">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5 space-y-3 text-sm">
         <div className="flex gap-4"><span className="text-gray-500 w-28">ニックネーム</span><span>{contact.nickname}</span></div>
         <div className="flex gap-4"><span className="text-gray-500 w-28">メール</span><span>{contact.email}</span></div>
         <div className="flex gap-4"><span className="text-gray-500 w-28">日時</span><span>{new Date(contact.created_at).toLocaleString("ja-JP")}</span></div>
         <div>
           <p className="text-gray-500 mb-1">お問い合わせ内容</p>
-          <p className="bg-gray-50 rounded-lg p-3 whitespace-pre-wrap text-gray-700">{contact.body}</p>
+          <p className="bg-orange-50 rounded-lg p-3 whitespace-pre-wrap text-gray-700">{contact.body}</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
         <div className="flex justify-between items-center mb-3">
           <p className="font-semibold text-gray-700 text-sm">対応状況</p>
           {!editing && <button onClick={startEdit} className="text-xs text-orange-500 hover:underline">編集</button>}

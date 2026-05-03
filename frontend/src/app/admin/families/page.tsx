@@ -27,9 +27,9 @@ export default function AdminFamiliesPage() {
       ) : (
         <>
           <p className="text-sm text-gray-500">全 {data?.meta.total} 件</p>
-          <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-xl shadow border border-orange-100 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-600">
+              <thead className="bg-orange-50 text-orange-700">
                 <tr>
                   <th className="px-4 py-3 text-left">ID</th>
                   <th className="px-4 py-3 text-left">ファミリー名</th>
@@ -38,9 +38,9 @@ export default function AdminFamiliesPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-orange-100">
                 {data?.families.map((f) => (
-                  <tr key={f.id} className="hover:bg-gray-50">
+                  <tr key={f.id} className="hover:bg-orange-50">
                     <td className="px-4 py-3 text-gray-500">{f.id}</td>
                     <td className="px-4 py-3 font-medium">{f.name}</td>
                     <td className="px-4 py-3">{f.members_count} 人</td>
@@ -61,10 +61,10 @@ export default function AdminFamiliesPage() {
           {totalPages > 1 && (
             <div className="flex gap-2 text-sm">
               <button disabled={page <= 1} onClick={() => setPage(page - 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50">←</button>
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50">←</button>
               <span className="px-3 py-1.5 text-gray-600">{page} / {totalPages}</span>
               <button disabled={page >= totalPages} onClick={() => setPage(page + 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50">→</button>
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50">→</button>
             </div>
           )}
         </>

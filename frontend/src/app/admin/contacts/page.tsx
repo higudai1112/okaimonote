@@ -41,7 +41,7 @@ export default function AdminContactsPage() {
             key={s}
             onClick={() => { setStatus(s); setPage(1); }}
             className={`text-sm px-3 py-1.5 rounded-lg border transition ${
-              status === s ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 hover:bg-gray-50"
+              status === s ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 hover:bg-orange-50"
             }`}
           >
             {s === "" ? "すべて" : STATUS_LABELS[s]}
@@ -54,9 +54,9 @@ export default function AdminContactsPage() {
       ) : (
         <>
           <p className="text-sm text-gray-500">全 {data?.meta.total} 件</p>
-          <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-xl shadow border border-orange-100 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-600">
+              <thead className="bg-orange-50 text-orange-700">
                 <tr>
                   <th className="px-4 py-3 text-left">ID</th>
                   <th className="px-4 py-3 text-left">ニックネーム</th>
@@ -66,9 +66,9 @@ export default function AdminContactsPage() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-orange-100">
                 {data?.contacts.map((c) => (
-                  <tr key={c.id} className="hover:bg-gray-50">
+                  <tr key={c.id} className="hover:bg-orange-50">
                     <td className="px-4 py-3 text-gray-500">{c.id}</td>
                     <td className="px-4 py-3">{c.nickname}</td>
                     <td className="px-4 py-3">{c.email}</td>
@@ -94,10 +94,10 @@ export default function AdminContactsPage() {
           {totalPages > 1 && (
             <div className="flex gap-2 text-sm">
               <button disabled={page <= 1} onClick={() => setPage(page - 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50">←</button>
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50">←</button>
               <span className="px-3 py-1.5 text-gray-600">{page} / {totalPages}</span>
               <button disabled={page >= totalPages} onClick={() => setPage(page + 1)}
-                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-gray-50">→</button>
+                className="px-3 py-1.5 border rounded-lg disabled:opacity-40 hover:bg-orange-50">→</button>
             </div>
           )}
         </>

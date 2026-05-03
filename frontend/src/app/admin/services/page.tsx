@@ -28,14 +28,14 @@ export default function AdminServicesPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-xl shadow p-5 border border-gray-100">
+          <div key={s.label} className="bg-white rounded-xl shadow p-5 border border-orange-100">
             <p className="text-xs text-gray-500">{s.label}</p>
             <p className="text-2xl font-bold text-gray-800 mt-1">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
         <p className="font-semibold text-gray-700 mb-3">システム情報</p>
         <dl className="space-y-2 text-sm">
           {[

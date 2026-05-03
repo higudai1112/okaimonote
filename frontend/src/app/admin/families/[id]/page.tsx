@@ -39,17 +39,17 @@ export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id
         <h1 className="text-2xl font-bold text-gray-800">ファミリー詳細</h1>
       </div>
 
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-5 text-sm space-y-2">
+      <div className="bg-white rounded-xl shadow border border-orange-100 p-5 text-sm space-y-2">
         <div className="flex gap-4"><span className="text-gray-500 w-28">ID</span><span>{family.id}</span></div>
         <div className="flex gap-4"><span className="text-gray-500 w-28">名前</span><span className="font-medium">{family.name}</span></div>
         <div className="flex gap-4"><span className="text-gray-500 w-28">メンバー数</span><span>{family.members_count} 人</span></div>
         <div className="flex gap-4"><span className="text-gray-500 w-28">作成日</span><span>{new Date(family.created_at).toLocaleString("ja-JP")}</span></div>
       </div>
 
-      <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
-        <p className="px-5 py-3 font-semibold text-gray-700 text-sm border-b border-gray-100">メンバー一覧</p>
+      <div className="bg-white rounded-xl shadow border border-orange-100 overflow-hidden">
+        <p className="px-5 py-3 font-semibold text-gray-700 text-sm border-b border-orange-100">メンバー一覧</p>
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-gray-600">
+          <thead className="bg-orange-50 text-orange-700">
             <tr>
               <th className="px-4 py-3 text-left">ニックネーム</th>
               <th className="px-4 py-3 text-left">メール</th>
@@ -57,9 +57,9 @@ export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id
               <th className="px-4 py-3"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-orange-100">
             {family.members?.map((member) => (
-              <tr key={member.id} className="hover:bg-gray-50">
+              <tr key={member.id} className="hover:bg-orange-50">
                 <td className="px-4 py-3">{member.nickname ?? "—"}</td>
                 <td className="px-4 py-3 text-gray-500">{member.email}</td>
                 <td className="px-4 py-3">

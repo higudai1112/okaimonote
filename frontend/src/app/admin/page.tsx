@@ -7,7 +7,7 @@ import Link from "next/link";
 
 function StatCard({ label, value, sub }: { label: string; value: number; sub?: string }) {
   return (
-    <div className="bg-white rounded-xl shadow p-5 border border-gray-100">
+    <div className="bg-white rounded-xl shadow p-5 border border-orange-100">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="text-3xl font-bold text-gray-800 mt-1">{value.toLocaleString()}</p>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
@@ -59,7 +59,7 @@ export default function AdminDashboardPage() {
 
       {/* TOP 商品・店舗 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl shadow p-5 border border-gray-100">
+        <div className="bg-white rounded-xl shadow p-5 border border-orange-100">
           <p className="font-semibold text-gray-700 mb-3">価格記録の多い商品 TOP5</p>
           <ol className="space-y-1.5">
             {data.top_products.map((p, i) => (
@@ -70,7 +70,7 @@ export default function AdminDashboardPage() {
             ))}
           </ol>
         </div>
-        <div className="bg-white rounded-xl shadow p-5 border border-gray-100">
+        <div className="bg-white rounded-xl shadow p-5 border border-orange-100">
           <p className="font-semibold text-gray-700 mb-3">価格記録の多い店舗 TOP5</p>
           <ol className="space-y-1.5">
             {data.top_shops.map((s, i) => (

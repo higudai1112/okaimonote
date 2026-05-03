@@ -119,7 +119,7 @@ export default function AdminStatsPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-gray-800">価格統計</h1>
 
-      <form onSubmit={handleSearch} className="bg-white rounded-xl shadow border border-gray-100 p-5 flex flex-wrap gap-3">
+      <form onSubmit={handleSearch} className="bg-white rounded-xl shadow border border-orange-100 p-5 flex flex-wrap gap-3">
         <AutocompleteInput
           value={keyword}
           onChange={setKeyword}
@@ -158,7 +158,7 @@ export default function AdminStatsPage() {
               { label: "最高値", value: data.max_price != null ? `¥${data.max_price.toLocaleString()}` : "—" },
               { label: "平均価格", value: data.avg_price != null ? `¥${data.avg_price.toLocaleString()}` : "—" },
             ].map((s) => (
-              <div key={s.label} className="bg-white rounded-xl shadow p-4 border border-gray-100">
+              <div key={s.label} className="bg-white rounded-xl shadow p-4 border border-orange-100">
                 <p className="text-xs text-gray-500">{s.label}</p>
                 <p className="text-xl font-bold text-gray-800 mt-1">{s.value}</p>
               </div>
@@ -166,7 +166,7 @@ export default function AdminStatsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+            <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
               <p className="font-semibold text-gray-700 text-sm mb-3">価格記録の多い商品 TOP5</p>
               <ol className="space-y-1.5 text-sm">
                 {data.top_products_by_records.map((p, i) => (
@@ -176,7 +176,7 @@ export default function AdminStatsPage() {
                 ))}
               </ol>
             </div>
-            <div className="bg-white rounded-xl shadow border border-gray-100 p-5">
+            <div className="bg-white rounded-xl shadow border border-orange-100 p-5">
               <p className="font-semibold text-gray-700 text-sm mb-3">登録の多い店舗 TOP5</p>
               <ol className="space-y-1.5 text-sm">
                 {data.top_shops.map((s, i) => (
