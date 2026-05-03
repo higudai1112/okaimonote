@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useShoppingList } from "@/hooks/useShoppingList";
 import { useFlash } from "@/contexts/FlashContext";
+import { useConfirm } from "@/hooks/useConfirm";
 import { ShoppingItemRow } from "@/components/shopping/ShoppingItemRow";
 import { AutocompleteInput } from "@/components/shopping/AutocompleteInput";
 
@@ -10,6 +11,7 @@ export default function ShoppingListPage() {
   const { list, isLoading, addItem, togglePurchased, deleteItem, deletePurchased } =
     useShoppingList();
   const { flash } = useFlash();
+  const { confirm, ConfirmModalElement } = useConfirm();
   const [name, setName] = useState("");
   const [memo, setMemo] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -46,7 +48,7 @@ export default function ShoppingListPage() {
   }
 
   async function handleDeletePurchased() {
-    if (!window.confirm("購入済みの商品をすべて削除しますか？")) return;
+    if (!await confirm({ message: "購入済みの商品をすべて削除しますか？", confirmLabel: "削除する", variant: "danger" })) return;
     try {
       await deletePurchased();
     } catch {
@@ -66,6 +68,8 @@ export default function ShoppingListPage() {
   const purchased = list?.items.filter((i) => i.purchased) ?? [];
 
   return (
+    <>
+    {ConfirmModalElement}
     <div className="min-h-screen bg-orange-50 py-2 pb-24 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-md sm:max-w-lg md:max-w-xl mx-auto bg-white rounded-2xl shadow p-6 md:p-8 border border-orange-100">
         {/* タイトル */}
@@ -146,5 +150,6 @@ export default function ShoppingListPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

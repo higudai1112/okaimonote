@@ -4,6 +4,7 @@ import { use, useState } from "react";
 import useSWR from "swr";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { useConfirm } from "@/hooks/useConfirm";
 import type { AdminUser } from "@/types";
 
 export default function AdminUserDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -13,6 +14,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
     (path: string) => apiFetch<AdminUser>(path)
   );
 
+  const { confirm, ConfirmModalElement } = useConfirm();
   const [memo, setMemo] = useState("");
   const [editingMemo, setEditingMemo] = useState(false);
   const [banReason, setBanReason] = useState("");
@@ -42,13 +44,15 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
   }
 
   async function handleUnban() {
-    if (!confirm("BANを解除しますか？")) return;
+    if (!await confirm({ message: "BANを解除しますか？", confirmLabel: "解除する" })) return;
     await apiFetch(`/api/v1/admin/users/${id}/unban`, { method: "PATCH" });
     mutate();
     setMessage("BAN解除しました");
   }
 
   return (
+    <>
+    {ConfirmModalElement}
     <div className="space-y-4 max-w-3xl">
       <div className="flex items-center gap-3">
         <Link href="/admin/users" className="text-gray-400 hover:text-gray-600 text-sm">← 一覧</Link>
@@ -143,6 +147,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
         </div>
       )}
     </div>
+    </>
   );
 }
 
