@@ -81,8 +81,9 @@ function PriceRecordCard({
   onSelect: (id: number) => void;
 }) {
   return (
-    <div
-      className="bg-white border border-orange-100 shadow-sm hover:shadow-md transition rounded-2xl p-5 cursor-pointer"
+    <button
+      type="button"
+      className="w-full text-left bg-white border border-orange-100 shadow-sm hover:shadow-md transition rounded-2xl p-5"
       onClick={() => onSelect(record.product_id)}
     >
       <div className="flex justify-between items-start mb-2 gap-3">
@@ -101,7 +102,7 @@ function PriceRecordCard({
           {record.memo}
         </p>
       )}
-    </div>
+    </button>
   );
 }
 
@@ -168,7 +169,7 @@ function SearchFilterPanel({
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               placeholder="例：牛乳"
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-sm outline-none transition placeholder-gray-400"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition placeholder-gray-400"
             />
           </div>
 
@@ -180,7 +181,7 @@ function SearchFilterPanel({
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-sm outline-none transition bg-white"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition bg-white"
             >
               <option value="">すべて</option>
               {formData?.categories.map((c) => (
@@ -199,7 +200,7 @@ function SearchFilterPanel({
             <select
               value={shopId}
               onChange={(e) => setShopId(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-sm outline-none transition bg-white"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition bg-white"
             >
               <option value="">すべて</option>
               {formData?.shops.map((s) => (

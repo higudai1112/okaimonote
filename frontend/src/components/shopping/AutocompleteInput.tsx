@@ -70,15 +70,15 @@ export function AutocompleteInput({ value, onChange, placeholder, className }: P
     }
   };
 
-  // コンテナ外クリックで候補を閉じる
+  // コンテナ外タップ・クリックで候補を閉じる（iOS対応で pointerdown を使用）
   useEffect(() => {
-    const handleOutside = (e: MouseEvent) => {
+    const handleOutside = (e: PointerEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleOutside);
-    return () => document.removeEventListener("mousedown", handleOutside);
+    document.addEventListener("pointerdown", handleOutside);
+    return () => document.removeEventListener("pointerdown", handleOutside);
   }, []);
 
   return (
@@ -97,8 +97,8 @@ export function AutocompleteInput({ value, onChange, placeholder, className }: P
           {candidates.map((name, i) => (
             <li
               key={name}
-              onMouseDown={() => handleSelect(name)}
-              className={`px-4 py-2.5 text-sm cursor-pointer transition ${
+              onClick={() => handleSelect(name)}
+              className={`px-4 py-3 text-sm cursor-pointer transition ${
                 i === activeIndex
                   ? "bg-orange-100 text-orange-700 font-semibold"
                   : "hover:bg-orange-50 text-gray-700"

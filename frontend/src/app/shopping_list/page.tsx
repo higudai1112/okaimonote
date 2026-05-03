@@ -79,14 +79,14 @@ export default function ShoppingListPage() {
             value={name}
             onChange={setName}
             placeholder="商品名を入力（例：にんじん）"
-            className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition"
+            className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition"
           />
           <textarea
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
             rows={2}
             placeholder="メモ（例：広告の品）"
-            className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition"
+            className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 focus:outline-none shadow-sm transition"
           />
           <button
             type="submit"

@@ -107,7 +107,7 @@ export default function NewPriceRecordPage() {
               }}
               placeholder="例：牛乳"
               list="product-list"
-              className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+              className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             />
             <datalist id="product-list">
               {formData?.products.map((p) => (
@@ -127,7 +127,7 @@ export default function NewPriceRecordPage() {
                 onChange={(e) =>
                   setCategoryId(e.target.value ? Number(e.target.value) : null)
                 }
-                className="w-full border border-gray-300 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+                className="w-full border border-gray-300 rounded-xl p-3 text-base bg-white focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
               >
                 <option value="">選択してください</option>
                 {formData?.categories.map((c) => (
@@ -149,7 +149,7 @@ export default function NewPriceRecordPage() {
               onChange={(e) =>
                 setShopId(e.target.value ? Number(e.target.value) : null)
               }
-              className="w-full border border-gray-300 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+              className="w-full border border-gray-300 rounded-xl p-3 text-base bg-white focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             >
               <option value="">選択してください</option>
               {formData?.shops.map((s) => (
@@ -172,7 +172,7 @@ export default function NewPriceRecordPage() {
               min={1}
               step={1}
               placeholder="例：198"
-              className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+              className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             />
           </div>
 
@@ -185,7 +185,7 @@ export default function NewPriceRecordPage() {
               type="date"
               value={purchasedAt}
               onChange={(e) => setPurchasedAt(e.target.value)}
-              className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+              className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             />
           </div>
 
@@ -199,7 +199,7 @@ export default function NewPriceRecordPage() {
               onChange={(e) => setMemo(e.target.value)}
               rows={3}
               placeholder="例：広告の品、まとめ買いなど"
-              className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
+              className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-orange-400 outline-none shadow-sm"
             />
           </div>
 
