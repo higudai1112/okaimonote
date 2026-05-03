@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useFamily } from "@/hooks/useFamily";
 import { useFlash } from "@/contexts/FlashContext";
+import { useConfirm } from "@/hooks/useConfirm";
 
 // QRコードは大きいので dynamic import で遅延読み込み
 const QRCodeSVG = dynamic(
@@ -22,6 +23,7 @@ export default function FamilyPage() {
   const { family, isLoading, destroyFamily, leaveFamily, transferOwner, regenerateInvite } =
     useFamily();
   const { flash } = useFlash();
+  const { confirm, ConfirmModalElement } = useConfirm();
 
   const [transferTargetId, setTransferTargetId] = useState<number | null>(null);
   const [showInviteUrl, setShowInviteUrl] = useState(false);
@@ -78,7 +80,6 @@ export default function FamilyPage() {
 
   async function handleTransfer() {
     if (!transferTargetId) return;
-    if (!confirm("管理者権限を譲渡しますか？")) return;
     try {
       await transferOwner(transferTargetId);
       flash("notice", "管理者権限を譲渡しました");
@@ -89,7 +90,7 @@ export default function FamilyPage() {
   }
 
   async function handleLeave() {
-    if (!confirm("ファミリーから脱退しますか？")) return;
+    if (!await confirm({ message: "ファミリーから脱退しますか？", confirmLabel: "脱退する", variant: "danger" })) return;
     try {
       await leaveFamily();
       flash("notice", "ファミリーから脱退しました");
@@ -100,7 +101,7 @@ export default function FamilyPage() {
   }
 
   async function handleDestroy() {
-    if (!confirm("ファミリーを解散しますか？この操作は取り消せません。")) return;
+    if (!await confirm({ message: "ファミリーを解散しますか？この操作は取り消せません。", confirmLabel: "解散する", variant: "danger" })) return;
     try {
       await destroyFamily();
       flash("notice", "ファミリーを解散しました");
@@ -111,6 +112,8 @@ export default function FamilyPage() {
   }
 
   return (
+    <>
+    {ConfirmModalElement}
     <div className="min-h-screen bg-orange-50 py-10 pb-24 px-4">
       <div className="max-w-md mx-auto space-y-4">
         <h1 className="text-2xl font-bold text-center text-orange-500 mb-2">
@@ -282,5 +285,6 @@ export default function FamilyPage() {
         </Link>
       </div>
     </div>
+    </>
   );
 }

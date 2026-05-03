@@ -4,6 +4,7 @@ import { use } from "react";
 import useSWR from "swr";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { useConfirm } from "@/hooks/useConfirm";
 import type { AdminFamily } from "@/types";
 
 export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -12,12 +13,13 @@ export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id
     `/api/v1/admin/families/${id}`,
     (path: string) => apiFetch<AdminFamily>(path)
   );
+  const { confirm, ConfirmModalElement } = useConfirm();
 
   if (isLoading || !family) return <p className="text-gray-500">読み込み中...</p>;
 
   async function handleChangeAdmin(userId: number) {
     const target = family!.members?.find((m) => m.id === userId);
-    if (!confirm(`${target?.nickname ?? "このユーザー"} を管理者にしますか？`)) return;
+    if (!await confirm({ message: `${target?.nickname ?? "このユーザー"} を管理者にしますか？`, confirmLabel: "変更する" })) return;
     await apiFetch(`/api/v1/admin/families/${id}/change_admin`, {
       method: "PATCH",
       body: JSON.stringify({ user_id: userId }),
@@ -27,12 +29,14 @@ export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id
 
   async function handleRemoveMember(userId: number) {
     const target = family!.members?.find((m) => m.id === userId);
-    if (!confirm(`${target?.nickname ?? "このユーザー"} を除名しますか？`)) return;
+    if (!await confirm({ message: `${target?.nickname ?? "このユーザー"} を除名しますか？`, confirmLabel: "除名する", variant: "danger" })) return;
     await apiFetch(`/api/v1/admin/families/${id}/members/${userId}`, { method: "DELETE" });
     mutate();
   }
 
   return (
+    <>
+    {ConfirmModalElement}
     <div className="space-y-4 max-w-2xl">
       <div className="flex items-center gap-3">
         <Link href="/admin/families" className="text-gray-400 hover:text-gray-600 text-sm">← 一覧</Link>
@@ -83,5 +87,6 @@ export default function AdminFamilyDetailPage({ params }: { params: Promise<{ id
         </table>
       </div>
     </div>
+    </>
   );
 }
