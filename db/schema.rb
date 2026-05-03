@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_13_032202) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_30_130126) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -51,6 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_13_032202) do
     t.bigint "user_id", null: false
     t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.index ["public_id"], name: "index_categories_on_public_id", unique: true
+    t.index ["user_id", "name"], name: "index_categories_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
@@ -134,6 +135,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_13_032202) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["user_id", "name"], name: "index_shops_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_shops_on_user_id"
   end
 
