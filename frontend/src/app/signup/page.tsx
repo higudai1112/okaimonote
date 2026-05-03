@@ -103,7 +103,7 @@ export default function SignupPage() {
               required
               maxLength={20}
               placeholder="おかいも太郎"
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition"
             />
           </div>
 
@@ -119,7 +119,7 @@ export default function SignupPage() {
               required
               autoComplete="email"
               placeholder="example@email.com"
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition"
             />
           </div>
 
@@ -135,7 +135,7 @@ export default function SignupPage() {
               required
               autoComplete="new-password"
               placeholder="8文字以上"
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function SignupPage() {
               required
               autoComplete="new-password"
               placeholder="もう一度入力してください"
-              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 outline-none transition"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:border-orange-400 px-3 py-2 text-base outline-none transition"
             />
           </div>
 
