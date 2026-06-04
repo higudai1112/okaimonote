@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import useSWR from "swr";
 import { useHome, type HomeSearchParams } from "@/hooks/useHome";
 import { usePriceSummary } from "@/hooks/useHome";
@@ -81,28 +82,39 @@ function PriceRecordCard({
   onSelect: (id: number) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="w-full text-left bg-white border border-orange-100 shadow-sm hover:shadow-md transition rounded-2xl p-5"
-      onClick={() => onSelect(record.product_id)}
-    >
-      <div className="flex justify-between items-start mb-2 gap-3">
-        <h3 className="text-lg font-semibold text-gray-800">
-          {record.product_name}
-        </h3>
-        <p className="text-lg font-bold text-orange-500 whitespace-nowrap">
-          ¥{record.price.toLocaleString()}
+    <div className="bg-white border border-orange-100 shadow-sm rounded-2xl p-5">
+      <button
+        type="button"
+        className="w-full text-left"
+        onClick={() => onSelect(record.product_id)}
+      >
+        <div className="flex justify-between items-start mb-2 gap-3">
+          <h3 className="text-lg font-semibold text-gray-800">
+            {record.product_name}
+          </h3>
+          <p className="text-lg font-bold text-orange-500 whitespace-nowrap">
+            ¥{record.price.toLocaleString()}
+          </p>
+        </div>
+        <p className="text-sm text-gray-600 mb-1">
+          店舗：{record.shop_name ?? "未登録"} ／ 日付：{record.purchased_at}
         </p>
+        {record.memo && (
+          <p className="text-xs text-gray-500 mt-1 bg-orange-50 p-2 rounded-md border border-orange-100">
+            {record.memo}
+          </p>
+        )}
+      </button>
+      {/* 商品詳細ページへのリンク */}
+      <div className="mt-3 pt-3 border-t border-orange-50 flex justify-end">
+        <Link
+          href={`/products/${record.product_public_id}`}
+          className="text-xs text-orange-500 font-semibold border border-orange-300 rounded-full px-3 py-1 hover:bg-orange-50 transition"
+        >
+          商品詳細 →
+        </Link>
       </div>
-      <p className="text-sm text-gray-600 mb-1">
-        店舗：{record.shop_name ?? "未登録"} ／ 日付：{record.purchased_at}
-      </p>
-      {record.memo && (
-        <p className="text-xs text-gray-500 mt-1 bg-orange-50 p-2 rounded-md border border-orange-100">
-          {record.memo}
-        </p>
-      )}
-    </button>
+    </div>
   );
 }
 

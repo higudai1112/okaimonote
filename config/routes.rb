@@ -135,7 +135,7 @@ Rails.application.routes.draw do
       resources :shops, only: [ :index, :create, :update, :destroy ]
 
       # 商品
-      resources :products, only: [ :index ]
+      resources :products, only: [ :index, :show, :update ]
 
       # ファミリー
       get    "family",                      to: "family#show"
