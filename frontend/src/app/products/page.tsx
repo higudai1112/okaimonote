@@ -137,33 +137,36 @@ export default function ProductsPage() {
         ) : (
           <ul className="space-y-3">
             {products.map((product) => (
-              <li
-                key={product.id}
-                className="bg-white rounded-2xl shadow-sm border border-orange-100 px-4 py-3 flex items-center gap-4"
-              >
-                <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 border border-orange-100 shrink-0 flex items-center justify-center">
-                  {product.image_url ? (
-                    <Image
-                      src={product.image_url}
-                      alt={product.name}
-                      width={56}
-                      height={56}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-2xl">🛍</span>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-800 truncate">
-                    {product.name}
-                  </p>
-                  {product.category && (
-                    <p className="text-sm text-gray-500 mt-0.5">
-                      {product.category.name}
+              <li key={product.id}>
+                <Link
+                  href={`/products/${product.public_id}`}
+                  className="bg-white rounded-2xl shadow-sm border border-orange-100 px-4 py-3 flex items-center gap-4 hover:bg-orange-50 transition active:scale-95"
+                >
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 border border-orange-100 shrink-0 flex items-center justify-center">
+                    {product.image_url ? (
+                      <Image
+                        src={product.image_url}
+                        alt={product.name}
+                        width={56}
+                        height={56}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl">🛍</span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-800 truncate">
+                      {product.name}
                     </p>
-                  )}
-                </div>
+                    {product.category && (
+                      <p className="text-sm text-gray-500 mt-0.5">
+                        {product.category.name}
+                      </p>
+                    )}
+                  </div>
+                  <span className="text-gray-300 text-lg shrink-0">›</span>
+                </Link>
               </li>
             ))}
           </ul>

@@ -88,6 +88,24 @@ export type Product = {
   image_url: string | null;
 };
 
+/** 商品詳細ページ内の価格履歴レコード */
+export type ProductPriceRecord = {
+  id: number;
+  public_id: string;
+  price: number;
+  memo: string | null;
+  purchased_at: string;
+  shop_id: number | null;
+  shop_name: string | null;
+};
+
+/** 商品詳細レスポンス（価格履歴・メタ情報付き） */
+export type ProductDetail = {
+  product: Product;
+  price_records: ProductPriceRecord[];
+  meta: { total: number; current_page: number; total_pages: number };
+};
+
 /** 管理画面: ユーザー */
 export type AdminUser = {
   id: number;
