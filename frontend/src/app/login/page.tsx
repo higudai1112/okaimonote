@@ -4,7 +4,9 @@ import { useState, type FormEvent, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { mutate } from "swr";
 import { apiFetch } from "@/lib/api";
+import type { User } from "@/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -30,10 +32,12 @@ function LoginForm() {
     const emailValue = (formData.get("email") as string) || email;
     const passwordValue = (formData.get("password") as string) || password;
     try {
-      await apiFetch("/api/v1/sessions", {
+      // ログイン成功後、SWRキャッシュを即時更新して誤リダイレクトを防ぐ
+      const userData = await apiFetch<User>("/api/v1/sessions", {
         method: "POST",
         body: JSON.stringify({ email: emailValue, password: passwordValue, remember_me: rememberMe ? "1" : "0" }),
       });
+      await mutate("/api/v1/me", userData, { revalidate: false });
       router.push("/home");
     } catch {
       setError("メールアドレスまたはパスワードが正しくありません");
