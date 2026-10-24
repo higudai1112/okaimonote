@@ -1,5 +1,5 @@
 # Ruby公式の最新版ベースイメージ
-FROM ruby:3.3.9
+FROM ruby:3.3.13
 
 # タイムゾーンと文字コードの設定（日本対応）
 ENV LANG C.UTF-8
